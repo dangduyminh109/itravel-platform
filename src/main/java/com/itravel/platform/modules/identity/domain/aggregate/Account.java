@@ -8,6 +8,7 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Passwo
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
 import com.itravel.platform.modules.identity.domain.exception.EmailCredentialsRequiredException;
 import com.itravel.platform.modules.identity.domain.exception.GoogleCredentialsRequiredException;
+import com.itravel.platform.modules.identity.domain.exception.InvalidCustomerRoleException;
 import com.itravel.platform.modules.identity.domain.exception.UsernameCredentialsRequiredException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -75,18 +77,29 @@ public class Account extends BaseAggregate<AccountId> {
 
     public static Account createByEmail(
             Email email,
-            PasswordHash password
+            PasswordHash password,
+            Role role
     ) {
-        return new Account(null, email, password, AuthProvider.EMAIL);
+        if(!Objects.equals(role.getName().value(), "customer")){
+            throw new InvalidCustomerRoleException();
+        }
+        Account account = new Account(null, email, password, AuthProvider.EMAIL);
+        account.grantRole(role);
+        return account;
     }
 
-    public static Account createByGoogle(Email email) {
-        return new Account(null, email, null, AuthProvider.GOOGLE);
+    public static Account createByGoogle(Email email,Role role) {
+        if(!Objects.equals(role.getName().value(), "customer")){
+            throw new InvalidCustomerRoleException();
+        }
+        Account account = new Account(null, email, null, AuthProvider.GOOGLE);
+        account.grantRole(role);
+        return account;
     }
 
     public void changePassword(PasswordHash newPassword) {
         if (authProvider == AuthProvider.GOOGLE) {
-            throw new IllegalStateException("Google account cannot have password");
+            throw new InvalidCustomerRoleException();
         }
         this.password = newPassword;
         touch();

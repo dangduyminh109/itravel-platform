@@ -1,0 +1,87 @@
+package com.itravel.platform.modules.identity.api.controller;
+
+import com.itravel.platform.common.dto.ApiResponse;
+import com.itravel.platform.modules.identity.api.dto.request.RegisterCustomerByEmailRequest;
+import com.itravel.platform.modules.identity.api.dto.request.UpdateCustomerRequest;
+import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
+import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
+import com.itravel.platform.modules.identity.application.command.customer.RegisterCustomerByEmailCommand;
+import com.itravel.platform.modules.identity.application.command.customer.UpdateCustomerCommand;
+import com.itravel.platform.modules.identity.application.handler.CustomerCommandHandler;
+import com.itravel.platform.modules.identity.application.service.CustomerQueryService;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("/customer")
+public class CustomerController {
+    CustomerCommandHandler customerCommandHandler;
+    CustomerQueryService customerQueryService;
+    CustomerRestMapper mapper;
+
+    @GetMapping
+    public ApiResponse<List<CustomerResponse>> getUsers() {
+        return ApiResponse.<List<CustomerResponse>>builder()
+                .success(true)
+                .data(
+                        customerQueryService.getCustomers().stream()
+                                .map(mapper::toCustomerResponse).toList()
+                )
+                .build();
+    }
+
+    @PostMapping
+    public ApiResponse<CustomerResponse> create(@RequestBody RegisterCustomerByEmailRequest request) {
+        RegisterCustomerByEmailCommand command = mapper.toCreateCustomerByEmailCommand(request);
+        return ApiResponse.<CustomerResponse>builder()
+                .message("Create customer successfully")
+                .success(true)
+                .data(mapper
+                        .toCustomerResponse(customerCommandHandler
+                                .RegisterCustomerByEmail(command)))
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<CustomerResponse> update(@PathVariable String id, @RequestBody UpdateCustomerRequest request) {
+        UpdateCustomerCommand command = mapper.toUpdateCustomerCommand(id,request);
+        return ApiResponse.<CustomerResponse>builder()
+                .message("Update user successfully")
+                .success(true)
+                .data(mapper.toCustomerResponse(customerCommandHandler.update(command)))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> delete(@PathVariable String id) {
+        customerCommandHandler.delete(mapper.toDeleteCustomerCommand(id));
+        return ApiResponse.<Void>builder()
+                .message("Delete customer successfully")
+                .success(true)
+                .build();
+    }
+
+    @PatchMapping("/{id}/restore")
+    public ApiResponse<Void> restore(@PathVariable String id) {
+        customerCommandHandler.restore(mapper.toRestoreCustomerCommand(id));
+        return ApiResponse.<Void>builder()
+                .message("Restore customer successfully")
+                .success(true)
+                .build();
+    }
+
+    @DeleteMapping("/{id}/destroy")
+    public ApiResponse<Void> destroy(@PathVariable String id) {
+        customerCommandHandler.destroy(mapper.toDeleteCustomerCommand(id));
+        return ApiResponse.<Void>builder()
+                .message("Destroy customer successfully")
+                .success(true)
+                .build();
+    }
+}

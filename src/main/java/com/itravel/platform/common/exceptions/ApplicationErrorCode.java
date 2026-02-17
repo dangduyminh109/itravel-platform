@@ -27,7 +27,6 @@ public enum ApplicationErrorCode {
     USER_NOT_DELETE_OR_UPDATE("USER_NOT_DELETE_OR_UPDATE", "User can not delete or update", HttpStatus.BAD_REQUEST, null),
 
     CUSTOMER_NOT_EXIST("CUSTOMER_NOT_EXIST", "Customer does not exist", HttpStatus.BAD_REQUEST, null),
-    CUSTOMER_INACTIVE("CUSTOMER_INACTIVE", "Customer is inactive", HttpStatus.FORBIDDEN, "status"),
     CUSTOMER_DELETED("CUSTOMER_DELETED", "Customer has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
 
     TOKEN_INVALID("TOKEN_INVALID", "Invalid or expired token", HttpStatus.UNAUTHORIZED, "token");

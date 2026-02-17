@@ -43,7 +43,7 @@ public class DataSeeder implements ApplicationRunner {
                     ).collect(Collectors.toSet());
             permissionJpaRepository.saveAll(permissionJpaEntityList);
         }
-        if(roleJpaRepository.count() == 0){
+        if(!roleJpaRepository.existsByName("admin")){
             List<PermissionJpaEntity> allPermission = permissionJpaRepository.findAll();
             RoleJpaEntity admin = RoleJpaEntity.builder()
                     .name("admin")
@@ -52,6 +52,13 @@ public class DataSeeder implements ApplicationRunner {
                     .build();
 
             roleJpaRepository.save(admin);
+        }
+        if(!roleJpaRepository.existsByName("customer")){
+            RoleJpaEntity customer = RoleJpaEntity.builder()
+                    .name("customer")
+                    .status("ACTIVE")
+                    .build();
+            roleJpaRepository.save(customer);
         }
 
         Optional<AccountJpaEntity> hasAdmin = accountJpaRepository.findByUsername("admin");

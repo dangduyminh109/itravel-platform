@@ -17,8 +17,8 @@ public class AccountLink {
     final AccountLinkType targetType;
     String targetId;
 
-    public static AccountLink linkToCustomer(AccountId accountId, String studentId) {
-        return new AccountLink(null, accountId, AccountLinkType.CUSTOMER, studentId);
+    public static AccountLink linkToCustomer(AccountId accountId, String customerId) {
+        return new AccountLink(null, accountId, AccountLinkType.CUSTOMER, customerId);
     }
 
     public static AccountLink linkToSystemUser(AccountId accountId, String userId) {
