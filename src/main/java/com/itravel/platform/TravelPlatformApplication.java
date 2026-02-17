@@ -8,5 +8,4 @@ public class TravelPlatformApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TravelPlatformApplication.class, args);
 	}
-
 }
