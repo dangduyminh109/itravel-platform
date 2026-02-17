@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -22,6 +24,7 @@ public class Account extends BaseAggregate<AccountId> {
     Email email;
     PasswordHash password;
     AuthProvider authProvider;
+    final Set<Role> roleList = new HashSet<>();
     AccountStatus status;
 
     private Account (
@@ -119,7 +122,8 @@ public class Account extends BaseAggregate<AccountId> {
             AccountStatus status,
             Instant createdAt,
             Instant updatedAt,
-            Instant deletedAt
+            Instant deletedAt,
+            Set<Role> roleList
     ) {
         Account acc = new Account(id,
                 username,
@@ -131,6 +135,14 @@ public class Account extends BaseAggregate<AccountId> {
                 updatedAt,
                 deletedAt
         );
+        acc.roleList.addAll(roleList);
         return acc;
+    }
+    public void grantRole(Role role) {
+        this.roleList.add(role);
+    }
+
+    public void revokeRole(Role role) {
+        this.roleList.remove(role);
     }
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -21,13 +20,5 @@ public class UserJpaEntity extends JpaBaseModel {
 
     @Column(nullable = false)
     String fullName;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId")
-    )
-    Set<RoleJpaEntity> roleList;
 }
 

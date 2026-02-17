@@ -1,13 +1,11 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 import com.itravel.platform.common.infrastructure.JpaBaseModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -34,4 +32,12 @@ public class AccountJpaEntity extends JpaBaseModel {
 
     Instant createdAt;
     Instant updatedAt;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "account_role",
+            joinColumns = @JoinColumn(name = "accountId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId")
+    )
+    Set<RoleJpaEntity> roleList;
 }

@@ -46,7 +46,7 @@ public class UserCommandHandler {
 
         Set<Role> roleList = new HashSet<>(roleRepository.findAllById(command.roleList().stream().toList()));
         for (Role role : roleList) {
-            user.grantRole(role);
+            account.grantRole(role);
         }
 
         accountRepository.save(account);
@@ -56,7 +56,7 @@ public class UserCommandHandler {
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .username(account.getUsername())
-                .roleList(user.getRoleList())
+                .roleList(account.getRoleList())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .deletedAt(user.getDeletedAt())
@@ -82,16 +82,16 @@ public class UserCommandHandler {
         user.updateName(command.fullName());
 
         Set<Role> newRoles = new HashSet<>(roleRepository.findAllById(command.roleList().stream().toList()));
-        Set<Role> oldRoles = new HashSet<>(user.getRoleList());
+        Set<Role> oldRoles = new HashSet<>(account.getRoleList());
 
         // revoke
         for (Role p : new HashSet<>(oldRoles)) {
-            if (!newRoles.contains(p)) user.revokeRole(p);
+            if (!newRoles.contains(p)) account.revokeRole(p);
         }
 
         // grant
         for (Role p : new HashSet<>(newRoles)) {
-            if (!oldRoles.contains(p)) user.grantRole(p);
+            if (!oldRoles.contains(p)) account.grantRole(p);
         }
         accountRepository.save(account);
         userRepository.save(user);
@@ -99,7 +99,7 @@ public class UserCommandHandler {
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .username(account.getUsername())
-                .roleList(user.getRoleList())
+                .roleList(account.getRoleList())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .deletedAt(user.getDeletedAt())

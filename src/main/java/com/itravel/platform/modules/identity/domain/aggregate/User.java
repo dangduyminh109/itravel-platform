@@ -8,14 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User extends BaseAggregate<UserId> {
     FullName fullName;
-    final Set<Role> roleList = new HashSet<>();
 
     private User(
             FullName fullName
@@ -50,29 +47,18 @@ public class User extends BaseAggregate<UserId> {
                                     FullName fullName,
                                     Instant createdAt,
                                     Instant updatedAt,
-                                    Instant deletedAt,
-                                    Set<Role> roleList
+                                    Instant deletedAt
     ) {
-        User u =  new User(
+        return new User(
                 id,
                 fullName,
                 createdAt,
                 updatedAt,
                 deletedAt
         );
-        u.roleList.addAll(roleList);
-        return u;
     }
     public void updateName(FullName fullName) {
         this.fullName = fullName;
         touch();
-    }
-
-    public void grantRole(Role role) {
-        this.roleList.add(role);
-    }
-
-    public void revokeRole(Role role) {
-        this.roleList.remove(role);
     }
 }

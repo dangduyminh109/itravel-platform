@@ -1,15 +1,19 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
+import com.itravel.platform.modules.identity.domain.aggregate.Role;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
+import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionJpaEntity;
+import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RoleJpaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AccountMapper {
@@ -28,6 +32,20 @@ public interface AccountMapper {
                 .authProvider(AuthProvider.valueOf(entity.getAuthProvider()))
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .roleList(entity.getRoleList().stream()
+                        .map(RoleMapper::toRoleDomain).collect(Collectors.toSet())
+                )
+                .build();
+    }
+
+    default RoleJpaEntity toRoleJpaEntity(Role role){
+        return RoleJpaEntity.builder()
+                .id(role.getId().value())
+                .name(role.getName().value())
+                .status(role.getStatus().toString())
+                .permissionList(role.getPermissionList().stream()
+                        .map(e -> new PermissionJpaEntity(e.code()))
+                        .collect(Collectors.toSet()))
                 .build();
     }
 }

@@ -65,12 +65,12 @@ public class DataSeeder implements ApplicationRunner {
                     .authProvider(AuthProvider.USERNAME.toString())
                     .createdAt(Instant.now())
                     .username("admin")
+                    .roleList(Set.of(adminRole))
                     .build();
 
             UserJpaEntity admin = UserJpaEntity.builder()
                     .id(UUID.randomUUID().toString())
                     .fullName("admin")
-                    .roleList(Set.of(adminRole))
                     .createdAt(Instant.now())
                     .build();
 

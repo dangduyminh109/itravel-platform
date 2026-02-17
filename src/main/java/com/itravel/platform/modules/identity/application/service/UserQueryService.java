@@ -35,7 +35,7 @@ public class UserQueryService {
                             .id(user.getId())
                             .fullName(user.getFullName())
                             .username(account.getUsername())
-                            .roleList(user.getRoleList())
+                            .roleList(account.getRoleList())
                             .createdAt(user.getCreatedAt())
                             .updatedAt(user.getUpdatedAt())
                             .deletedAt(user.getDeletedAt())
