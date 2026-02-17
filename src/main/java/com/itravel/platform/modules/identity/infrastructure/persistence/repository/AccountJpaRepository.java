@@ -2,8 +2,10 @@ package com.itravel.platform.modules.identity.infrastructure.persistence.reposit
 
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+@Repository
 public interface AccountJpaRepository extends JpaRepository<AccountJpaEntity,String> {
     Optional<AccountJpaEntity> findByUsername(String username);
     Optional<AccountJpaEntity> findByEmail(String email);

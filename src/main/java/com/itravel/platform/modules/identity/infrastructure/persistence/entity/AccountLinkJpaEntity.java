@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-@Table(name = "Account_Link")
+@Table(name = "account_link")
 public class AccountLinkJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

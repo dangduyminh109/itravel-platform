@@ -1,5 +1,6 @@
 package com.itravel.platform.common.infrastructure;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,10 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@MappedSuperclass
 public abstract class JpaBaseModel {
     Instant createdAt;
     Instant deletedAt;

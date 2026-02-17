@@ -7,9 +7,16 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Userna
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.mapper.AccountMapper;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
-public class AccountJpaRepositoryImpl implements AccountRepository {
+@Repository
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+public class AccountRepositoryImpl implements AccountRepository {
     AccountJpaRepository repository;
     AccountMapper mapper;
 
