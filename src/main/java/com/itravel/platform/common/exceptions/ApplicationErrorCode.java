@@ -1,0 +1,40 @@
+package com.itravel.platform.common.exceptions;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PACKAGE)
+public enum ApplicationErrorCode {
+
+    // ===== AUTH / USER / CUSTOMER =====
+    ROLE_EXISTED("ROLE_EXISTED", "Role already exists", HttpStatus.BAD_REQUEST, null),
+    ROLE_NOT_EXIST("ROLE_NOT_EXIST", "Role does not exist", HttpStatus.BAD_REQUEST, null),
+    ADMIN_ROLE_CAN_NOT_DELETE("ADMIN_ROLE_CAN_NOT_DELETE", "Admin role cannot be deleted", HttpStatus.FORBIDDEN, null),
+
+    USERNAME_EXISTED("USERNAME_EXISTED", "Username already exists", HttpStatus.BAD_REQUEST, "username"),
+    USERNAME_OR_PASSWORD_INVALID("USERNAME_OR_PASSWORD_INVALID", "Invalid username or password", HttpStatus.UNAUTHORIZED, "username, password"),
+    EMAIL_OR_PASSWORD_INVALID("EMAIL_OR_PASSWORD_INVALID", "Invalid email or password", HttpStatus.UNAUTHORIZED, "username, password"),
+    EMAIL_EXISTED("EMAIL_EXISTED", "Email already exists", HttpStatus.BAD_REQUEST, "email"),
+
+    USER_NOT_EXIST("USER_NOT_EXIST", "User does not exist", HttpStatus.BAD_REQUEST, null),
+    USER_INACTIVE("USER_INACTIVE", "Account is inactive", HttpStatus.FORBIDDEN, "status"),
+    USER_DELETED("USER_DELETED", "Account has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
+    USER_NOT_DELETE_OR_UPDATE("USER_NOT_DELETE_OR_UPDATE", "User can not delete or update", HttpStatus.BAD_REQUEST, null),
+
+    CUSTOMER_NOT_EXIST("CUSTOMER_NOT_EXIST", "Customer does not exist", HttpStatus.BAD_REQUEST, null),
+    CUSTOMER_INACTIVE("CUSTOMER_INACTIVE", "Customer is inactive", HttpStatus.FORBIDDEN, "status"),
+    CUSTOMER_DELETED("CUSTOMER_DELETED", "Customer has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
+
+    TOKEN_INVALID("TOKEN_INVALID", "Invalid or expired token", HttpStatus.UNAUTHORIZED, "token");
+    ;
+
+    String code;
+    String message;
+    HttpStatus httpStatusCode;
+    String feild;
+}
