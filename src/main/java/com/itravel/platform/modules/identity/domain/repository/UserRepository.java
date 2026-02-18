@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository {
-    Optional<User> findById(UserId userId);
+    Optional<User> findById(UserId id);
     List<User> getUsers();
     void save(User user);
-    void destroy(UserId userId);
+    void destroy(UserId id);
 }

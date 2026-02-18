@@ -1,18 +1,13 @@
 package com.itravel.platform.modules.identity.application.handler;
 
+import com.itravel.platform.modules.identity.application.command.account.*;
 import com.itravel.platform.modules.identity.application.command.customer.*;
-import com.itravel.platform.modules.identity.application.exception.CustomerNotExistException;
-import com.itravel.platform.modules.identity.application.exception.EmailExistedException;
-import com.itravel.platform.modules.identity.application.exception.RoleNotExistException;
-import com.itravel.platform.modules.identity.application.query.CustomerDetail;
-import com.itravel.platform.modules.identity.domain.aggregate.Account;
-import com.itravel.platform.modules.identity.domain.aggregate.AccountLink;
-import com.itravel.platform.modules.identity.domain.aggregate.Customer;
-import com.itravel.platform.modules.identity.domain.aggregate.Role;
+import com.itravel.platform.modules.identity.application.exception.*;
+import com.itravel.platform.modules.identity.application.service.AccountQueryService;
+import com.itravel.platform.modules.identity.domain.aggregate.*;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
 import com.itravel.platform.modules.identity.domain.repository.AccountLinkRepository;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
-import com.itravel.platform.modules.identity.domain.repository.CustomerRepository;
 import com.itravel.platform.modules.identity.domain.repository.RoleRepository;
 import com.itravel.platform.modules.identity.infrastructure.security.PasswordEncoderAdapter;
 import lombok.AccessLevel;
@@ -20,34 +15,40 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CustomerCommandHandler {
+public class AccountCommandHandler {
     AccountRepository accountRepository;
     AccountLinkRepository accountLinkRepository;
     PasswordEncoderAdapter passwordEncoderAdapter;
-    CustomerRepository customerRepository;
     RoleRepository roleRepository;
+    AccountQueryService accountQueryService;
 
-    public void RegisterCustomerByGoogle(RegisterCustomerByGoogleCommand command) {
-        Role role = roleRepository.findByRoleName(new RoleName("customer"))
-                .orElseThrow(RoleNotExistException::new);
+    @Transactional
+    public Account CreateByUserName(CreateAccountByUserNameCommand command) {
+        accountRepository.findByUsername(command.username()).ifPresent(e -> {
+            throw new UsernameExistedException();
+        });
 
-        Account account = Account.createByGoogle(command.email(),role);
-        Customer customer = Customer.create(command.fullName());
+        Account account = Account.createByUsername(command.username(), passwordEncoderAdapter.encode(command.password().value()));
+        AccountLink accountLink = AccountLink.linkToSystemUser(account.getId(), command.id().value());
 
-        AccountLink accountLink = AccountLink.linkToSystemUser(account.getId(), customer.getId().value());
+        Set<Role> roleList = new HashSet<>(roleRepository.findAllById(command.roleList().stream().toList()));
+        for (Role role : roleList) {
+            account.grantRole(role);
+        }
 
         accountRepository.save(account);
         accountLinkRepository.save(accountLink);
-        customerRepository.save(customer);
+        return account;
     }
 
-
-    public CustomerDetail RegisterCustomerByEmail(RegisterCustomerByEmailCommand command) {
+    public Account CreateByEmail(CreateAccountByEmailCommand command) {
         accountRepository.findByEmail(command.email()).ifPresent(e -> {
             throw new EmailExistedException();
         });
@@ -55,73 +56,78 @@ public class CustomerCommandHandler {
                 .orElseThrow(RoleNotExistException::new);
 
         Account account = Account.createByEmail(command.email(), passwordEncoderAdapter.encode(command.password().value()),role);
-        Customer customer = Customer.create(command.fullName());
-        AccountLink accountLink = AccountLink.linkToCustomer(account.getId(), customer.getId().value());
+        AccountLink accountLink = AccountLink.linkToCustomer(account.getId(), command.customerId().value());
 
         accountRepository.save(account);
         accountLinkRepository.save(accountLink);
-        customerRepository.save(customer);
-        return CustomerDetail.builder()
-                .id(customer.getId())
-                .fullName(customer.getFullName())
-                .email(account.getEmail())
-                .roleList(account.getRoleList())
-                .createdAt(customer.getCreatedAt())
-                .updatedAt(customer.getUpdatedAt())
-                .deletedAt(customer.getDeletedAt())
-                .build();
+        return account;
+    }
+
+    public Account CreateByGoogle(CreateAccountByGoogleCommand command) {
+        Role role = roleRepository.findByRoleName(new RoleName("customer"))
+                .orElseThrow(RoleNotExistException::new);
+
+        Account account = Account.createByGoogle(command.email(),role);
+
+        AccountLink accountLink = AccountLink.linkToSystemUser(account.getId(), command.customerId().value());
+
+        accountRepository.save(account);
+        accountLinkRepository.save(accountLink);
+        return account;
     }
 
     @Transactional
-    public CustomerDetail update(UpdateCustomerCommand command){
-        Customer customer = customerRepository.findById(command.id())
-                .orElseThrow(CustomerNotExistException::new);
-
-        AccountLink accountLink = accountLinkRepository.findByTargetId(customer.getId().value())
-                .orElseThrow(CustomerNotExistException::new);
-
-        Account account = accountRepository.findById(accountLink.getAccountId())
-                        .orElseThrow(CustomerNotExistException::new);
-
-        customer.changeName(command.fullName());
-        customerRepository.save(customer);
-        return CustomerDetail.builder()
-                .id(customer.getId())
-                .fullName(customer.getFullName())
-                .email(account.getEmail())
-                .roleList(account.getRoleList())
-                .createdAt(customer.getCreatedAt())
-                .updatedAt(customer.getUpdatedAt())
-                .deletedAt(customer.getDeletedAt())
-                .build();
-    }
-
-    @Transactional
-    public void delete(DeleteCustomerCommand command){
-        Optional<Customer> optionalCustomer = customerRepository.findById(command.id());
-        if(optionalCustomer.isEmpty()){
-            return;
+    public Account ChangePassword(UpdateAccountPasswordCommand command){
+        Account account = accountQueryService.getAccount(command.targetId());
+        if(command.newPassword() == null){
+            return account;
         }
-        Customer customer = optionalCustomer.get();
-        customer.softDelete();
-        customerRepository.save(customer);
+        account.changePassword(passwordEncoderAdapter.encode(command.newPassword().value()));
+        accountRepository.save(account);
+        return account;
+    }
+
+
+    @Transactional
+    public Account update(UpdateAccountCommand command){
+        Account account = accountQueryService.getAccount(command.targetId());
+
+        if("admin".equals(account.getUsername().value())){
+            throw new UserNotDeleteOrUpdateException();
+        }
+
+        Set<Role> newRoles = new HashSet<>(roleRepository.findAllById(command.roleList().stream().toList()));
+        Set<Role> oldRoles = new HashSet<>(account.getRoleList());
+
+        // revoke
+        for (Role p : new HashSet<>(oldRoles)) {
+            if (!newRoles.contains(p)) account.revokeRole(p);
+        }
+
+        // grant
+        for (Role p : new HashSet<>(newRoles)) {
+            if (!oldRoles.contains(p)) account.grantRole(p);
+        }
+        accountRepository.save(account);
+
+        return account;
     }
 
     @Transactional
-    public void restore(RestoreCustomerCommand command){
-        Customer customer = customerRepository.findById(command.id())
-                .orElseThrow(CustomerNotExistException::new);
-        customer.restore();
-        customerRepository.save(customer);
-    }
+    public void destroy(String targetId){
+        AccountLink accountLink = accountLinkRepository.findByTargetId(targetId)
+                .orElseThrow(AccountNotExistException::new);
+        Account account = accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(UserNotExistException::new);
 
-    @Transactional
-    public void destroy(DeleteCustomerCommand command){
-        AccountLink accountLink = accountLinkRepository.findByTargetId(command.id().value())
-                .orElseThrow(CustomerNotExistException::new);
+        if("admin".equals(account.getUsername().value())){
+            throw new UserNotDeleteOrUpdateException();
+        }
 
-        accountRepository.destroy(accountLink.getAccountId());
         accountLinkRepository.destroy(accountLink.getId());
-        customerRepository.destroy(command.id());
+
+        if (accountLinkRepository.findByAccountId(account.getId()).isEmpty()) {
+            accountRepository.destroy(account.getId());
+        }
     }
 }

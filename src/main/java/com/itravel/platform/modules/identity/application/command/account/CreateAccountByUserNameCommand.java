@@ -1,14 +1,14 @@
-package com.itravel.platform.modules.identity.application.command.user;
+package com.itravel.platform.modules.identity.application.command.account;
 
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleId;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
 import java.util.Set;
 
-public record CreateUserCommand(
+public record CreateAccountByUserNameCommand(
         Username username,
         PasswordHash password,
-        FullName fullName,
-        Set<RoleId> roleList
+        Set<RoleId> roleList,
+        UserId id
 ) {}

@@ -1,13 +1,14 @@
 package com.itravel.platform.modules.identity.application.service;
 
 import com.itravel.platform.modules.identity.application.exception.AccountNotExistException;
+import com.itravel.platform.modules.identity.application.exception.CustomerNotExistException;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
+import com.itravel.platform.modules.identity.domain.aggregate.AccountLink;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
 import com.itravel.platform.modules.identity.domain.repository.AccountLinkRepository;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
-import com.itravel.platform.modules.identity.domain.repository.CustomerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,9 +21,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountQueryService {
-    CustomerRepository customerRepository;
     AccountLinkRepository accountLinkRepository;
     AccountRepository accountRepository;
+
+    public Account getAccount(String targetId){
+        AccountLink accountLink = accountLinkRepository.findByTargetId(targetId)
+                .orElseThrow(AccountNotExistException::new);
+
+        return accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(CustomerNotExistException::new);
+    }
 
     public Set<String> getPermissions(AccountId id){
         Account account = accountRepository.findById(id)

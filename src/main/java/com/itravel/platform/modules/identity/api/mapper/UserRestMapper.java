@@ -29,21 +29,21 @@ public interface UserRestMapper {
             expression = "java(request.fullName() != null ? new FullName(request.fullName()) : null)")
     CreateUserCommand toCreateUserCommand(CreateUserRequest request);
 
-    @Mapping(target = "userId",
-            expression = "java(userId != null ? new UserId(userId) : null)")
-    @Mapping(target = "password",
-            expression = "java(request.password() != null ? new PasswordHash(request.password()) : null)")
+    @Mapping(target = "id",
+            expression = "java(id != null ? new UserId(id) : null)")
+    @Mapping(target = "newPassword",
+            expression = "java(request.newPassword() != null ? new PasswordHash(request.newPassword()) : null)")
     @Mapping(target = "fullName",
             expression = "java(request.fullName() != null ? new FullName(request.fullName()) : null)")
-    UpdateUserCommand toUpdateUserCommand(String userId, UpdateUserRequest request);
+    UpdateUserCommand toUpdateUserCommand(String id, UpdateUserRequest request);
 
-    @Mapping(target = "userId",
-            expression = "java(userId != null ? new UserId(userId) : null)")
-    DeleteUserCommand toDeleteUserCommand(String userId);
+    @Mapping(target = "id",
+            expression = "java(id != null ? new UserId(id) : null)")
+    DeleteUserCommand toDeleteUserCommand(String id);
 
-    @Mapping(target = "userId",
-            expression = "java(userId != null ? new UserId(userId) : null)")
-    RestoreUserCommand toRestoreUserCommand(String userId);
+    @Mapping(target = "id",
+            expression = "java(id != null ? new UserId(id) : null)")
+    RestoreUserCommand toRestoreUserCommand(String id);
 
     default RoleId map(Long roleId) {
         return roleId != null ? new RoleId(roleId) : null;

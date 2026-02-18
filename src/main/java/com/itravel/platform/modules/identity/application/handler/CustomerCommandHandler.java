@@ -1,20 +1,14 @@
 package com.itravel.platform.modules.identity.application.handler;
 
+import com.itravel.platform.modules.identity.application.command.account.CreateAccountByEmailCommand;
+import com.itravel.platform.modules.identity.application.command.account.CreateAccountByGoogleCommand;
+import com.itravel.platform.modules.identity.application.command.account.UpdateAccountPasswordCommand;
 import com.itravel.platform.modules.identity.application.command.customer.*;
 import com.itravel.platform.modules.identity.application.exception.CustomerNotExistException;
-import com.itravel.platform.modules.identity.application.exception.EmailExistedException;
-import com.itravel.platform.modules.identity.application.exception.RoleNotExistException;
 import com.itravel.platform.modules.identity.application.query.CustomerDetail;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
-import com.itravel.platform.modules.identity.domain.aggregate.AccountLink;
 import com.itravel.platform.modules.identity.domain.aggregate.Customer;
-import com.itravel.platform.modules.identity.domain.aggregate.Role;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
-import com.itravel.platform.modules.identity.domain.repository.AccountLinkRepository;
-import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
 import com.itravel.platform.modules.identity.domain.repository.CustomerRepository;
-import com.itravel.platform.modules.identity.domain.repository.RoleRepository;
-import com.itravel.platform.modules.identity.infrastructure.security.PasswordEncoderAdapter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,40 +20,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerCommandHandler {
-    AccountRepository accountRepository;
-    AccountLinkRepository accountLinkRepository;
-    PasswordEncoderAdapter passwordEncoderAdapter;
     CustomerRepository customerRepository;
-    RoleRepository roleRepository;
+    AccountCommandHandler accountCommandHandler;
 
     public void RegisterCustomerByGoogle(RegisterCustomerByGoogleCommand command) {
-        Role role = roleRepository.findByRoleName(new RoleName("customer"))
-                .orElseThrow(RoleNotExistException::new);
-
-        Account account = Account.createByGoogle(command.email(),role);
         Customer customer = Customer.create(command.fullName());
-
-        AccountLink accountLink = AccountLink.linkToSystemUser(account.getId(), customer.getId().value());
-
-        accountRepository.save(account);
-        accountLinkRepository.save(accountLink);
+        CreateAccountByGoogleCommand createAccountByGoogleCommand =
+                new CreateAccountByGoogleCommand(
+                        command.email(),
+                        customer.getId()
+                );
+        accountCommandHandler.CreateByGoogle(createAccountByGoogleCommand);
         customerRepository.save(customer);
     }
 
-
     public CustomerDetail RegisterCustomerByEmail(RegisterCustomerByEmailCommand command) {
-        accountRepository.findByEmail(command.email()).ifPresent(e -> {
-            throw new EmailExistedException();
-        });
-        Role role = roleRepository.findByRoleName(new RoleName("customer"))
-                .orElseThrow(RoleNotExistException::new);
-
-        Account account = Account.createByEmail(command.email(), passwordEncoderAdapter.encode(command.password().value()),role);
         Customer customer = Customer.create(command.fullName());
-        AccountLink accountLink = AccountLink.linkToCustomer(account.getId(), customer.getId().value());
+        CreateAccountByEmailCommand createAccountByEmailCommand
+                = new CreateAccountByEmailCommand(
+                command.email(),
+                command.password(),
+                customer.getId()
+        );
+        Account account = accountCommandHandler.CreateByEmail(createAccountByEmailCommand);
 
-        accountRepository.save(account);
-        accountLinkRepository.save(accountLink);
         customerRepository.save(customer);
         return CustomerDetail.builder()
                 .id(customer.getId())
@@ -77,12 +61,13 @@ public class CustomerCommandHandler {
         Customer customer = customerRepository.findById(command.id())
                 .orElseThrow(CustomerNotExistException::new);
 
-        AccountLink accountLink = accountLinkRepository.findByTargetId(customer.getId().value())
-                .orElseThrow(CustomerNotExistException::new);
+        UpdateAccountPasswordCommand updateAccountPasswordCommand =
+                new UpdateAccountPasswordCommand(
+                        command.id().value(),
+                        command.newPassword()
+                );
 
-        Account account = accountRepository.findById(accountLink.getAccountId())
-                        .orElseThrow(CustomerNotExistException::new);
-
+        Account account = accountCommandHandler.ChangePassword(updateAccountPasswordCommand);
         customer.changeName(command.fullName());
         customerRepository.save(customer);
         return CustomerDetail.builder()
@@ -117,11 +102,7 @@ public class CustomerCommandHandler {
 
     @Transactional
     public void destroy(DeleteCustomerCommand command){
-        AccountLink accountLink = accountLinkRepository.findByTargetId(command.id().value())
-                .orElseThrow(CustomerNotExistException::new);
-
-        accountRepository.destroy(accountLink.getAccountId());
-        accountLinkRepository.destroy(accountLink.getId());
+        accountCommandHandler.destroy(command.id().value());
         customerRepository.destroy(command.id());
     }
 }

@@ -20,9 +20,9 @@ public class UserRepositoryImpl implements UserRepository {
     UserMapper userMapper;
 
     @Override
-    public Optional<User> findById(UserId userId) {
+    public Optional<User> findById(UserId id) {
         return userJpaRepository
-                .findById(userId.value())
+                .findById(id.value())
                 .map(UserMapper::toUserDomain);
     }
 
@@ -41,8 +41,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void destroy(UserId userId) {
-        userJpaRepository.findById(userId.value())
+    public void destroy(UserId id) {
+        userJpaRepository.findById(id.value())
                 .ifPresent(userJpaRepository::delete);
     }
 }

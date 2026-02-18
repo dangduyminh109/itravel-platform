@@ -17,17 +17,9 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public ApiResponse<Set<String>> getPermission(@PathVariable String id) {
-
         return ApiResponse.<Set<String>>builder()
                 .success(true)
                 .data(accountQueryService.getPermissions(new AccountId(id)))
                 .build();
     }
-
-//    @PutMapping("/update-permissions")
-//    public ApiResponse<List<Permission>> updatePermission() {
-//        return ApiResponse.<List<Permission>>builder()
-//                .success(true)
-//                .build();
-//    }
 }

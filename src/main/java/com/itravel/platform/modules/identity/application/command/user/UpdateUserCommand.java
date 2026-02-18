@@ -8,8 +8,8 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId
 import java.util.Set;
 
 public record UpdateUserCommand(
-        UserId userId,
+        UserId id,
         FullName fullName,
-        PasswordHash password,
+        PasswordHash newPassword,
         Set<RoleId> roleList) {
 }

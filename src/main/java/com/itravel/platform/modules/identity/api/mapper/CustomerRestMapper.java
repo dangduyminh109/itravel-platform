@@ -36,6 +36,8 @@ public interface CustomerRestMapper {
             expression = "java(id != null ? new CustomerId(id) : null)")
     @Mapping(target = "fullName",
             expression = "java(request.fullName() != null ? new FullName(request.fullName()) : null)")
+    @Mapping(target = "newPassword",
+            expression = "java(request.newPassword() != null ? new PasswordHash(request.newPassword()) : null)")
     UpdateCustomerCommand toUpdateCustomerCommand(String id, UpdateCustomerRequest request);
 
     @Mapping(target = "id",

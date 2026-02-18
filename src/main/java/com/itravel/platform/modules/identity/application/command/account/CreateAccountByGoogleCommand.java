@@ -1,14 +1,8 @@
 package com.itravel.platform.modules.identity.application.command.account;
 
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
-import java.util.Set;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 
-public record CreateAccountByUserNameCommand(
-        Username username,
-        PasswordHash password,
-        Set<RoleId> roleList,
-        UserId userId
+public record CreateAccountByGoogleCommand(
+        Email email,
+        CustomerId customerId
 ) {}

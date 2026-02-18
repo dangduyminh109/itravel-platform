@@ -2,10 +2,7 @@ package com.itravel.platform.modules.identity.domain.aggregate;
 import com.itravel.platform.common.domain.BaseAggregate;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.domain.exception.EmailCredentialsRequiredException;
 import com.itravel.platform.modules.identity.domain.exception.GoogleCredentialsRequiredException;
 import com.itravel.platform.modules.identity.domain.exception.InvalidCustomerRoleException;
@@ -27,6 +24,7 @@ public class Account extends BaseAggregate<AccountId> {
     PasswordHash password;
     AuthProvider authProvider;
     final Set<Role> roleList = new HashSet<>();
+    final Set<AccountPermission> permissionOverrides = new HashSet<>();
     AccountStatus status;
 
     private Account (
@@ -157,5 +155,13 @@ public class Account extends BaseAggregate<AccountId> {
 
     public void revokeRole(Role role) {
         this.roleList.remove(role);
+    }
+
+    public void grantPermissionOverride(AccountPermission permission) {
+        this.permissionOverrides.add(permission);
+    }
+
+    public void revokePermissionOverride(AccountPermission permission) {
+        this.permissionOverrides.remove(permission);
     }
 }
