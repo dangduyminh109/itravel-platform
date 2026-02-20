@@ -6,12 +6,15 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
+import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionOverrideJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.mapper.AccountMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,6 +44,14 @@ public class AccountRepositoryImpl implements AccountRepository {
     @Override
     public void save(Account account) {
         AccountJpaEntity accountJpa = mapper.toAccountJpaEntity(account);
+        Set<PermissionOverrideJpaEntity> permissionOverrides = account.getPermissionOverrides().stream()
+                .map(permissionOverride -> PermissionOverrideJpaEntity.builder()
+                        .accountId(account.getId().value())
+                        .permission(permissionOverride.getPermission().code())
+                        .permissionType(permissionOverride.getPermissionType())
+                        .build())
+                .collect(Collectors.toSet());
+        accountJpa.setPermissionOverrides(permissionOverrides);
         repository.save(accountJpa);
     }
 

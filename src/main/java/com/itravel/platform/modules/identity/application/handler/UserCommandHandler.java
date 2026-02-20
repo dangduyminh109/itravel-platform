@@ -8,6 +8,7 @@ import com.itravel.platform.modules.identity.application.exception.UserNotDelete
 import com.itravel.platform.modules.identity.application.exception.UserNotExistException;
 import com.itravel.platform.modules.identity.application.query.UserDetail;
 import com.itravel.platform.modules.identity.application.service.AccountQueryService;
+import com.itravel.platform.modules.identity.application.service.UserQueryService;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.User;
 import com.itravel.platform.modules.identity.domain.repository.UserRepository;
@@ -35,6 +36,7 @@ public class UserCommandHandler {
                 = new CreateAccountByUserNameCommand( command.username(),
                 command.password(),
                 command.roleList(),
+                command.permissionOverrides(),
                 user.getId()
         );
 
@@ -42,15 +44,8 @@ public class UserCommandHandler {
                 .CreateByUserName(createAccountByUserNameCommand);
 
         userRepository.save(user);
-        return UserDetail.builder()
-                .id(user.getId())
-                .fullName(user.getFullName())
-                .username(account.getUsername())
-                .roleList(account.getRoleList())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .deletedAt(user.getDeletedAt())
-                .build();
+
+        return UserQueryService.createResponse(user,account);
     }
 
     @Transactional
@@ -70,21 +65,14 @@ public class UserCommandHandler {
         UpdateAccountCommand updateAccountCommand =
                 new UpdateAccountCommand(
                         command.id().value(),
-                        command.roleList()
+                        command.roleList(),
+                        command.permissionOverrides()
                 );
 
         Account account = accountCommandHandler.update(updateAccountCommand);
 
         userRepository.save(user);
-        return UserDetail.builder()
-                .id(user.getId())
-                .fullName(user.getFullName())
-                .username(account.getUsername())
-                .roleList(account.getRoleList())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .deletedAt(user.getDeletedAt())
-                .build();
+        return UserQueryService.createResponse(user,account);
     }
 
     @Transactional

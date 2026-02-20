@@ -19,14 +19,14 @@ public class AccountLinkRepositoryImpl implements AccountLinkRepository {
 
     @Override
     public Optional<AccountLink> findByAccountId(AccountId id) {
-        AccountLinkJpaEntity accountLinkJpaEntity = repository.findByAccountId(id.value());
-        return Optional.ofNullable(AccountLinkMapper.toAccountLinkDomain(accountLinkJpaEntity));
+        Optional<AccountLinkJpaEntity> accountLinkJpaEntity = repository.findByAccountId(id.value());
+        return accountLinkJpaEntity.map(AccountLinkMapper::toAccountLinkDomain).or(() -> Optional.ofNullable(null));
     }
 
     @Override
     public Optional<AccountLink> findByTargetId(String targetId) {
-        AccountLinkJpaEntity accountLinkJpaEntity = repository.findByTargetId(targetId);
-        return Optional.ofNullable(AccountLinkMapper.toAccountLinkDomain(accountLinkJpaEntity));
+        Optional<AccountLinkJpaEntity> accountLinkJpaEntity = repository.findByTargetId(targetId);
+        return accountLinkJpaEntity.map(AccountLinkMapper::toAccountLinkDomain).or(() -> Optional.ofNullable(null));
     }
 
     @Override

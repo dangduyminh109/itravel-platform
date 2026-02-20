@@ -6,6 +6,7 @@ public record CreateUserRequest(
         String username,
         String password,
         String fullName,
-        Set<Long> roleList
+        Set<Long> roleList,
+        Set<PermissionOverrideRequest> permissionOverrides
 ) { }
 

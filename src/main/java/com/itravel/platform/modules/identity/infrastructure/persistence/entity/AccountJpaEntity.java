@@ -40,4 +40,7 @@ public class AccountJpaEntity extends JpaBaseModel {
             inverseJoinColumns = @JoinColumn(name = "roleId")
     )
     Set<RoleJpaEntity> roleList;
+
+    @OneToMany(mappedBy = "accountId", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<PermissionOverrideJpaEntity> permissionOverrides;
 }

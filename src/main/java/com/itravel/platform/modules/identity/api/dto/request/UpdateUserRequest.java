@@ -6,5 +6,6 @@ public record UpdateUserRequest(
         String newPassword,
         String status,
         String fullName,
-        Set<Long> roleList
+        Set<Long> roleList,
+        Set<PermissionOverrideRequest> permissionOverrides
 ) { }

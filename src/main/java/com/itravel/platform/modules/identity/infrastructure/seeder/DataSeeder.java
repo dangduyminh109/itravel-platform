@@ -1,9 +1,9 @@
 package com.itravel.platform.modules.identity.infrastructure.seeder;
 
-import com.itravel.platform.modules.identity.application.authorization.PermissionCatalog;
 import com.itravel.platform.modules.identity.application.exception.RoleNotExistException;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkType;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionCode;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.repository.*;
 import com.itravel.platform.modules.identity.infrastructure.security.PasswordEncoderAdapter;
@@ -34,11 +34,10 @@ public class DataSeeder implements ApplicationRunner {
     @Transactional
     public void run(ApplicationArguments args) {
         if (permissionJpaRepository.count() == 0) {
-            Set<PermissionJpaEntity> permissionJpaEntityList = PermissionCatalog
-                    .getPermissionList()
-                    .stream()
+            List<PermissionCode> permissionList = Arrays.asList(PermissionCode.values());
+            Set<PermissionJpaEntity> permissionJpaEntityList = permissionList.stream()
                     .map(item -> PermissionJpaEntity.builder()
-                        .code(item.code())
+                        .code(item.name())
                         .build()
                     ).collect(Collectors.toSet());
             permissionJpaRepository.saveAll(permissionJpaEntityList);

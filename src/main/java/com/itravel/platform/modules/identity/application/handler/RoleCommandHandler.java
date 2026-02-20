@@ -1,6 +1,5 @@
 package com.itravel.platform.modules.identity.application.handler;
 
-import com.itravel.platform.modules.identity.application.authorization.PermissionCatalog;
 import com.itravel.platform.modules.identity.application.command.role.CreateRoleCommand;
 import com.itravel.platform.modules.identity.application.command.role.DeleteRoleCommand;
 import com.itravel.platform.modules.identity.application.command.role.UpdatePermissionForRoleCommand;
@@ -10,7 +9,6 @@ import com.itravel.platform.modules.identity.application.exception.RoleExistedEx
 import com.itravel.platform.modules.identity.application.exception.RoleNotExistException;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
-import com.itravel.platform.modules.identity.domain.exception.InvalidPermissionCodeException;
 import com.itravel.platform.modules.identity.domain.repository.RoleRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -66,12 +64,6 @@ public class RoleCommandHandler {
     @Transactional
     public void updatePermissionForRole(List<UpdatePermissionForRoleCommand> updatePermissionForRoleCommands){
         for (UpdatePermissionForRoleCommand command : updatePermissionForRoleCommands) {
-            command.permissionCodeList().forEach(p -> {
-                if(!PermissionCatalog.checkPermissionCode(p)){
-                    throw new InvalidPermissionCodeException();
-                }
-            });
-
             Role role = roleRepository.findById(command.id())
                     .orElseThrow(RoleNotExistException::new);
             if(role.getName().value().equals("admin")){

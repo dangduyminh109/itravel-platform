@@ -2,6 +2,7 @@ package com.itravel.platform.modules.identity.domain.aggregate;
 import com.itravel.platform.common.domain.BaseAggregate;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.domain.exception.EmailCredentialsRequiredException;
 import com.itravel.platform.modules.identity.domain.exception.GoogleCredentialsRequiredException;
@@ -14,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -24,7 +26,7 @@ public class Account extends BaseAggregate<AccountId> {
     PasswordHash password;
     AuthProvider authProvider;
     final Set<Role> roleList = new HashSet<>();
-    final Set<AccountPermission> permissionOverrides = new HashSet<>();
+    final Set<PermissionOverride> permissionOverrides = new HashSet<>();
     AccountStatus status;
 
     private Account (
@@ -134,7 +136,8 @@ public class Account extends BaseAggregate<AccountId> {
             Instant createdAt,
             Instant updatedAt,
             Instant deletedAt,
-            Set<Role> roleList
+            Set<Role> roleList,
+            Set<PermissionOverride> permissionOverrides
     ) {
         Account acc = new Account(id,
                 username,
@@ -147,6 +150,7 @@ public class Account extends BaseAggregate<AccountId> {
                 deletedAt
         );
         acc.roleList.addAll(roleList);
+        acc.permissionOverrides.addAll(permissionOverrides);
         return acc;
     }
     public void grantRole(Role role) {
@@ -157,11 +161,47 @@ public class Account extends BaseAggregate<AccountId> {
         this.roleList.remove(role);
     }
 
-    public void grantPermissionOverride(AccountPermission permission) {
+    public void grantPermissionOverride(PermissionOverride permission) {
+        Set<Permission> rolePermissions = new HashSet<>();
+        for (Role role : roleList) {
+            rolePermissions.addAll(role.getPermissionList());
+        }
+        if(permission.getPermissionType().equals(PermissionType.DENY)
+        && !rolePermissions.contains(permission.getPermission())){
+            return;
+        }
+        if(permission.getPermissionType().equals(PermissionType.GRANT)
+                && rolePermissions.contains(permission.getPermission())){
+            return;
+        }
+
+        Optional<PermissionOverride> existing = this.permissionOverrides.stream()
+                .filter(p -> p.getPermission().code().equals(permission.getPermission().code()))
+                .findFirst();
+        existing.ifPresent(this.permissionOverrides::remove);
         this.permissionOverrides.add(permission);
     }
 
-    public void revokePermissionOverride(AccountPermission permission) {
+    public void revokePermissionOverride(PermissionOverride permission) {
         this.permissionOverrides.remove(permission);
+    }
+
+    public void syncPermissionOverride() {
+        Set<Permission> rolePermissions = new HashSet<>();
+        for (Role role : roleList) {
+            rolePermissions.addAll(role.getPermissionList());
+        }
+        Set<PermissionOverride> asyncPer = new HashSet<>(this.permissionOverrides);
+        for (PermissionOverride item : asyncPer) {
+            if(item.getPermissionType().equals(PermissionType.DENY)
+                    && !rolePermissions.contains(item.getPermission())
+            ){
+                this.permissionOverrides.remove(item);
+            }else if(item.getPermissionType().equals(PermissionType.GRANT)
+                    && rolePermissions.contains(item.getPermission())
+            ){
+                this.permissionOverrides.remove(item);
+            }
+        }
     }
 }

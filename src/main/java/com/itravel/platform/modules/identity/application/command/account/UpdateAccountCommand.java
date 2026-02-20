@@ -5,6 +5,7 @@ import java.util.Set;
 
 public record UpdateAccountCommand(
         String targetId,
-        Set<RoleId> roleList
+        Set<RoleId> roleList,
+        Set<PermissionOverrideCommand> permissionOverrides
 ) {
 }

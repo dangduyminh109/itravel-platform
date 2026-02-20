@@ -1,5 +1,8 @@
 package com.itravel.platform.modules.identity.application.service;
 
+import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
+import com.itravel.platform.modules.identity.domain.aggregate.User;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +17,8 @@ import com.itravel.platform.modules.identity.domain.repository.AccountRepository
 import com.itravel.platform.modules.identity.domain.repository.UserRepository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,15 +36,30 @@ public class UserQueryService {
                             .orElseThrow(UserNotExistException::new);
                     Account account = accountRepository.findById(accountLink.getAccountId())
                             .orElseThrow(UserNotExistException::new);
-                    return UserDetail.builder()
-                            .id(user.getId())
-                            .fullName(user.getFullName())
-                            .username(account.getUsername())
-                            .roleList(account.getRoleList())
-                            .createdAt(user.getCreatedAt())
-                            .updatedAt(user.getUpdatedAt())
-                            .deletedAt(user.getDeletedAt())
-                            .build();
+
+                  return createResponse(user, account);
                 }).toList();
+    }
+
+    public static UserDetail createResponse(User user, Account account){
+        Set<PermissionOverrideCommand> permissionOverrides =
+                account.getPermissionOverrides().stream()
+                        .map(item ->
+                                new PermissionOverrideCommand(
+                                        item.getPermission(),
+                                        item.getPermissionType())
+                        )
+                        .collect(Collectors.toSet());
+
+        return UserDetail.builder()
+                .id(user.getId())
+                .fullName(user.getFullName())
+                .username(account.getUsername())
+                .roleList(account.getRoleList())
+                .permissionOverrides(permissionOverrides)
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .deletedAt(user.getDeletedAt())
+                .build();
     }
 }
