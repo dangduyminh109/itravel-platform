@@ -29,6 +29,8 @@ public enum ApplicationErrorCode {
     CUSTOMER_NOT_EXIST("CUSTOMER_NOT_EXIST", "Customer does not exist", HttpStatus.BAD_REQUEST, null),
     CUSTOMER_DELETED("CUSTOMER_DELETED", "Customer has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
     ACCOUNT_NOT_EXIST("ACCOUNT_NOT_EXIST", "Account does not exist", HttpStatus.BAD_REQUEST, null),
+    ACCOUNT_INACTIVE("ACCOUNT_INACTIVE", "Account is inactive", HttpStatus.BAD_REQUEST, "status"),
+    ACCOUNT_DELETED("ACCOUNT_DELETED", "Account has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
 
     TOKEN_INVALID("TOKEN_INVALID", "Invalid or expired token", HttpStatus.UNAUTHORIZED, "token");
     ;

@@ -1,5 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 import com.itravel.platform.common.infrastructure.JpaBaseModel;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +30,10 @@ public class AccountJpaEntity extends JpaBaseModel {
     String email;
 
     @Column(nullable = false)
-    String authProvider;
+    AccountStatus status;
+
+    @Column(nullable = false)
+    AuthProvider authProvider;
 
     Instant createdAt;
     Instant updatedAt;

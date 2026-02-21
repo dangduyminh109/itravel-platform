@@ -2,6 +2,7 @@ package com.itravel.platform.modules.identity.infrastructure.seeder;
 
 import com.itravel.platform.modules.identity.application.exception.RoleNotExistException;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkType;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionCode;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.*;
@@ -68,7 +69,8 @@ public class DataSeeder implements ApplicationRunner {
             AccountJpaEntity accountJpa = AccountJpaEntity.builder()
                     .id(UUID.randomUUID().toString())
                     .password(passwordEncoderAdapter.encode("123456").value())
-                    .authProvider(AuthProvider.USERNAME.toString())
+                    .authProvider(AuthProvider.USERNAME)
+                    .status(AccountStatus.ACTIVE)
                     .createdAt(Instant.now())
                     .username("admin")
                     .roleList(Set.of(adminRole))

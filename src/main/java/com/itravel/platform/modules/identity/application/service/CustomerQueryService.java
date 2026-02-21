@@ -34,6 +34,7 @@ public class CustomerQueryService {
                             .fullName(customer.getFullName())
                             .email(account.getEmail())
                             .roleList(account.getRoleList())
+                            .status(account.getStatus())
                             .createdAt(customer.getCreatedAt())
                             .updatedAt(customer.getUpdatedAt())
                             .deletedAt(customer.getDeletedAt())

@@ -57,6 +57,7 @@ public class UserQueryService {
                 .username(account.getUsername())
                 .roleList(account.getRoleList())
                 .permissionOverrides(permissionOverrides)
+                .status(account.getStatus())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .deletedAt(user.getDeletedAt())

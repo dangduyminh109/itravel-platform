@@ -2,6 +2,7 @@ package com.itravel.platform.modules.identity.application.query;
 
 import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
@@ -16,6 +17,7 @@ public record UserDetail(
     FullName fullName,
     Set<Role> roleList,
     Set<PermissionOverrideCommand> permissionOverrides,
+    AccountStatus status,
     Instant createdAt,
     Instant updatedAt,
     Instant deletedAt

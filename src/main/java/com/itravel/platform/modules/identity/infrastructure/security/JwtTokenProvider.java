@@ -39,21 +39,7 @@ public class JwtTokenProvider implements TokenProvider {
     public String generateAccessToken(AccountId accountId, AccountLinkType accountType, String roleList, String permissionList) throws JOSEException {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet;
-        if(accountType.equals(AccountLinkType.CUSTOMER)){
-            jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(accountId.value())
-                .issuer(ISSUER)
-                .audience(AUDIENCE)
-                .issueTime(new Date())
-                .expirationTime(new Date(
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
-                ))
-                .claim("type", accountType.toString())
-                .jwtID(UUID.randomUUID().toString())
-                    .build();
-
-        }else {
-            jwtClaimsSet = new JWTClaimsSet.Builder()
+        jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(accountId.value())
                 .issuer(ISSUER)
                 .audience(AUDIENCE)
@@ -65,9 +51,6 @@ public class JwtTokenProvider implements TokenProvider {
                 .claim("type", accountType.toString())
                 .jwtID(UUID.randomUUID().toString())
                 .build();
-
-        }
-
         SignedJWT signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
         signedJWT.sign(new MACSigner(SIGNER_KEY));
         return signedJWT.serialize();
