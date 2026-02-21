@@ -6,16 +6,19 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permis
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RoleJpaEntity;
+import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(
+        componentModel = "spring",
+        uses = {IdentityValueObjectMapper.class},
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface RoleMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "name",
-            expression = "java(role.getName() != null ? role.getName().value() : null)")
     RoleJpaEntity toRoleJpaEntity(Role role);
 
     static Role toRoleDomain(RoleJpaEntity entity) {

@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.identity.api.dto.request;
 
-public record RegisterCustomerByEmailRequest(
-   String fullName,
+public record CustomerForgotPasswordRequest(
    String email,
-   String password,
+   String newPassword,
+   String confirmPassword,
    String otp
 ) {}

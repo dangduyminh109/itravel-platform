@@ -4,8 +4,6 @@ import com.itravel.platform.modules.identity.application.command.account.*;
 import com.itravel.platform.modules.identity.application.exception.*;
 import com.itravel.platform.modules.identity.application.service.AccountQueryService;
 import com.itravel.platform.modules.identity.domain.aggregate.*;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
 import com.itravel.platform.modules.identity.domain.repository.AccountLinkRepository;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
@@ -175,7 +173,7 @@ public class AccountCommandHandler {
         Account account = accountRepository.findById(accountLink.getAccountId())
                 .orElseThrow(UserNotExistException::new);
 
-        if("admin".equals(account.getUsername().value())){
+        if(account.getUsername() != null && "admin".equals(account.getUsername().value())){
             throw new UserNotDeleteOrUpdateException();
         }
 

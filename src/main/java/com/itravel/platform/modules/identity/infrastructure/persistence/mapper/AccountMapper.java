@@ -12,17 +12,18 @@ import com.itravel.platform.modules.identity.infrastructure.persistence.entity.A
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionOverrideJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RoleJpaEntity;
+import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(
+        componentModel = "spring",
+        uses = {IdentityValueObjectMapper.class},
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface AccountMapper {
-    @Mapping(target = "id", expression = "java(account.getId() != null ? account.getId().value() : null)")
-    @Mapping(target = "username", expression = "java(account.getUsername() != null ? account.getUsername().value() : null)")
-    @Mapping(target = "password", expression = "java(account.getPassword() != null ? account.getPassword().value() : null)")
-    @Mapping(target = "email", expression = "java(account.getEmail() != null ? account.getEmail().value() : null)")
     @Mapping(target = "permissionOverrides", ignore = true)
     AccountJpaEntity toAccountJpaEntity(Account account);
 

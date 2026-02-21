@@ -34,7 +34,7 @@ public class CustomerCommandHandler {
         customerRepository.save(customer);
     }
 
-    public CustomerDetail RegisterCustomerByEmail(RegisterCustomerByEmailCommand command) {
+    public CustomerDetail create(CustomerCreateCommand command) {
         Customer customer = Customer.create(command.fullName());
         CreateAccountByEmailCommand createAccountByEmailCommand
                 = new CreateAccountByEmailCommand(
@@ -49,6 +49,7 @@ public class CustomerCommandHandler {
                 .id(customer.getId())
                 .fullName(customer.getFullName())
                 .email(account.getEmail())
+                .status(account.getStatus())
                 .roleList(account.getRoleList())
                 .createdAt(customer.getCreatedAt())
                 .updatedAt(customer.getUpdatedAt())

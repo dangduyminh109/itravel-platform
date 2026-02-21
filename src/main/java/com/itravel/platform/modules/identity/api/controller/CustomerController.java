@@ -1,11 +1,11 @@
 package com.itravel.platform.modules.identity.api.controller;
 
 import com.itravel.platform.common.dto.ApiResponse;
-import com.itravel.platform.modules.identity.api.dto.request.RegisterCustomerByEmailRequest;
+import com.itravel.platform.modules.identity.api.dto.request.CustomerCreateRequest;
 import com.itravel.platform.modules.identity.api.dto.request.UpdateCustomerRequest;
 import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
 import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
-import com.itravel.platform.modules.identity.application.command.customer.RegisterCustomerByEmailCommand;
+import com.itravel.platform.modules.identity.application.command.customer.CustomerCreateCommand;
 import com.itravel.platform.modules.identity.application.command.customer.UpdateCustomerCommand;
 import com.itravel.platform.modules.identity.application.handler.CustomerCommandHandler;
 import com.itravel.platform.modules.identity.application.service.CustomerQueryService;
@@ -26,7 +26,7 @@ public class CustomerController {
     CustomerRestMapper mapper;
 
     @GetMapping
-    public ApiResponse<List<CustomerResponse>> getUsers() {
+    public ApiResponse<List<CustomerResponse>> getCustomers() {
         return ApiResponse.<List<CustomerResponse>>builder()
                 .success(true)
                 .data(
@@ -37,14 +37,14 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ApiResponse<CustomerResponse> create(@RequestBody RegisterCustomerByEmailRequest request) {
-        RegisterCustomerByEmailCommand command = mapper.toCreateCustomerByEmailCommand(request);
+    public ApiResponse<CustomerResponse> create(@RequestBody CustomerCreateRequest request) {
+        CustomerCreateCommand command = mapper.toCustomerCreateCommand(request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
                 .success(true)
                 .data(mapper
                         .toCustomerResponse(customerCommandHandler
-                                .RegisterCustomerByEmail(command)))
+                                .create(command)))
                 .build();
     }
 

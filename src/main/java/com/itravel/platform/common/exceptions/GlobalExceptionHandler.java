@@ -3,6 +3,7 @@ package com.itravel.platform.common.exceptions;
 import com.itravel.platform.common.dto.ApiError;
 import com.itravel.platform.common.dto.ApiResponse;
 import com.nimbusds.jose.JOSEException;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -246,6 +247,25 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.CANNOT_CREATE_TOKEN;
         return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
                   ApiResponse.<Void>builder()
+                        .message(errorCode.getMessage())
+                        .success(false)
+                        .Errors(List.of(
+                                ApiError.builder()
+                                        .code(errorCode.getCode())
+                                        .message(errorCode.getMessage())
+                                        .field(errorCode.getField())
+                                        .build()
+                        ))
+                        .build()
+        );
+    }
+
+    // lỗi không gửi được mail
+    @ExceptionHandler(MessagingException.class)
+    ResponseEntity<ApiResponse<Void>> MessagingExceptionHandler(MessagingException e) {
+        ErrorCode errorCode = ErrorCode.EMAIL_SEND_FAILED;
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
+                ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
                         .Errors(List.of(

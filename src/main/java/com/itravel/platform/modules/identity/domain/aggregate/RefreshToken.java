@@ -50,7 +50,6 @@ public class RefreshToken {
         return new RefreshToken(id, accountId,tokenHash,expiresAt,revokedAt,createdAt);
     }
 
-
     public static RefreshToken create(AccountId accountId, TokenHash tokenHash, Duration refreshDuration){
         return new RefreshToken(accountId,tokenHash,refreshDuration);
     }

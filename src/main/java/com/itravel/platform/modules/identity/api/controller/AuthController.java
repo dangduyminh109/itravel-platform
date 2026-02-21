@@ -1,15 +1,15 @@
 package com.itravel.platform.modules.identity.api.controller;
 import com.itravel.platform.common.dto.ApiResponse;
-import com.itravel.platform.modules.identity.api.dto.request.LoginRequest;
-import com.itravel.platform.modules.identity.api.dto.request.LogoutRequest;
-import com.itravel.platform.modules.identity.api.dto.request.RefreshRequest;
+import com.itravel.platform.modules.identity.api.dto.request.*;
 import com.itravel.platform.modules.identity.api.dto.response.AuthTokenResponse;
+import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
 import com.itravel.platform.modules.identity.api.mapper.AuthRestMapper;
-import com.itravel.platform.modules.identity.application.command.auth.LoginCommand;
-import com.itravel.platform.modules.identity.application.command.auth.LogoutCommand;
-import com.itravel.platform.modules.identity.application.command.auth.RefreshCommand;
+import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
+import com.itravel.platform.modules.identity.api.mapper.OtpRestMapper;
+import com.itravel.platform.modules.identity.application.command.auth.*;
 import com.itravel.platform.modules.identity.application.handler.AuthCommandHandler;
 import com.nimbusds.jose.JOSEException;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     AuthRestMapper mapper;
     AuthCommandHandler authCommandHandler;
+    OtpRestMapper otpMapper;
+    CustomerRestMapper customerMapper;
+    private final AuthRestMapper authResMapper;
 
     @PostMapping("/login")
     ApiResponse<AuthTokenResponse> login(@RequestBody @Valid LoginRequest request) throws JOSEException {
@@ -56,6 +59,39 @@ public class AuthController {
         return ApiResponse.<AuthTokenResponse>builder()
                 .data(authTokenResponse)
                 .message("logout successfully")
+                .build();
+    }
+
+    @PostMapping("/register")
+    public ApiResponse<CustomerResponse> register(@RequestBody RegisterCustomerByEmailRequest request) {
+        RegisterCustomerByEmailCommand command = customerMapper.toCreateCustomerByEmailCommand(request);
+        return ApiResponse.<CustomerResponse>builder()
+                .message("Create customer successfully")
+                .success(true)
+                .data(customerMapper
+                        .toCustomerResponse(authCommandHandler
+                                .RegisterCustomerByEmail(command)))
+                .build();
+    }
+
+    @PostMapping("/forgot-password")
+    ApiResponse<String> forgotPassword(@RequestBody CustomerForgotPasswordRequest request) throws JOSEException {
+        CustomerForgotPasswordCommand command =
+                mapper.toCustomerForgotPasswordCommand(request);
+        return ApiResponse.<String>builder()
+                .message(authCommandHandler.forgotPassword(command))
+                .success(true)
+                .data(null)
+                .build();
+    }
+
+    @PostMapping("/send-otp")
+    ApiResponse<Void> sendOtp(@RequestBody SendOtpRequest request) throws MessagingException {
+        SendOtpCommand command = otpMapper.toSendOtpCommand(request);
+        return ApiResponse.<Void>builder()
+                .message(authCommandHandler.sendOtp(command))
+                .success(true)
+                .data(null)
                 .build();
     }
 }

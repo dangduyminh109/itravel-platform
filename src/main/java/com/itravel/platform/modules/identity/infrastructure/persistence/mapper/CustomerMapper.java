@@ -4,16 +4,16 @@ import com.itravel.platform.modules.identity.domain.aggregate.Customer;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.CustomerId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.CustomerJpaEntity;
+import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(
+        componentModel = "spring",
+        uses = {IdentityValueObjectMapper.class},
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface CustomerMapper {
-    @Mapping(target = "id",
-            expression = "java(customer.getId() != null ? customer.getId().value() : null)")
-    @Mapping(target = "fullName",
-            expression = "java(customer.getFullName() != null ? customer.getFullName().value() : null)")
     CustomerJpaEntity toCustomerJpaEntity(Customer customer);
 
     static Customer toCustomerDomain(CustomerJpaEntity entity) {

@@ -22,7 +22,8 @@ public enum ErrorCode {
     UNAUTHENTICATED("UNAUTHENTICATED", "Authentication required", HttpStatus.UNAUTHORIZED, null),
     UNAUTHORIZED("UNAUTHORIZED", "Access denied", HttpStatus.FORBIDDEN, null),
     CANNOT_CREATE_TOKEN("CANNOT_CREATE_TOKEN", "Failed to create token", HttpStatus.INTERNAL_SERVER_ERROR, "token"),
-    INVALID_TOKEN("INVALID_TOKEN", "Invalid or expired token", HttpStatus.UNAUTHORIZED, "token");
+    INVALID_TOKEN("INVALID_TOKEN", "Invalid or expired token", HttpStatus.UNAUTHORIZED, "token"),
+    EMAIL_SEND_FAILED("EMAIL_SEND_FAILED", "Failed to send email",HttpStatus.INTERNAL_SERVER_ERROR,"email");
     ;
 
     String code;

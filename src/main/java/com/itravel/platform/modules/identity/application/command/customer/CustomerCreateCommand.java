@@ -4,7 +4,7 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
 
-public record RegisterCustomerByEmailCommand(
+public record CustomerCreateCommand(
         FullName fullName,
         Email email,
         PasswordHash password
