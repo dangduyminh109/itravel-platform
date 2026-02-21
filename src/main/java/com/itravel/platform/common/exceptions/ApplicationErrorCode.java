@@ -32,6 +32,10 @@ public enum ApplicationErrorCode {
     ACCOUNT_INACTIVE("ACCOUNT_INACTIVE", "Account is inactive", HttpStatus.BAD_REQUEST, "status"),
     ACCOUNT_DELETED("ACCOUNT_DELETED", "Account has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
 
+    INVALID_LOGIN_METHOD("INVALID_LOGIN_METHOD", "Invalid login method for this account", HttpStatus.BAD_REQUEST, "authProvider"),
+    REFRESH_TOKEN_REVOKED("REFRESH_TOKEN_REVOKED", "Refresh token has been revoked", HttpStatus.UNAUTHORIZED, "refreshToken"),
+    REFRESH_TOKEN_NOT_FOUND("REFRESH_TOKEN_NOT_FOUND", "Refresh token not found", HttpStatus.UNAUTHORIZED, "refreshToken"),
+    REFRESH_TOKEN_EXPIRED("REFRESH_TOKEN_EXPIRED", "Refresh token has expired", HttpStatus.UNAUTHORIZED, "refreshToken"),
     TOKEN_INVALID("TOKEN_INVALID", "Invalid or expired token", HttpStatus.UNAUTHORIZED, "token");
     ;
 
