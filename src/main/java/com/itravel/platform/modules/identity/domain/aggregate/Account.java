@@ -1,8 +1,10 @@
 package com.itravel.platform.modules.identity.domain.aggregate;
 import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.modules.identity.application.exception.RoleInActiveException;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.domain.exception.EmailCredentialsRequiredException;
 import com.itravel.platform.modules.identity.domain.exception.GoogleCredentialsRequiredException;
@@ -154,6 +156,9 @@ public class Account extends BaseAggregate<AccountId> {
         return acc;
     }
     public void grantRole(Role role) {
+        if(RoleStatus.INACTIVE.equals(role.getStatus())){
+            throw new RoleInActiveException();
+        }
         this.roleList.add(role);
     }
 
@@ -203,5 +208,24 @@ public class Account extends BaseAggregate<AccountId> {
                 this.permissionOverrides.remove(item);
             }
         }
+    }
+
+    public Set<Permission> getEffectivePermissions() {
+        Set<Permission> effectivePermissions = new HashSet<>();
+        for (Role role : roleList) {
+            if(RoleStatus.INACTIVE.equals(role.getStatus())){
+                continue;
+            }
+            effectivePermissions.addAll(role.getPermissionList());
+        }
+
+        for (PermissionOverride override : permissionOverrides) {
+            if (override.getPermissionType() == PermissionType.GRANT) {
+                effectivePermissions.add(override.getPermission());
+            } else if (override.getPermissionType() == PermissionType.DENY) {
+                effectivePermissions.remove(override.getPermission());
+            }
+        }
+        return effectivePermissions;
     }
 }

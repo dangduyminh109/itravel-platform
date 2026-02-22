@@ -31,18 +31,4 @@ public class AccountQueryService {
         return accountRepository.findById(accountLink.getAccountId())
                 .orElseThrow(CustomerNotExistException::new);
     }
-
-    public Set<String> getPermissions(AccountId id){
-        Account account = accountRepository.findById(id)
-                .orElseThrow(AccountNotExistException::new);
-
-        Set<Role> roleList = new HashSet<>(account.getRoleList());
-        Set<Permission> permissionList = new HashSet<>();
-
-        for(Role r : roleList){
-            permissionList.addAll(r.getPermissionList());
-        }
-        return permissionList.stream().map(Permission::code)
-                .collect(Collectors.toSet());
-    }
 }

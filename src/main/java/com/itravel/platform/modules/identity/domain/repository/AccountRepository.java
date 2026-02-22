@@ -13,6 +13,7 @@ public interface AccountRepository {
     Optional<Account> findByUsername(Username username);
     Optional<Account> findByEmail(Email email);
     Optional<Account> findByIdentifier(String identifier);
+    Optional<Account> findByIdWithRolesAndPermissions(AccountId id);
     void save(Account account);
     void destroy(AccountId accountId);
 }

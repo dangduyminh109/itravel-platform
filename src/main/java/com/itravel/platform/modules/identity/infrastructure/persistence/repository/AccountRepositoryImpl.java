@@ -48,6 +48,12 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
+    public Optional<Account> findByIdWithRolesAndPermissions(AccountId id) {
+        return repository.findByIdWithRolesAndPermissions(id.value())
+                .map(AccountMapper::toAccountDomain);
+    }
+
+    @Override
     public void save(Account account) {
         AccountJpaEntity accountJpa = mapper.toAccountJpaEntity(account);
         Set<PermissionOverrideJpaEntity> permissionOverrides = account.getPermissionOverrides().stream()

@@ -39,13 +39,15 @@ public class RoleCommandHandler {
     public Role update(UpdateRoleCommand command){
         Role role = roleRepository.findById(command.id())
                 .orElseThrow(RoleNotExistException::new);
-        roleRepository.findByRoleName(command.name()).ifPresent(e -> {
-            throw new RoleExistedException();
-        });
         if(role.getName().value().equals("admin")){
             throw new AdminRoleCanNotDeleteException();
         }
-        role.rename(command.name());
+        if(!role.getName().equals(command.name())){
+            roleRepository.findByRoleName(command.name()).ifPresent(e -> {
+                throw new RoleExistedException();
+            });
+            role.rename(command.name());
+        }
         role.changeStatus(command.status());
         roleRepository.save(role);
         return role;

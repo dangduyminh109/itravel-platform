@@ -3,7 +3,6 @@ package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.PermissionOverride;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;

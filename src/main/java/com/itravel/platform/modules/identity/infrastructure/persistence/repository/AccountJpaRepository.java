@@ -17,4 +17,13 @@ public interface AccountJpaRepository extends JpaRepository<AccountJpaEntity,Str
           OR a.email = :identifier
        """)
     Optional<AccountJpaEntity> findByIdentifier(@Param("identifier") String identifier);
+
+    @Query("""
+        SELECT DISTINCT a FROM AccountJpaEntity a
+        LEFT JOIN FETCH a.permissionOverrides
+        LEFT JOIN FETCH a.roleList r
+        LEFT JOIN FETCH r.permissionList
+        WHERE a.id = :id
+    """)
+    Optional<AccountJpaEntity> findByIdWithRolesAndPermissions(String id);
 }

@@ -14,8 +14,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -144,7 +143,6 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
-
 
     // token hết hạn
     @ExceptionHandler(value = AuthenticationServiceException.class)

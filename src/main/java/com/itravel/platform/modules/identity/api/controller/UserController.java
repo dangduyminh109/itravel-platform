@@ -12,6 +12,7 @@ import com.itravel.platform.modules.identity.application.service.UserQueryServic
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserController {
     UserRestMapper mapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('USER_VIEW')")
     public ApiResponse<List<UserResponse>> getUsers() {
         return ApiResponse.<List<UserResponse>>builder()
                 .success(true)
@@ -38,6 +40,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('USER_CREATE')")
     public ApiResponse<UserResponse> create(@RequestBody CreateUserRequest createUserRequest) {
         CreateUserCommand createUserCommand = mapper.toCreateUserCommand(createUserRequest);
         return ApiResponse.<UserResponse>builder()
@@ -48,6 +51,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ApiResponse<UserResponse> update(@PathVariable String id, @RequestBody UpdateUserRequest updateUserRequest) {
         UpdateUserCommand updateUserCommand = mapper.toUpdateUserCommand(id, updateUserRequest);
         return ApiResponse.<UserResponse>builder()
@@ -58,6 +62,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
         userCommandHandler.delete(mapper.toDeleteUserCommand(id));
         return ApiResponse.<Void>builder()
@@ -67,6 +72,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/restore")
+    @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ApiResponse<Void> restore(@PathVariable String id) {
         userCommandHandler.restore(mapper.toRestoreUserCommand(id));
         return ApiResponse.<Void>builder()
@@ -76,6 +82,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/destroy")
+    @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
         userCommandHandler.destroy(mapper.toDeleteUserCommand(id));
         return ApiResponse.<Void>builder()

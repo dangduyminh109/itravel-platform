@@ -12,8 +12,8 @@ import com.itravel.platform.modules.identity.application.service.CustomerQuerySe
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -26,6 +26,7 @@ public class CustomerController {
     CustomerRestMapper mapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")
     public ApiResponse<List<CustomerResponse>> getCustomers() {
         return ApiResponse.<List<CustomerResponse>>builder()
                 .success(true)
@@ -37,6 +38,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CUSTOMER_CREATE')")
     public ApiResponse<CustomerResponse> create(@RequestBody CustomerCreateRequest request) {
         CustomerCreateCommand command = mapper.toCustomerCreateCommand(request);
         return ApiResponse.<CustomerResponse>builder()
@@ -49,6 +51,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('CUSTOMER_UPDATE')")
     public ApiResponse<CustomerResponse> update(@PathVariable String id, @RequestBody UpdateCustomerRequest request) {
         UpdateCustomerCommand command = mapper.toUpdateCustomerCommand(id,request);
         return ApiResponse.<CustomerResponse>builder()
@@ -59,6 +62,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
         customerCommandHandler.delete(mapper.toDeleteCustomerCommand(id));
         return ApiResponse.<Void>builder()
@@ -68,6 +72,7 @@ public class CustomerController {
     }
 
     @PatchMapping("/{id}/restore")
+    @PreAuthorize("hasAuthority('CUSTOMER_UPDATE')")
     public ApiResponse<Void> restore(@PathVariable String id) {
         customerCommandHandler.restore(mapper.toRestoreCustomerCommand(id));
         return ApiResponse.<Void>builder()
@@ -77,6 +82,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}/destroy")
+    @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
         customerCommandHandler.destroy(mapper.toDeleteCustomerCommand(id));
         return ApiResponse.<Void>builder()

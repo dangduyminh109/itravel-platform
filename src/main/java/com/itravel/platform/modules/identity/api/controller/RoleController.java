@@ -14,6 +14,7 @@ import com.itravel.platform.modules.identity.application.service.RoleQueryServic
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -25,7 +26,9 @@ public class RoleController {
     RoleCommandHandler roleCommandHandler;
     RoleQueryService roleQueryService;
     RoleRestMapper mapper;
+
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_VIEW')")
     public ApiResponse<List<RoleResponse>> getRoles() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .success(true)
@@ -34,6 +37,7 @@ public class RoleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CREATE')")
     public ApiResponse<RoleResponse> create(@RequestBody CreateRoleRequest createRoleRequest) {
         CreateRoleCommand createRoleCommand = mapper.toCreateRoleCommand(createRoleRequest);
         return ApiResponse.<RoleResponse>builder()
@@ -44,6 +48,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ApiResponse<RoleResponse> update(@PathVariable Long id, @RequestBody UpdateRoleRequest updateRoleRequest) {
         UpdateRoleCommand updateRoleCommand = mapper.toUpdateRoleCommand(id,updateRoleRequest);
         return ApiResponse.<RoleResponse>builder()
@@ -54,6 +59,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}/destroy")
+    @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable Long id) {
         roleCommandHandler.destroy(mapper.toDeleteRoleCommand(id));
         return ApiResponse.<Void>builder()
@@ -63,6 +69,7 @@ public class RoleController {
     }
 
     @PutMapping("/permissions")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ApiResponse<Void> updatePermissionForRole(@RequestBody List<UpdatePermissionsForRoleRequest> requests) {
         List<UpdatePermissionForRoleCommand> updatePermissionForRoleCommand =
                 mapper.toUpdatePermissionForRoleCommand(requests);
