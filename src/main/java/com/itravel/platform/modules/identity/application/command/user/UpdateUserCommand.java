@@ -8,7 +8,7 @@ import java.util.Set;
 public record UpdateUserCommand(
         UserId id,
         FullName fullName,
-        PasswordHash newPassword,
+        RawPassword newPassword,
         Set<RoleId> roleList,
         Set<PermissionOverrideCommand> permissionOverrides
 ) {

@@ -5,7 +5,7 @@ import java.util.Set;
 
 public record CreateAccountByUserNameCommand(
         Username username,
-        PasswordHash password,
+        RawPassword password,
         Set<RoleId> roleList,
         Set<PermissionOverrideCommand> permissionOverrides,
         UserId id

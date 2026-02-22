@@ -7,7 +7,7 @@ import java.util.Set;
 
 public record CreateUserCommand(
         Username username,
-        PasswordHash password,
+        RawPassword password,
         FullName fullName,
         Set<RoleId> roleList,
         Set<PermissionOverrideCommand> permissionOverrides

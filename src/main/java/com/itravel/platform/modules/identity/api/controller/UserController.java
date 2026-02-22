@@ -9,6 +9,7 @@ import com.itravel.platform.modules.identity.application.command.user.CreateUser
 import com.itravel.platform.modules.identity.application.command.user.UpdateUserCommand;
 import com.itravel.platform.modules.identity.application.handler.UserCommandHandler;
 import com.itravel.platform.modules.identity.application.service.UserQueryService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -43,7 +44,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('USER_CREATE')")
-    public ApiResponse<UserResponse> create(@RequestBody CreateUserRequest createUserRequest) {
+    public ApiResponse<UserResponse> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
         CreateUserCommand createUserCommand = mapper.toCreateUserCommand(createUserRequest);
         return ApiResponse.<UserResponse>builder()
                 .message("Create user successfully")
@@ -54,7 +55,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER_UPDATE')")
-    public ApiResponse<UserResponse> update(@PathVariable String id, @RequestBody UpdateUserRequest updateUserRequest) {
+    public ApiResponse<UserResponse> update(@PathVariable String id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
         UpdateUserCommand updateUserCommand = mapper.toUpdateUserCommand(id, updateUserRequest);
         return ApiResponse.<UserResponse>builder()
                 .message("Update user successfully")

@@ -9,6 +9,7 @@ import com.itravel.platform.modules.identity.application.command.customer.Custom
 import com.itravel.platform.modules.identity.application.command.customer.UpdateCustomerCommand;
 import com.itravel.platform.modules.identity.application.handler.CustomerCommandHandler;
 import com.itravel.platform.modules.identity.application.service.CustomerQueryService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,7 +42,7 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('CUSTOMER_CREATE')")
-    public ApiResponse<CustomerResponse> create(@RequestBody CustomerCreateRequest request) {
+    public ApiResponse<CustomerResponse> create(@RequestBody @Valid CustomerCreateRequest request) {
         CustomerCreateCommand command = mapper.toCustomerCreateCommand(request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
@@ -54,7 +55,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('CUSTOMER_UPDATE')")
-    public ApiResponse<CustomerResponse> update(@PathVariable String id, @RequestBody UpdateCustomerRequest request) {
+    public ApiResponse<CustomerResponse> update(@PathVariable String id, @RequestBody @Valid UpdateCustomerRequest request) {
         UpdateCustomerCommand command = mapper.toUpdateCustomerCommand(id,request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Update user successfully")

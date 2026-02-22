@@ -11,6 +11,7 @@ import com.itravel.platform.modules.identity.application.command.role.UpdatePerm
 import com.itravel.platform.modules.identity.api.dto.request.UpdatePermissionsForRoleRequest;
 import com.itravel.platform.modules.identity.application.handler.RoleCommandHandler;
 import com.itravel.platform.modules.identity.application.service.RoleQueryService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -40,7 +41,7 @@ public class RoleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ROLE_CREATE')")
-    public ApiResponse<RoleResponse> create(@RequestBody CreateRoleRequest createRoleRequest) {
+    public ApiResponse<RoleResponse> create(@RequestBody @Valid CreateRoleRequest createRoleRequest) {
         CreateRoleCommand createRoleCommand = mapper.toCreateRoleCommand(createRoleRequest);
         return ApiResponse.<RoleResponse>builder()
                 .message("Create role successfully")
@@ -51,7 +52,7 @@ public class RoleController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_UPDATE')")
-    public ApiResponse<RoleResponse> update(@PathVariable Long id, @RequestBody UpdateRoleRequest updateRoleRequest) {
+    public ApiResponse<RoleResponse> update(@PathVariable Long id, @RequestBody @Valid UpdateRoleRequest updateRoleRequest) {
         UpdateRoleCommand updateRoleCommand = mapper.toUpdateRoleCommand(id,updateRoleRequest);
         return ApiResponse.<RoleResponse>builder()
                 .message("Update role successfully")
@@ -73,7 +74,7 @@ public class RoleController {
 
     @PutMapping("/permissions")
     @PreAuthorize("hasAuthority('ROLE_UPDATE')")
-    public ApiResponse<Void> updatePermissionForRole(@RequestBody List<UpdatePermissionsForRoleRequest> requests) {
+    public ApiResponse<Void> updatePermissionForRole(@RequestBody @Valid List<UpdatePermissionsForRoleRequest> requests) {
         List<UpdatePermissionForRoleCommand> updatePermissionForRoleCommand =
                 mapper.toUpdatePermissionForRoleCommand(requests);
         roleCommandHandler.updatePermissionForRole(updatePermissionForRoleCommand);

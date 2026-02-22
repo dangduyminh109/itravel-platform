@@ -10,14 +10,14 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.security.access.AccessDeniedException;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -65,13 +65,83 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
                                         .field(errorCode.getFeild())
                                         .build()
                         ))
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException e) {
+        List<ApiError> apiErrors = new ArrayList<>();
+        ErrorCode firstErrorCode = null;
+
+        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+            ErrorCode currentErrorCode = ErrorCode.INVALID_KEY;
+            String fieldName = fieldError.getField();
+
+            if ("typeMismatch".equals(fieldError.getCode())
+                    || (fieldError.getCodes() != null && Arrays.stream(fieldError.getCodes()).anyMatch(code -> code.contains("typeMismatch")))) {
+                if (fieldName.contains("image")) {
+                    currentErrorCode = ErrorCode.INVALID_FILE;
+                } else {
+                    currentErrorCode = ErrorCode.INVALID_TYPE_DATA;
+                }
+            } else {
+                try {
+                    currentErrorCode = ErrorCode.valueOf(fieldError.getDefaultMessage());
+                } catch (IllegalArgumentException ex) {
+                    log.error("ErrorCode {} does not exist in enum\n{}", fieldError.getDefaultMessage(), ex.getMessage());
+                    currentErrorCode = ErrorCode.INVALID_KEY;
+                }
+            }
+
+            if (firstErrorCode == null) {
+                firstErrorCode = currentErrorCode;
+            }
+
+            apiErrors.add(ApiError.builder()
+                    .code(currentErrorCode.getCode())
+                    .message(currentErrorCode.getMessage())
+                    .field(fieldName)
+                    .build());
+        }
+
+        for (ObjectError globalError : e.getBindingResult().getGlobalErrors()) {
+            ErrorCode currentErrorCode = ErrorCode.INVALID_KEY;
+            String defaultMessage = globalError.getDefaultMessage();
+            try {
+                currentErrorCode = ErrorCode.valueOf(defaultMessage);
+            } catch (IllegalArgumentException ex) {
+                log.error("Global ErrorCode {} does not exist in enum\n{}", defaultMessage, ex.getMessage());
+                currentErrorCode = ErrorCode.INVALID_KEY;
+            }
+
+            if (firstErrorCode == null) {
+                firstErrorCode = currentErrorCode;
+            }
+
+            apiErrors.add(ApiError.builder()
+                    .code(currentErrorCode.getCode())
+                    .message(currentErrorCode.getMessage())
+                    .field("global")
+                    .build());
+        }
+
+        if (firstErrorCode == null) {
+            firstErrorCode = ErrorCode.INVALID_KEY;
+        }
+
+        return ResponseEntity.status(firstErrorCode.getHttpStatusCode()).body(
+                ApiResponse.<Void>builder()
+                        .message("Invalid input data")
+                        .success(false)
+                        .errors(apiErrors)
                         .build()
         );
     }
@@ -83,57 +153,7 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
-                                ApiError.builder()
-                                        .code(errorCode.getCode())
-                                        .message(errorCode.getMessage())
-                                        .field(errorCode.getField())
-                                        .build()
-                        ))
-                        .build()
-        );
-    }
-
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse<Void>> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        ErrorCode errorCode = ErrorCode.INVALID_KEY;
-
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            String fieldName = fieldError.getField();
-
-            if ("typeMismatch".equals(fieldError.getCode())
-                    || (fieldError.getCodes() != null && Arrays.stream(fieldError.getCodes()).anyMatch(code -> code.contains("typeMismatch")))) {
-               if (fieldName.contains("image")) {
-                    errorCode = ErrorCode.INVALID_FILE;
-               } else {
-                   errorCode = ErrorCode.INVALID_TYPE_DATA;
-               }
-            } else {
-                try {
-                    errorCode = ErrorCode.valueOf(fieldError.getDefaultMessage());
-                } catch (IllegalArgumentException ex) {
-                    log.error("ErrorCode {} does not exist in enum\n{}", fieldError.getDefaultMessage(), ex.getMessage());
-                    errorCode = ErrorCode.INVALID_KEY;
-                }
-            }
-            break;
-        }
-
-        if (e.getBindingResult().getFieldErrors().isEmpty() && !e.getBindingResult().getGlobalErrors().isEmpty()) {
-            String defaultMessage = e.getBindingResult().getGlobalErrors().get(0).getDefaultMessage();
-            try {
-                errorCode = ErrorCode.valueOf(defaultMessage);
-            } catch (IllegalArgumentException ex) {
-                log.error("Global ErrorCode {} does not exist in enum\n{}", defaultMessage, ex.getMessage());
-                errorCode = ErrorCode.INVALID_KEY;
-            }
-        }
-
-        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
-                ApiResponse.<Void>builder()
-                        .message(errorCode.getMessage())
-                        .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -152,7 +172,7 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -171,7 +191,7 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -190,7 +210,7 @@ public class GlobalExceptionHandler {
                   ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -209,7 +229,7 @@ public class GlobalExceptionHandler {
                   ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -228,7 +248,7 @@ public class GlobalExceptionHandler {
                   ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -247,7 +267,7 @@ public class GlobalExceptionHandler {
                   ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
@@ -266,7 +286,7 @@ public class GlobalExceptionHandler {
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
                         .success(false)
-                        .Errors(List.of(
+                        .errors(List.of(
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())

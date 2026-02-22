@@ -75,7 +75,7 @@ public class AuthCommandHandler {
         }
 
         if (AuthProvider.USERNAME.equals(account.getAuthProvider()) || AuthProvider.EMAIL.equals(account.getAuthProvider())) {
-            if(!passwordEncoderAdapter.matches(command.password().value(),account.getPassword())){
+            if(!passwordEncoderAdapter.matches(command.password(), account.getPassword())){
                 if(account.getAuthProvider().equals(AuthProvider.USERNAME)){
                     throw new UsernameOrPasswordInvalidException();
                 } else{
@@ -198,7 +198,7 @@ public class AuthCommandHandler {
         Account account = accountRepository.findByEmail(command.email())
                         .orElseThrow(AccountNotExistException::new);
 
-        account.changePassword(passwordEncoderAdapter.encode(command.newPassword().value()));
+        account.changePassword(passwordEncoderAdapter.encode(command.newPassword()));
         accountRepository.save(account);
         otpRepository.destroy(otp.getId());
         return "Đổi mật khẩu thành công";

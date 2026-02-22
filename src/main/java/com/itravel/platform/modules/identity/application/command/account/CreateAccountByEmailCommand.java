@@ -4,6 +4,6 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 
 public record CreateAccountByEmailCommand(
         Email email,
-        PasswordHash password,
+        RawPassword password,
         CustomerId customerId
 ) {}

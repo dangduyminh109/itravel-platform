@@ -1,9 +1,9 @@
 package com.itravel.platform.modules.identity.application.command.account;
 
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RawPassword;
 
 public record UpdateAccountPasswordCommand(
     String targetId,
-    PasswordHash newPassword
+    RawPassword newPassword
 ) {
 }

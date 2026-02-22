@@ -5,6 +5,7 @@ import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkT
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionCode;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RawPassword;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.repository.*;
 import com.itravel.platform.modules.identity.infrastructure.security.PasswordEncoderAdapter;
@@ -68,7 +69,7 @@ public class DataSeeder implements ApplicationRunner {
 
             AccountJpaEntity accountJpa = AccountJpaEntity.builder()
                     .id(UUID.randomUUID().toString())
-                    .password(passwordEncoderAdapter.encode("123456").value())
+                    .password(passwordEncoderAdapter.encode(new RawPassword("Admin@123")).value())
                     .authProvider(AuthProvider.USERNAME)
                     .status(AccountStatus.ACTIVE)
                     .createdAt(Instant.now())

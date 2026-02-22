@@ -34,7 +34,7 @@ public class AccountCommandHandler {
             throw new UsernameExistedException();
         });
 
-        Account account = Account.createByUsername(command.username(), passwordEncoderAdapter.encode(command.password().value()));
+        Account account = Account.createByUsername(command.username(), passwordEncoderAdapter.encode(command.password()));
         AccountLink accountLink = AccountLink.linkToSystemUser(account.getId(), command.id().value());
 
         Set<Role> roleList = new HashSet<>(roleRepository.findAllById(command.roleList().stream().toList()));
@@ -67,7 +67,7 @@ public class AccountCommandHandler {
         Role role = roleRepository.findByRoleName(new RoleName("customer"))
                 .orElseThrow(RoleNotExistException::new);
 
-        Account account = Account.createByEmail(command.email(), passwordEncoderAdapter.encode(command.password().value()),role);
+        Account account = Account.createByEmail(command.email(), passwordEncoderAdapter.encode(command.password()), role);
         AccountLink accountLink = AccountLink.linkToCustomer(account.getId(), command.customerId().value());
 
         accountRepository.save(account);
@@ -94,7 +94,7 @@ public class AccountCommandHandler {
         if(command.newPassword() == null){
             return account;
         }
-        account.changePassword(passwordEncoderAdapter.encode(command.newPassword().value()));
+        account.changePassword(passwordEncoderAdapter.encode(command.newPassword()));
         accountRepository.save(account);
         return account;
     }

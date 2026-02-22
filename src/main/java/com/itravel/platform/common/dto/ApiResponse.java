@@ -21,7 +21,7 @@ public class ApiResponse<T>
     String RequestId;
 
     @Builder.Default
-    List<ApiError> Errors = new ArrayList<>();
+    List<ApiError> errors = new ArrayList<>();
     @Builder.Default
     Instant Timestamp = Instant.now();
 }

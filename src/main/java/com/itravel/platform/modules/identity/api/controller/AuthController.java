@@ -64,7 +64,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CustomerResponse> register(@RequestBody RegisterCustomerByEmailRequest request) {
+    public ApiResponse<CustomerResponse> register(@RequestBody @Valid RegisterCustomerByEmailRequest request) {
         RegisterCustomerByEmailCommand command = customerMapper.toCreateCustomerByEmailCommand(request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
@@ -76,7 +76,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    ApiResponse<String> forgotPassword(@RequestBody CustomerForgotPasswordRequest request) throws JOSEException {
+    ApiResponse<String> forgotPassword(@RequestBody @Valid CustomerForgotPasswordRequest request) throws JOSEException {
         CustomerForgotPasswordCommand command =
                 mapper.toCustomerForgotPasswordCommand(request);
         return ApiResponse.<String>builder()
@@ -87,7 +87,7 @@ public class AuthController {
     }
 
     @PostMapping("/send-otp")
-    ApiResponse<Void> sendOtp(@RequestBody SendOtpRequest request) throws MessagingException {
+    ApiResponse<Void> sendOtp(@RequestBody @Valid SendOtpRequest request) throws MessagingException {
         SendOtpCommand command = otpMapper.toSendOtpCommand(request);
         return ApiResponse.<Void>builder()
                 .message(authCommandHandler.sendOtp(command))

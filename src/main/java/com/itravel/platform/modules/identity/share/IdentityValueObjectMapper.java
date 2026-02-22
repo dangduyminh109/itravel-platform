@@ -3,6 +3,7 @@ package com.itravel.platform.modules.identity.share;
 import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
 import com.itravel.platform.modules.identity.api.dto.request.PermissionOverrideRequest;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -62,6 +63,14 @@ public interface IdentityValueObjectMapper {
         return passwordHash != null ? passwordHash.value() : null;
     }
 
+    default RawPassword toRawPassword(String password) {
+        return password != null && !password.isBlank() ? new RawPassword(password) : null;
+    }
+
+    default String fromRawPassword(RawPassword rawPassword) {
+        return rawPassword != null ? rawPassword.value() : null;
+    }
+
     default RoleId toRoleId(Long id) {
         return id != null ? new RoleId(id) : null;
     }
@@ -110,11 +119,18 @@ public interface IdentityValueObjectMapper {
         return hash != null ? hash.value() : null;
     }
 
+    default PermissionType toPermissionType(String type) {
+        return type != null && !type.isBlank() ? PermissionType.valueOf(type) : null;
+    }
+    default String fromPermissionType(PermissionType type) {
+        return type != null ? type.name() : null;
+    }
+
     default PermissionOverrideCommand toPermissionOverrideCommand(PermissionOverrideRequest request) {
         return request != null
                 ? new PermissionOverrideCommand(
                 toPermission(request.permission()),
-                request.permissionType()
+                toPermissionType(request.permissionType())
         )
                 : null;
     }
@@ -122,7 +138,7 @@ public interface IdentityValueObjectMapper {
         return command != null
                 ? new PermissionOverrideRequest(
                 fromPermission(command.permission()),
-                command.permissionType()
+                fromPermissionType(command.permissionType())
         )
                 : null;
     }
