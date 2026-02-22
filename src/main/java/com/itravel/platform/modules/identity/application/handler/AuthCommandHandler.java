@@ -1,29 +1,28 @@
 package com.itravel.platform.modules.identity.application.handler;
 
 import com.itravel.platform.modules.identity.application.command.account.CreateAccountByEmailCommand;
+import com.itravel.platform.modules.identity.application.command.account.CreateAccountByGoogleCommand;
 import com.itravel.platform.modules.identity.application.command.auth.*;
+import com.itravel.platform.modules.identity.application.command.customer.RegisterCustomerByGoogleCommand;
 import com.itravel.platform.modules.identity.application.exception.*;
 import com.itravel.platform.modules.identity.application.query.AuthToken;
 import com.itravel.platform.modules.identity.application.query.CustomerDetail;
 import com.itravel.platform.modules.identity.application.service.EmailService;
+import com.itravel.platform.modules.identity.application.service.TokenApplicationService;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.Customer;
 import com.itravel.platform.modules.identity.domain.aggregate.Otp;
 import com.itravel.platform.modules.identity.domain.aggregate.RefreshToken;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkType;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.OtpCode;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.TokenHash;
 import com.itravel.platform.modules.identity.domain.exception.InvalidOtpCodeException;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
 import com.itravel.platform.modules.identity.domain.repository.CustomerRepository;
 import com.itravel.platform.modules.identity.domain.repository.OtpRepository;
 import com.itravel.platform.modules.identity.domain.repository.RefreshTokenRepository;
-import com.itravel.platform.modules.identity.domain.service.RefreshTokenGenerator;
 import com.itravel.platform.modules.identity.domain.service.RefreshTokenHasher;
-import com.itravel.platform.modules.identity.domain.service.TokenProvider;
 import com.itravel.platform.modules.identity.infrastructure.security.PasswordEncoderAdapter;
 import com.nimbusds.jose.JOSEException;
 import jakarta.mail.MessagingException;
@@ -41,8 +40,6 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,18 +47,13 @@ import java.util.stream.Collectors;
 public class AuthCommandHandler {
     AccountRepository accountRepository;
     RefreshTokenRepository refreshTokenRepository;
-    TokenProvider tokenProvider;
-    RefreshTokenGenerator refreshTokenGenerator;
     RefreshTokenHasher refreshTokenHasher;
-    PasswordEncoderAdapter passwordEncoderAdapter;
     OtpRepository otpRepository;
+    CustomerRepository customerRepository;
+    PasswordEncoderAdapter passwordEncoderAdapter;
     EmailService emailService;
     AccountCommandHandler accountCommandHandler;
-    CustomerRepository customerRepository;
-
-    @NonFinal
-    @Value("${security.refresh-token.refreshable-duration}")
-    long REFRESH_DURATION;
+    TokenApplicationService tokenApplicationService;
 
     @NonFinal
     @Value("${security.otp.otp-duration}")
@@ -94,7 +86,7 @@ public class AuthCommandHandler {
             throw new InvalidLoginMethodException();
         }
 
-        return createToken(account);
+        return tokenApplicationService.createToken(account);
     }
 
     @Transactional
@@ -151,44 +143,7 @@ public class AuthCommandHandler {
             throw new AccountDeletedException();
         }
 
-        return createToken(account);
-    }
-
-    private AuthToken createToken(Account account) throws JOSEException {
-        Set<Permission> permissionSet = account.getRoleList().stream()
-                .flatMap(role -> role.getPermissionList().stream())
-                .collect(Collectors.toSet());
-
-        String permissionList = permissionSet.stream()
-                .map(Permission::code)
-                .collect(Collectors.joining(","));
-        String roleList = account.getRoleList().stream()
-                .map(role -> role.getName().value())
-                .collect(Collectors.joining(","));
-
-        AccountLinkType type = AuthProvider.USERNAME.equals(account.getAuthProvider())
-                ? AccountLinkType.SYSTEM_USER : AccountLinkType.CUSTOMER;
-
-        String accessToken = tokenProvider.generateAccessToken(
-                account.getId(),
-                type,
-                roleList,permissionList
-        );
-
-        String refreshTokenRaw = refreshTokenGenerator.generate();
-        TokenHash refreshTokenHash = refreshTokenHasher.hash(refreshTokenRaw);
-        Duration duration = Duration.ofSeconds(REFRESH_DURATION);
-        RefreshToken refreshToken = RefreshToken.create(
-                account.getId(),
-                refreshTokenHash,
-                duration
-        );
-        refreshTokenRepository.save(refreshToken);
-        return new AuthToken(
-                accessToken,
-                refreshTokenRaw,
-                refreshToken.getExpiresAt()
-        );
+        return tokenApplicationService.createToken(account);
     }
 
     @Transactional
@@ -205,7 +160,7 @@ public class AuthCommandHandler {
                 customer.getId()
         );
         Account account = accountCommandHandler.CreateByEmail(createAccountByEmailCommand);
-            customerRepository.save(customer);
+        customerRepository.save(customer);
         otpRepository.destroy(otp.getId());
         return CustomerDetail.builder()
                 .id(customer.getId())
@@ -216,6 +171,19 @@ public class AuthCommandHandler {
                 .updatedAt(customer.getUpdatedAt())
                 .deletedAt(customer.getDeletedAt())
                 .build();
+    }
+
+    @Transactional
+    public Account RegisterCustomerByGoogle(RegisterCustomerByGoogleCommand command) {
+        Customer customer = Customer.create(command.fullName());
+        CreateAccountByGoogleCommand createAccountByGoogleCommand =
+                new CreateAccountByGoogleCommand(
+                        command.email(),
+                        customer.getId()
+                );
+        Account account = accountCommandHandler.CreateByGoogle(createAccountByGoogleCommand);
+        customerRepository.save(customer);
+        return account;
     }
 
     @Transactional

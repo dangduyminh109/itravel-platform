@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,14 @@ import java.util.Optional;
 @Repository
 public interface AccountJpaRepository extends JpaRepository<AccountJpaEntity,String> {
     Optional<AccountJpaEntity> findByUsername(String username);
+
+    @EntityGraph(attributePaths = {
+            "permissionOverrides",
+            "roleList",
+            "roleList.permissionList"
+    })
     Optional<AccountJpaEntity> findByEmail(String email);
+
     @Query("""
        SELECT a FROM AccountJpaEntity a
        WHERE a.username = :identifier

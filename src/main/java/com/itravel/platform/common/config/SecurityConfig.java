@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,6 +32,11 @@ public class SecurityConfig {
     private CustomJwtDecoder customJwtDecoder;
     @Autowired
     private CustomJwtAuthenticationConverter customJwtAuthenticationConverter;
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -49,6 +55,19 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .with(new OAuth2LoginConfigurer<HttpSecurity>(), oauth2 -> oauth2
+                        .successHandler(oAuth2SuccessHandler)
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .failureHandler((request, response, exception) -> {
+                            if (exception.getMessage().contains("access_denied")) {
+                                response.sendRedirect("/login?error=cancelled");
+                            } else {
+                                response.sendRedirect("/login?error=oauth2_error");
+                            }
+                        })
+                )
                 .cors(withDefaults -> {
                 })
                 .csrf(AbstractHttpConfigurer::disable);

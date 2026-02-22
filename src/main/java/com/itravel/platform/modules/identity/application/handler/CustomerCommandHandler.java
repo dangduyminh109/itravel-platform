@@ -1,7 +1,6 @@
 package com.itravel.platform.modules.identity.application.handler;
 
 import com.itravel.platform.modules.identity.application.command.account.CreateAccountByEmailCommand;
-import com.itravel.platform.modules.identity.application.command.account.CreateAccountByGoogleCommand;
 import com.itravel.platform.modules.identity.application.command.account.UpdateAccountPasswordCommand;
 import com.itravel.platform.modules.identity.application.command.customer.*;
 import com.itravel.platform.modules.identity.application.exception.CustomerNotExistException;
@@ -22,17 +21,6 @@ import java.util.Optional;
 public class CustomerCommandHandler {
     CustomerRepository customerRepository;
     AccountCommandHandler accountCommandHandler;
-
-    public void RegisterCustomerByGoogle(RegisterCustomerByGoogleCommand command) {
-        Customer customer = Customer.create(command.fullName());
-        CreateAccountByGoogleCommand createAccountByGoogleCommand =
-                new CreateAccountByGoogleCommand(
-                        command.email(),
-                        customer.getId()
-                );
-        accountCommandHandler.CreateByGoogle(createAccountByGoogleCommand);
-        customerRepository.save(customer);
-    }
 
     public CustomerDetail create(CustomerCreateCommand command) {
         Customer customer = Customer.create(command.fullName());
