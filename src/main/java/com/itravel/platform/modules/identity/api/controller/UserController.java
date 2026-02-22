@@ -12,6 +12,7 @@ import com.itravel.platform.modules.identity.application.service.UserQueryServic
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,7 @@ public class UserController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('USER_CREATE')")
     public ApiResponse<UserResponse> create(@RequestBody CreateUserRequest createUserRequest) {
         CreateUserCommand createUserCommand = mapper.toCreateUserCommand(createUserRequest);
@@ -62,6 +64,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
         userCommandHandler.delete(mapper.toDeleteUserCommand(id));
@@ -82,6 +85,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/destroy")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
         userCommandHandler.destroy(mapper.toDeleteUserCommand(id));

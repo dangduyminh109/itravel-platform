@@ -12,6 +12,7 @@ import com.itravel.platform.modules.identity.application.service.CustomerQuerySe
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -38,6 +39,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('CUSTOMER_CREATE')")
     public ApiResponse<CustomerResponse> create(@RequestBody CustomerCreateRequest request) {
         CustomerCreateCommand command = mapper.toCustomerCreateCommand(request);
@@ -62,6 +64,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
         customerCommandHandler.delete(mapper.toDeleteCustomerCommand(id));
@@ -82,6 +85,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}/destroy")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
         customerCommandHandler.destroy(mapper.toDeleteCustomerCommand(id));

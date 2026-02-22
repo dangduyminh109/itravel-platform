@@ -14,6 +14,7 @@ import com.itravel.platform.modules.identity.application.service.RoleQueryServic
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -37,6 +38,7 @@ public class RoleController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ROLE_CREATE')")
     public ApiResponse<RoleResponse> create(@RequestBody CreateRoleRequest createRoleRequest) {
         CreateRoleCommand createRoleCommand = mapper.toCreateRoleCommand(createRoleRequest);
@@ -59,6 +61,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}/destroy")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable Long id) {
         roleCommandHandler.destroy(mapper.toDeleteRoleCommand(id));

@@ -1,7 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
-import com.itravel.platform.modules.identity.domain.aggregate.PermissionOverride;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
@@ -9,7 +8,6 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Passwo
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionJpaEntity;
-import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionOverrideJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RoleJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
@@ -19,7 +17,10 @@ import java.util.stream.Collectors;
 
 @Mapper(
         componentModel = "spring",
-        uses = {IdentityValueObjectMapper.class},
+        uses = {
+                IdentityValueObjectMapper.class,
+                PermissionOverrideMapper.class
+        },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface AccountMapper {
@@ -53,15 +54,6 @@ public interface AccountMapper {
                 .permissionList(role.getPermissionList().stream()
                         .map(e -> new PermissionJpaEntity(e.code()))
                         .collect(Collectors.toSet()))
-                .build();
-    }
-
-    default PermissionOverrideJpaEntity toPermissionOverrideJpaEntity(PermissionOverride permissionOverride){
-        return PermissionOverrideJpaEntity.builder()
-                .id(permissionOverride.getId())
-                .permission(permissionOverride.getPermission().code())
-                .permissionType(permissionOverride.getPermissionType())
-                .accountId(permissionOverride.getAccountId().value())
                 .build();
     }
 }

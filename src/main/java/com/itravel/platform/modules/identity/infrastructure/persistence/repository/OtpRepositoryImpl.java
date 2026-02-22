@@ -18,6 +18,7 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class OtpRepositoryImpl implements OtpRepository {
     OtpJpaRepository repository;
+    OtpMapper otpMapper;
 
     @Override
     public Optional<Otp> findByEmailAndCode(Email email, OtpCode otpCode) {
@@ -33,14 +34,9 @@ public class OtpRepositoryImpl implements OtpRepository {
 
     @Override
     public Otp save(Otp otp) {
-        OtpJpaEntity otpToSave = OtpJpaEntity.builder()
-                .email(otp.getEmail().value())
-                .code(otp.getCode().value())
-                .expiresAt(otp.getExpiresAt())
-                .build();
-
-        repository.save(otpToSave);
-        return OtpMapper.toOtpDomain(otpToSave);
+        OtpJpaEntity entity = otpMapper.toOtpJpaEntity(otp);
+        OtpJpaEntity savedEntity = repository.save(entity);
+        return OtpMapper.toOtpDomain(savedEntity);
     }
 
     @Override

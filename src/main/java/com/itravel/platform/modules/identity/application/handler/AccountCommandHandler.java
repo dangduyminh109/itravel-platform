@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -178,8 +178,8 @@ public class AccountCommandHandler {
         }
 
         accountLinkRepository.destroy(accountLink.getId());
-        Optional<AccountLink> link = accountLinkRepository.findByAccountId(account.getId());
-        if (link.isEmpty()) {
+        List<AccountLink> remainingLinks = accountLinkRepository.findAllByAccountId(account.getId());
+        if (remainingLinks.isEmpty()) {
             accountRepository.destroy(account.getId());
         }
     }

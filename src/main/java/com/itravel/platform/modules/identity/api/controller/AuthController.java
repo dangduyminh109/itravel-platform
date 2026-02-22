@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +26,6 @@ public class AuthController {
     AuthCommandHandler authCommandHandler;
     OtpRestMapper otpMapper;
     CustomerRestMapper customerMapper;
-    private final AuthRestMapper authResMapper;
 
     @PostMapping("/login")
     ApiResponse<AuthTokenResponse> login(@RequestBody @Valid LoginRequest request) throws JOSEException {
@@ -63,6 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CustomerResponse> register(@RequestBody RegisterCustomerByEmailRequest request) {
         RegisterCustomerByEmailCommand command = customerMapper.toCreateCustomerByEmailCommand(request);
         return ApiResponse.<CustomerResponse>builder()
