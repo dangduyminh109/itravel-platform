@@ -42,9 +42,10 @@ spring:
               - email
               - profile
 
-firebase:
-  storage:
-    bucket-name:
+cloudinary:
+  cloud-name:
+  api-key:
+  api-secret:
 
 logging:
   level:

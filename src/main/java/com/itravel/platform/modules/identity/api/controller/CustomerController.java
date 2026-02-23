@@ -42,7 +42,7 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('CUSTOMER_CREATE')")
-    public ApiResponse<CustomerResponse> create(@RequestBody @Valid CustomerCreateRequest request) {
+    public ApiResponse<CustomerResponse> create(@ModelAttribute @Valid CustomerCreateRequest request) {
         CustomerCreateCommand command = mapper.toCustomerCreateCommand(request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
@@ -55,7 +55,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('CUSTOMER_UPDATE')")
-    public ApiResponse<CustomerResponse> update(@PathVariable String id, @RequestBody @Valid UpdateCustomerRequest request) {
+    public ApiResponse<CustomerResponse> update(@PathVariable String id, @ModelAttribute @Valid UpdateCustomerRequest request) {
         UpdateCustomerCommand command = mapper.toUpdateCustomerCommand(id,request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Update user successfully")

@@ -1,8 +1,15 @@
 package com.itravel.platform.modules.identity.share;
 
 import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
+import com.itravel.platform.modules.identity.api.dto.request.AddressRequest;
+import com.itravel.platform.modules.identity.api.dto.request.IdentityCardRequest;
+import com.itravel.platform.modules.identity.api.dto.request.PassportRequest;
 import com.itravel.platform.modules.identity.api.dto.request.PermissionOverrideRequest;
+import com.itravel.platform.modules.identity.api.dto.response.AddressResponse;
+import com.itravel.platform.modules.identity.api.dto.response.IdentityCardResponse;
+import com.itravel.platform.modules.identity.api.dto.response.PassportResponse;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import org.mapstruct.Mapper;
@@ -119,6 +126,17 @@ public interface IdentityValueObjectMapper {
         return hash != null ? hash.value() : null;
     }
 
+    default PhoneNumber toPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && !phoneNumber.isBlank() ? new PhoneNumber(phoneNumber) : null;
+    }
+    default String fromPhoneNumber(PhoneNumber phoneNumber) {
+        return phoneNumber != null ? phoneNumber.value() : null;
+    }
+
+    default String fromAvatar(Avatar avatar) {
+        return avatar != null ? avatar.value() : null;
+    }
+
     default PermissionType toPermissionType(String type) {
         return type != null && !type.isBlank() ? PermissionType.valueOf(type) : null;
     }
@@ -126,11 +144,18 @@ public interface IdentityValueObjectMapper {
         return type != null ? type.name() : null;
     }
 
+    default Gender toGender(String gender) {
+        return gender != null && !gender.isBlank() ? Gender.valueOf(gender) : null;
+    }
+    default String fromGender(Gender gender) {
+        return gender != null ? gender.name() : null;
+    }
+
     default PermissionOverrideCommand toPermissionOverrideCommand(PermissionOverrideRequest request) {
         return request != null
                 ? new PermissionOverrideCommand(
-                toPermission(request.permission()),
-                toPermissionType(request.permissionType())
+                toPermission(request.getPermission()),
+                toPermissionType(request.getPermissionType())
         )
                 : null;
     }
@@ -141,5 +166,74 @@ public interface IdentityValueObjectMapper {
                 fromPermissionType(command.permissionType())
         )
                 : null;
+    }
+
+    // Address mappings
+    default Address toAddress(AddressRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new Address(
+                request.detail(),
+                request.wardId(),
+                request.provinceId()
+        );
+    }
+
+    default AddressResponse fromAddress(Address address) {
+        if (address == null) {
+            return null;
+        }
+        return new AddressResponse(
+                address.detail(),
+                address.wardId(),
+                address.provinceId()
+        );
+    }
+
+    // IdentityCard mappings
+    default IdentityCard toIdentityCard(IdentityCardRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new IdentityCard(
+                request.documentNumber(),
+                request.issueDate(),
+                request.issuePlace()
+        );
+    }
+
+    default IdentityCardResponse fromIdentityCard(IdentityCard identityCard) {
+        if (identityCard == null) {
+            return null;
+        }
+        return new IdentityCardResponse(
+                identityCard.documentNumber(),
+                identityCard.issueDate(),
+                identityCard.issuePlace()
+        );
+    }
+
+    // Passport mappings
+    default Passport toPassport(PassportRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return new Passport(
+                request.documentNumber(),
+                request.issueDate(),
+                request.expiryDate()
+        );
+    }
+
+    default PassportResponse fromPassport(Passport passport) {
+        if (passport == null) {
+            return null;
+        }
+        return new PassportResponse(
+                passport.documentNumber(),
+                passport.issueDate(),
+                passport.expiryDate()
+        );
     }
 }

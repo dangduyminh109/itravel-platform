@@ -100,6 +100,14 @@ public class AccountCommandHandler {
     }
 
     @Transactional
+    public Account ChangeStatus(UpdateAccountStatusCommand command){
+        Account account = accountQueryService.getAccount(command.targetId());
+        account.changeStatus(command.newStatus());
+        accountRepository.save(account);
+        return account;
+    }
+
+    @Transactional
     public Account update(UpdateAccountCommand command){
         Account account = accountQueryService.getAccount(command.targetId());
 
@@ -161,6 +169,8 @@ public class AccountCommandHandler {
                 );
             }
         }
+
+        account.changeStatus(command.Status());
 
         accountRepository.save(account);
         return account;

@@ -32,7 +32,25 @@ public enum DomainErrorCode {
 
     INVALID_OTP_CODE("INVALID_OTP_CODE", "Invalid OTP code", HttpStatus.BAD_REQUEST, "otpCode"),
     OTP_EXPIRED("OTP_EXPIRED", "OTP has expired", HttpStatus.BAD_REQUEST, "otpCode"),
-    INVALID_CUSTOMER_ROLE("INVALID_CUSTOMER_ROLE", "Invalid role for customer registration", HttpStatus.BAD_REQUEST, "role")
+    INVALID_CUSTOMER_ROLE("INVALID_CUSTOMER_ROLE", "Invalid role for customer registration", HttpStatus.BAD_REQUEST, "role"),
+    INVALID_PHONE_NUMBER("INVALID_PHONE_NUMBER", "Invalid phone number format", HttpStatus.BAD_REQUEST, "phoneNumber"),
+    INVALID_AVATAR("INVALID_AVATAR", "Invalid avatar URL", HttpStatus.BAD_REQUEST, "avatar"),
+
+    // ===== ADDRESS =====
+    ADDRESS_DETAIL_CANNOT_BE_BLANK("ADDRESS_DETAIL_CANNOT_BE_BLANK", "Address detail cannot be blank", HttpStatus.BAD_REQUEST, "detail"),
+    WARD_ID_CANNOT_BE_NULL("WARD_ID_CANNOT_BE_NULL", "Ward ID cannot be null", HttpStatus.BAD_REQUEST, "wardId"),
+    PROVINCE_ID_CANNOT_BE_NULL("PROVINCE_ID_CANNOT_BE_NULL", "Province ID cannot be null", HttpStatus.BAD_REQUEST, "provinceId"),
+
+    // ===== IDENTITY CARD =====
+    DOCUMENT_NUMBER_CANNOT_BE_BLANK("DOCUMENT_NUMBER_CANNOT_BE_BLANK", "Document number cannot be blank", HttpStatus.BAD_REQUEST, "documentNumber"),
+    ISSUE_DATE_CANNOT_BE_NULL("ISSUE_DATE_CANNOT_BE_NULL", "Issue date cannot be null", HttpStatus.BAD_REQUEST, "issueDate"),
+    ISSUE_DATE_MUST_BE_PAST_OR_PRESENT("ISSUE_DATE_MUST_BE_PAST_OR_PRESENT", "Issue date must be in the past or present", HttpStatus.BAD_REQUEST, "issueDate"),
+    ISSUE_PLACE_CANNOT_BE_BLANK("ISSUE_PLACE_CANNOT_BE_BLANK", "Issue place cannot be blank", HttpStatus.BAD_REQUEST, "issuePlace"),
+
+    // ===== PASSPORT =====
+    EXPIRY_DATE_CANNOT_BE_NULL("EXPIRY_DATE_CANNOT_BE_NULL", "Expiry date cannot be null", HttpStatus.BAD_REQUEST, "expiryDate"),
+    EXPIRY_DATE_MUST_BE_FUTURE("EXPIRY_DATE_MUST_BE_FUTURE", "Expiry date must be in the future", HttpStatus.BAD_REQUEST, "expiryDate"),
+    ISSUE_DATE_MUST_BE_BEFORE_EXPIRY_DATE("ISSUE_DATE_MUST_BE_BEFORE_EXPIRY_DATE", "Issue date must be before expiry date", HttpStatus.BAD_REQUEST, "issueDate")
     ;
     String code;
     String message;

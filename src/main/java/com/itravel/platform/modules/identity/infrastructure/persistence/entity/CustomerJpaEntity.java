@@ -1,13 +1,13 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 
 import com.itravel.platform.common.infrastructure.JpaBaseModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -23,5 +23,45 @@ public class CustomerJpaEntity extends JpaBaseModel {
 
     @Column(nullable = false)
     String fullName;
+
+    @Column
+    String phoneNumber;
+
+    @Column
+    String avatar;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    Gender gender;
+
+    @Column
+    LocalDate dateOfBirth;
+
+    @Column
+    String addressDetail;
+
+    @Column
+    Long wardId;
+
+    @Column
+    Long provinceId;
+
+    @Column
+    String identityCardNumber;
+
+    @Column
+    LocalDate identityCardIssueDate;
+
+    @Column
+    String identityCardIssuePlace;
+
+    @Column
+    String passportNumber;
+
+    @Column
+    LocalDate passportIssueDate;
+
+    @Column
+    LocalDate passportExpiryDate;
 }
 

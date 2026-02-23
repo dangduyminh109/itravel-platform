@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
                                 ApiError.builder()
                                         .code(errorCode.getCode())
                                         .message(errorCode.getMessage())
-                                        .field(errorCode.getFeild())
+                                        .field(errorCode.getField())
                                         .build()
                         ))
                         .build()

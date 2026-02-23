@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.domain.aggregate;
 import com.itravel.platform.common.domain.BaseAggregate;
 import com.itravel.platform.modules.identity.application.exception.RoleInActiveException;
+import com.itravel.platform.modules.identity.application.exception.UserNotDeleteOrUpdateException;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
@@ -104,6 +105,14 @@ public class Account extends BaseAggregate<AccountId> {
             throw new InvalidCustomerRoleException();
         }
         this.password = newPassword;
+        touch();
+    }
+
+    public void changeStatus(AccountStatus newStatus) {
+        if(username != null && "admin".equals(username.value())){
+            throw new UserNotDeleteOrUpdateException();
+        }
+        this.status = newStatus;
         touch();
     }
 

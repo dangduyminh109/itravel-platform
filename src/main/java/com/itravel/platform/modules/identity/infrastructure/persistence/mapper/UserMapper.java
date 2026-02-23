@@ -1,7 +1,9 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
 import com.itravel.platform.modules.identity.domain.aggregate.User;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Avatar;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PhoneNumber;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.UserJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
@@ -19,7 +21,11 @@ public interface UserMapper {
     static User toUserDomain(UserJpaEntity entity) {
         return User.fromExistingBuilder()
                 .id(new UserId(entity.getId()))
-                .fullName( new FullName(entity.getFullName()))
+                .fullName(new FullName(entity.getFullName()))
+                .phoneNumber(entity.getPhoneNumber() != null ? new PhoneNumber(entity.getPhoneNumber()) : null)
+                .avatar(entity.getAvatar() != null ? new Avatar(entity.getAvatar()) : null)
+                .gender(entity.getGender())
+                .dateOfBirth(entity.getDateOfBirth())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())

@@ -48,10 +48,27 @@ public enum ErrorCode {
     ROLE_ID_CANNOT_BE_NULL("ROLE_ID_CANNOT_BE_NULL", "Role id cannot be null.", HttpStatus.BAD_REQUEST, "roleList"),
     PERMISSION_CODE_LIST_CANNOT_BE_EMPTY("PERMISSION_CODE_LIST_CANNOT_BE_EMPTY", "Permission code list cannot be empty.", HttpStatus.BAD_REQUEST, "permissionCodeList"),
     NAME_CANNOT_BE_BLANK("NAME_CANNOT_BE_BLANK", "Role name cannot be left blank.",HttpStatus.BAD_REQUEST,"name"),
+    PHONE_NUMBER_INVALID("PHONE_NUMBER_INVALID", "Phone number is invalid. It must be 10-15 digits and may start with '+'.", HttpStatus.BAD_REQUEST, "phoneNumber"),
+    GENDER_INVALID("GENDER_INVALID", "Gender must be MALE, FEMALE or OTHER.", HttpStatus.BAD_REQUEST, "gender"),
+    DATE_OF_BIRTH_MUST_BE_PAST_OR_PRESENT("DATE_OF_BIRTH_MUST_BE_PAST_OR_PRESENT", "Date of birth must be in the past or present.", HttpStatus.BAD_REQUEST, "dateOfBirth"),
 
-    FIREBASE_INITIALIZATION_FAILED("FIREBASE_INITIALIZATION_FAILED", "Failed to initialize Firebase. Configuration file not found.", HttpStatus.INTERNAL_SERVER_ERROR, null),
-    FIREBASE_UPLOAD_FAILED("FIREBASE_UPLOAD_FAILED", "Failed to upload file to Firebase storage.", HttpStatus.INTERNAL_SERVER_ERROR, "file")
+    // Address validation
+    ADDRESS_DETAIL_CANNOT_BE_BLANK("ADDRESS_DETAIL_CANNOT_BE_BLANK", "Address detail cannot be blank.", HttpStatus.BAD_REQUEST, "detail"),
+    WARD_ID_CANNOT_BE_NULL("WARD_ID_CANNOT_BE_NULL", "Ward ID cannot be null.", HttpStatus.BAD_REQUEST, "wardId"),
+    PROVINCE_ID_CANNOT_BE_NULL("PROVINCE_ID_CANNOT_BE_NULL", "Province ID cannot be null.", HttpStatus.BAD_REQUEST, "provinceId"),
 
+    // IdentityCard validation
+    DOCUMENT_NUMBER_CANNOT_BE_BLANK("DOCUMENT_NUMBER_CANNOT_BE_BLANK", "Document number cannot be blank.", HttpStatus.BAD_REQUEST, "documentNumber"),
+    ISSUE_DATE_CANNOT_BE_NULL("ISSUE_DATE_CANNOT_BE_NULL", "Issue date cannot be null.", HttpStatus.BAD_REQUEST, "issueDate"),
+    ISSUE_DATE_MUST_BE_PAST_OR_PRESENT("ISSUE_DATE_MUST_BE_PAST_OR_PRESENT", "Issue date must be in the past or present.", HttpStatus.BAD_REQUEST, "issueDate"),
+    ISSUE_PLACE_CANNOT_BE_BLANK("ISSUE_PLACE_CANNOT_BE_BLANK", "Issue place cannot be blank.", HttpStatus.BAD_REQUEST, "issuePlace"),
+
+    // Passport validation
+    EXPIRY_DATE_CANNOT_BE_NULL("EXPIRY_DATE_CANNOT_BE_NULL", "Expiry date cannot be null.", HttpStatus.BAD_REQUEST, "expiryDate"),
+    EXPIRY_DATE_MUST_BE_FUTURE("EXPIRY_DATE_MUST_BE_FUTURE", "Expiry date must be in the future.", HttpStatus.BAD_REQUEST, "expiryDate"),
+    ISSUE_DATE_MUST_BE_BEFORE_EXPIRY_DATE("ISSUE_DATE_MUST_BE_BEFORE_EXPIRY_DATE", "Issue date must be before expiry date.", HttpStatus.BAD_REQUEST, "issueDate"),
+
+    UPLOAD_FAILED("UPLOAD_FAILED", "Failed to upload file to cloud storage.", HttpStatus.INTERNAL_SERVER_ERROR, "file")
     ;
 
     String code;

@@ -152,7 +152,16 @@ public class AuthCommandHandler {
                 .orElseThrow(InvalidOtpCodeException::new);
         otp.verify(command.otp());
 
-        Customer customer = Customer.create(command.fullName());
+        Customer customer = Customer.create(
+                command.fullName(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
         CreateAccountByEmailCommand createAccountByEmailCommand
                 = new CreateAccountByEmailCommand(
                 command.email(),
@@ -165,6 +174,8 @@ public class AuthCommandHandler {
         return CustomerDetail.builder()
                 .id(customer.getId())
                 .fullName(customer.getFullName())
+                .phoneNumber(customer.getPhoneNumber())
+                .avatar(customer.getAvatar())
                 .email(account.getEmail())
                 .roleList(account.getRoleList())
                 .createdAt(customer.getCreatedAt())
@@ -175,7 +186,17 @@ public class AuthCommandHandler {
 
     @Transactional
     public Account RegisterCustomerByGoogle(RegisterCustomerByGoogleCommand command) {
-        Customer customer = Customer.create(command.fullName());
+        Customer customer = Customer.create(
+                command.fullName(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
         CreateAccountByGoogleCommand createAccountByGoogleCommand =
                 new CreateAccountByGoogleCommand(
                         command.email(),

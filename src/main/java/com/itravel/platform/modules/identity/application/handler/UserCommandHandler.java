@@ -6,11 +6,13 @@ import com.itravel.platform.modules.identity.application.command.account.UpdateA
 import com.itravel.platform.modules.identity.application.command.user.*;
 import com.itravel.platform.modules.identity.application.exception.UserNotDeleteOrUpdateException;
 import com.itravel.platform.modules.identity.application.exception.UserNotExistException;
+import com.itravel.platform.modules.identity.application.port.out.MediaUploadPort;
 import com.itravel.platform.modules.identity.application.query.UserDetail;
 import com.itravel.platform.modules.identity.application.service.AccountQueryService;
 import com.itravel.platform.modules.identity.application.service.UserQueryService;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.User;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Avatar;
 import com.itravel.platform.modules.identity.domain.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,17 @@ public class UserCommandHandler {
     UserRepository userRepository;
     AccountQueryService accountQueryService;
     AccountCommandHandler accountCommandHandler;
+    MediaUploadPort mediaUploadPort;
 
     @Transactional
     public UserDetail CreateSystemUser(CreateUserCommand command) {
-        User user = User.create(command.fullName());
+        Avatar avatar = null;
+        if (command.avatar() != null && !command.avatar().isEmpty()) {
+            String avatarUrl = mediaUploadPort.uploadAvatar(command.avatar());
+            avatar = new Avatar(avatarUrl);
+        }
+
+        User user = User.create(command.fullName(), command.phoneNumber(), avatar, command.gender(), command.dateOfBirth());
 
         CreateAccountByUserNameCommand createAccountByUserNameCommand
                 = new CreateAccountByUserNameCommand( command.username(),
@@ -53,6 +62,14 @@ public class UserCommandHandler {
         User user = userRepository.findById(command.id())
                 .orElseThrow(UserNotExistException::new);
         user.updateName(command.fullName());
+        user.updatePhoneNumber(command.phoneNumber());
+        user.updateGender(command.gender());
+        user.updateDateOfBirth(command.dateOfBirth());
+
+        if (command.avatar() != null && !command.avatar().isEmpty()) {
+            String avatarUrl = mediaUploadPort.uploadAvatar(command.avatar());
+            user.updateAvatar(new Avatar(avatarUrl));
+        }
 
         UpdateAccountPasswordCommand updateAccountPasswordCommand =
                 new UpdateAccountPasswordCommand(
@@ -65,12 +82,12 @@ public class UserCommandHandler {
         UpdateAccountCommand updateAccountCommand =
                 new UpdateAccountCommand(
                         command.id().value(),
+                        command.status(),
                         command.roleList(),
                         command.permissionOverrides()
                 );
 
         Account account = accountCommandHandler.update(updateAccountCommand);
-
         userRepository.save(user);
         return UserQueryService.createResponse(user,account);
     }

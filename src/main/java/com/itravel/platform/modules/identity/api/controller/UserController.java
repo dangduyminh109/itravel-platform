@@ -44,8 +44,8 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('USER_CREATE')")
-    public ApiResponse<UserResponse> create(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        CreateUserCommand createUserCommand = mapper.toCreateUserCommand(createUserRequest);
+    public ApiResponse<UserResponse> create(@ModelAttribute @Valid CreateUserRequest request) {
+        CreateUserCommand createUserCommand = mapper.toCreateUserCommand(request);
         return ApiResponse.<UserResponse>builder()
                 .message("Create user successfully")
                 .success(true)
@@ -55,7 +55,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER_UPDATE')")
-    public ApiResponse<UserResponse> update(@PathVariable String id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
+    public ApiResponse<UserResponse> update(@PathVariable String id, @ModelAttribute @Valid UpdateUserRequest updateUserRequest) {
         UpdateUserCommand updateUserCommand = mapper.toUpdateUserCommand(id, updateUserRequest);
         return ApiResponse.<UserResponse>builder()
                 .message("Update user successfully")
