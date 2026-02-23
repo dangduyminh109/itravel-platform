@@ -41,6 +41,11 @@ spring:
             scope:
               - email
               - profile
+
+firebase:
+  storage:
+    bucket-name:
+
 logging:
   level:
     jakarta.mail: DEBUG

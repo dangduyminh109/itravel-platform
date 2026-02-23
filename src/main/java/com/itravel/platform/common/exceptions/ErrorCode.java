@@ -47,7 +47,10 @@ public enum ErrorCode {
     ROLE_LIST_CANNOT_BE_EMPTY("ROLE_LIST_CANNOT_BE_EMPTY", "Role list cannot be empty.", HttpStatus.BAD_REQUEST, "roleList"),
     ROLE_ID_CANNOT_BE_NULL("ROLE_ID_CANNOT_BE_NULL", "Role id cannot be null.", HttpStatus.BAD_REQUEST, "roleList"),
     PERMISSION_CODE_LIST_CANNOT_BE_EMPTY("PERMISSION_CODE_LIST_CANNOT_BE_EMPTY", "Permission code list cannot be empty.", HttpStatus.BAD_REQUEST, "permissionCodeList"),
-    NAME_CANNOT_BE_BLANK("NAME_CANNOT_BE_BLANK", "Role name cannot be left blank.",HttpStatus.BAD_REQUEST,"name")
+    NAME_CANNOT_BE_BLANK("NAME_CANNOT_BE_BLANK", "Role name cannot be left blank.",HttpStatus.BAD_REQUEST,"name"),
+
+    FIREBASE_INITIALIZATION_FAILED("FIREBASE_INITIALIZATION_FAILED", "Failed to initialize Firebase. Configuration file not found.", HttpStatus.INTERNAL_SERVER_ERROR, null),
+    FIREBASE_UPLOAD_FAILED("FIREBASE_UPLOAD_FAILED", "Failed to upload file to Firebase storage.", HttpStatus.INTERNAL_SERVER_ERROR, "file")
 
     ;
 
