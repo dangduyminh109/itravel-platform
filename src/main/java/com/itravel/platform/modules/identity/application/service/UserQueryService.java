@@ -1,8 +1,11 @@
 package com.itravel.platform.modules.identity.application.service;
 
+import com.itravel.platform.common.utils.SecurityUtils;
 import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
+import com.itravel.platform.modules.identity.application.exception.AccountInActiveException;
+import com.itravel.platform.modules.identity.application.exception.UserDeletedException;
 import com.itravel.platform.modules.identity.domain.aggregate.User;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +18,8 @@ import com.itravel.platform.modules.identity.domain.aggregate.AccountLink;
 import com.itravel.platform.modules.identity.domain.repository.AccountLinkRepository;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
 import com.itravel.platform.modules.identity.domain.repository.UserRepository;
-
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,6 +43,26 @@ public class UserQueryService {
 
                   return createResponse(user, account);
                 }).toList();
+    }
+
+    public UserDetail getMe() {
+        String accountId = SecurityUtils.getCurrentAccountId();
+        AccountLink accountLink = accountLinkRepository
+                .findByAccountId(new AccountId(accountId))
+                .orElseThrow(UserNotExistException::new);
+        User user = userRepository.findById(new UserId(accountLink.getTargetId()))
+                .orElseThrow(UserNotExistException::new);
+        Account account = accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(UserNotExistException::new);
+
+        if(user.getDeletedAt() != null || account.getDeletedAt() != null){
+            throw new UserDeletedException();
+        }
+        if(AccountStatus.INACTIVE.equals(account.getStatus())){
+            throw new AccountInActiveException();
+        }
+
+        return createResponse(user, account);
     }
 
     public static UserDetail createResponse(User user, Account account){

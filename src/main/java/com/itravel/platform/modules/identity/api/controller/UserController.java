@@ -41,6 +41,14 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/me")
+    public ApiResponse<UserResponse> getMe() {
+        return ApiResponse.<UserResponse>builder()
+                .success(true)
+                .data(mapper.toUserResponse(userQueryService.getMe()))
+                .build();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('USER_CREATE')")

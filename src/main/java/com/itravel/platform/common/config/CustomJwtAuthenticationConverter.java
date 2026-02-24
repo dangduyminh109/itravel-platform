@@ -41,6 +41,6 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
                 .stream()
                 .map(p -> new SimpleGrantedAuthority(p.code()))
                 .collect(Collectors.toSet());
-        return new UsernamePasswordAuthenticationToken(account.getId(), jwt, authorities);
+        return new UsernamePasswordAuthenticationToken(account.getId().value(), jwt, authorities);
     }
 }

@@ -39,6 +39,14 @@ public class CustomerController {
                 .build();
     }
 
+    @GetMapping("/me")
+    public ApiResponse<CustomerResponse> getMe() {
+        return ApiResponse.<CustomerResponse>builder()
+                .success(true)
+                .data(mapper.toCustomerResponse(customerQueryService.getMe()))
+                .build();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('CUSTOMER_CREATE')")
