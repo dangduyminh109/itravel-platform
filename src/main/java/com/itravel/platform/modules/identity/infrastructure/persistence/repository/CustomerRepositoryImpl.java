@@ -8,6 +8,8 @@ import com.itravel.platform.modules.identity.infrastructure.persistence.mapper.C
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +26,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Optional<Customer> findById(CustomerId id) {
         return customerJpaRepository
                 .findById(id.value()).map(CustomerMapper::toCustomerDomain);
+    }
+
+    @Override
+    public Page<Customer> getCustomers(String keyword, Pageable pageable) {
+        return customerJpaRepository
+                .searchCustomer(keyword, pageable)
+                .map(CustomerMapper::toCustomerDomain);
     }
 
     @Override

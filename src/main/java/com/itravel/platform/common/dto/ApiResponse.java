@@ -17,7 +17,7 @@ public class ApiResponse<T>
 {
     Boolean success;
     String message;
-    T data;
+    T response;
     String RequestId;
 
     @Builder.Default

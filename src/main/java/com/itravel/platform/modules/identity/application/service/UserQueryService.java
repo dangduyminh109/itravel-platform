@@ -1,6 +1,9 @@
 package com.itravel.platform.modules.identity.application.service;
 
+import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.common.utils.SecurityUtils;
+import com.itravel.platform.modules.identity.api.dto.response.UserResponse;
+import com.itravel.platform.modules.identity.api.mapper.UserRestMapper;
 import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
 import com.itravel.platform.modules.identity.application.exception.AccountInActiveException;
 import com.itravel.platform.modules.identity.application.exception.UserDeletedException;
@@ -9,6 +12,8 @@ import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatu
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.itravel.platform.modules.identity.application.command.user.*;
 import com.itravel.platform.modules.identity.application.exception.UserNotExistException;
@@ -20,7 +25,7 @@ import com.itravel.platform.modules.identity.domain.repository.AccountRepository
 import com.itravel.platform.modules.identity.domain.repository.UserRepository;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
-import java.util.List;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,18 +36,29 @@ public class UserQueryService {
     UserRepository userRepository;
     AccountLinkRepository accountLinkRepository;
     AccountRepository accountRepository;
+    UserRestMapper mapper;
 
-    public List<UserDetail> getUsers(){
-        return userRepository.getUsers().stream()
-                .map(user -> {
-                    AccountLink accountLink = accountLinkRepository
-                            .findByTargetId(user.getId().value())
-                            .orElseThrow(UserNotExistException::new);
-                    Account account = accountRepository.findById(accountLink.getAccountId())
-                            .orElseThrow(UserNotExistException::new);
+    public PageResponse<UserResponse> getUsers(String keyword, Pageable pageable) {
+        Page<User> userPage = userRepository.getUsers(keyword, pageable);
 
-                  return createResponse(user, account);
-                }).toList();
+        return PageResponse.<UserResponse>builder()
+                .currentPage(userPage.getNumber())
+                .pageSize(userPage.getSize())
+                .totalElements(userPage.getTotalElements())
+                .totalPages(userPage.getTotalPages())
+                .data(
+                        userPage.getContent().stream()
+                                .map(user -> {
+                                    AccountLink accountLink = accountLinkRepository
+                                            .findByTargetId(user.getId().value())
+                                            .orElseThrow(UserNotExistException::new);
+                                    Account account = accountRepository.findById(accountLink.getAccountId())
+                                            .orElseThrow(UserNotExistException::new);
+
+                                    return mapper.toUserResponse(createResponse(user, account));
+                                }).toList()
+                )
+                .build();
     }
 
     public UserDetail getMe() {

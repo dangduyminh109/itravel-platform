@@ -63,6 +63,6 @@ public class OAuth2SuccessHandler
         accessCookie.setMaxAge(validDuration);
         response.addCookie(accessCookie);
 
-        response.sendRedirect("http://localhost:5173");
+        response.sendRedirect("http://localhost:3000/api/auth/callback");
     }
 }

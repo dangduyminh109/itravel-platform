@@ -65,10 +65,4 @@ public class RefreshToken {
     public boolean isExpired() {
         return Instant.now().isAfter(expiresAt);
     }
-
-    public void verifyOwner(AccountId accountId) {
-        if (!this.accountId.equals(accountId)) {
-            throw new TokenNotOwnedException();
-        }
-    }
 }

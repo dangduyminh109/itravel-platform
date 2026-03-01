@@ -34,7 +34,7 @@ public class RoleController {
     public ApiResponse<List<RoleResponse>> getRoles() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .success(true)
-                .data(roleQueryService.getRoles().stream().map(mapper::toRoleResponse).toList())
+                .response(roleQueryService.getRoles().stream().map(mapper::toRoleResponse).toList())
                 .build();
     }
 
@@ -46,7 +46,7 @@ public class RoleController {
         return ApiResponse.<RoleResponse>builder()
                 .message("Create role successfully")
                 .success(true)
-                .data(mapper.toRoleResponse(roleCommandHandler.create(createRoleCommand)))
+                .response(mapper.toRoleResponse(roleCommandHandler.create(createRoleCommand)))
                 .build();
     }
 
@@ -57,7 +57,7 @@ public class RoleController {
         return ApiResponse.<RoleResponse>builder()
                 .message("Update role successfully")
                 .success(true)
-                .data(mapper.toRoleResponse(roleCommandHandler.update(updateRoleCommand)))
+                .response(mapper.toRoleResponse(roleCommandHandler.update(updateRoleCommand)))
                 .build();
     }
 

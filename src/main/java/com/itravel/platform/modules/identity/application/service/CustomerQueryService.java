@@ -1,6 +1,9 @@
 package com.itravel.platform.modules.identity.application.service;
 
+import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.common.utils.SecurityUtils;
+import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
+import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
 import com.itravel.platform.modules.identity.application.command.customer.*;
 import com.itravel.platform.modules.identity.application.exception.AccountInActiveException;
 import com.itravel.platform.modules.identity.application.exception.CustomerDeletedException;
@@ -18,8 +21,9 @@ import com.itravel.platform.modules.identity.domain.repository.CustomerRepositor
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,18 +32,30 @@ public class CustomerQueryService {
     CustomerRepository customerRepository;
     AccountLinkRepository accountLinkRepository;
     AccountRepository accountRepository;
-    AccountQueryService accountQueryService;
+    CustomerRestMapper mapper;
 
-    public List<CustomerDetail> getCustomers(){
-        return customerRepository.getCustomers().stream()
-                .map(customer -> {
-                    AccountLink accountLink = accountLinkRepository
-                            .findByTargetId(customer.getId().value())
-                            .orElseThrow(CustomerNotExistException::new);
-                    Account account = accountRepository.findById(accountLink.getAccountId())
-                            .orElseThrow(CustomerNotExistException::new);
-                    return createCustomerDetail(customer, account);
-                }).toList();
+    public PageResponse<CustomerResponse> getCustomers(String keyword, Pageable pageable) {
+        Page<Customer> responsePage = customerRepository.getCustomers(keyword,pageable);
+
+        return PageResponse.<CustomerResponse>builder()
+                .currentPage(responsePage.getNumber())
+                .pageSize(responsePage.getSize())
+                .totalPages(responsePage.getTotalPages())
+                .totalElements(responsePage.getTotalElements())
+                .data(
+                        responsePage.getContent().stream()
+                                .map(customer -> {
+                                    AccountLink accountLink = accountLinkRepository
+                                            .findByTargetId(customer.getId().value())
+                                            .orElseThrow(CustomerNotExistException::new);
+                                    Account account = accountRepository.findById(accountLink.getAccountId())
+                                            .orElseThrow(CustomerNotExistException::new);
+                                    return mapper.toCustomerResponse(
+                                                createCustomerDetail(customer, account)
+                                            );
+                                }).toList()
+                )
+                .build();
     }
 
     public CustomerDetail getMe() {

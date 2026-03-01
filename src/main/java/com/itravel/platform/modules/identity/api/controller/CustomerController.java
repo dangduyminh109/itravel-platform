@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.api.controller;
 
 import com.itravel.platform.common.dto.ApiResponse;
+import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.identity.api.dto.request.CustomerCreateRequest;
 import com.itravel.platform.modules.identity.api.dto.request.UpdateCustomerRequest;
 import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
@@ -8,11 +9,15 @@ import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
 import com.itravel.platform.modules.identity.application.command.customer.CustomerCreateCommand;
 import com.itravel.platform.modules.identity.application.command.customer.UpdateCustomerCommand;
 import com.itravel.platform.modules.identity.application.handler.CustomerCommandHandler;
+import com.itravel.platform.modules.identity.application.service.AccountQueryService;
 import com.itravel.platform.modules.identity.application.service.CustomerQueryService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,16 +31,18 @@ public class CustomerController {
     CustomerCommandHandler customerCommandHandler;
     CustomerQueryService customerQueryService;
     CustomerRestMapper mapper;
+    private final AccountQueryService accountQueryService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")
-    public ApiResponse<List<CustomerResponse>> getCustomers() {
-        return ApiResponse.<List<CustomerResponse>>builder()
+    public ApiResponse<PageResponse<CustomerResponse>> getCustomers(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(page = 0, size = 3) Pageable pageable
+    ) {
+        var response = customerQueryService.getCustomers(keyword,pageable);
+        return ApiResponse.<PageResponse<CustomerResponse>>builder()
                 .success(true)
-                .data(
-                        customerQueryService.getCustomers().stream()
-                                .map(mapper::toCustomerResponse).toList()
-                )
+                .response(response)
                 .build();
     }
 
@@ -43,7 +50,7 @@ public class CustomerController {
     public ApiResponse<CustomerResponse> getMe() {
         return ApiResponse.<CustomerResponse>builder()
                 .success(true)
-                .data(mapper.toCustomerResponse(customerQueryService.getMe()))
+                .response(mapper.toCustomerResponse(customerQueryService.getMe()))
                 .build();
     }
 
@@ -55,7 +62,7 @@ public class CustomerController {
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
                 .success(true)
-                .data(mapper
+                .response(mapper
                         .toCustomerResponse(customerCommandHandler
                                 .create(command)))
                 .build();
@@ -68,7 +75,7 @@ public class CustomerController {
         return ApiResponse.<CustomerResponse>builder()
                 .message("Update user successfully")
                 .success(true)
-                .data(mapper.toCustomerResponse(customerCommandHandler.update(command)))
+                .response(mapper.toCustomerResponse(customerCommandHandler.update(command)))
                 .build();
     }
 

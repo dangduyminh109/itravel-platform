@@ -36,7 +36,7 @@ public class AuthController {
 
         return ApiResponse.<AuthTokenResponse>builder()
                 .message("login successfully")
-                .data(authTokenResponse)
+                .response(authTokenResponse)
                 .build();
     }
 
@@ -57,7 +57,7 @@ public class AuthController {
                 .toAuthTokenResponse(authCommandHandler.refresh(RefreshCommand));
 
         return ApiResponse.<AuthTokenResponse>builder()
-                .data(authTokenResponse)
+                .response(authTokenResponse)
                 .message("logout successfully")
                 .build();
     }
@@ -69,7 +69,7 @@ public class AuthController {
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
                 .success(true)
-                .data(customerMapper
+                .response(customerMapper
                         .toCustomerResponse(authCommandHandler
                                 .RegisterCustomerByEmail(command)))
                 .build();
@@ -82,7 +82,7 @@ public class AuthController {
         return ApiResponse.<String>builder()
                 .message(authCommandHandler.forgotPassword(command))
                 .success(true)
-                .data(null)
+                .response(null)
                 .build();
     }
 
@@ -92,7 +92,7 @@ public class AuthController {
         return ApiResponse.<Void>builder()
                 .message(authCommandHandler.sendOtp(command))
                 .success(true)
-                .data(null)
+                .response(null)
                 .build();
     }
 }

@@ -1,5 +1,4 @@
 package com.itravel.platform.modules.identity.application.command.auth;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
 
-public record LogoutCommand(AccountId accountId, String refreshToken) {
+public record LogoutCommand(String refreshToken) {
 }

@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.api.controller;
 
 import com.itravel.platform.common.dto.ApiResponse;
+import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.identity.api.dto.request.CreateUserRequest;
 import com.itravel.platform.modules.identity.api.dto.request.UpdateUserRequest;
 import com.itravel.platform.modules.identity.api.dto.response.UserResponse;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +33,13 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('USER_VIEW')")
-    public ApiResponse<List<UserResponse>> getUsers() {
-        return ApiResponse.<List<UserResponse>>builder()
+    public ApiResponse<PageResponse<UserResponse>> getUsers(
+            @RequestParam (required = false) String keyword,
+            @PageableDefault(size = 3, page = 0) Pageable pageable
+    ) {
+        return ApiResponse.<PageResponse<UserResponse>>builder()
                 .success(true)
-                .data(
-                        userQueryService.getUsers().stream()
-                                .map(mapper::toUserResponse)
-                                .toList()
-                )
+                .response(userQueryService.getUsers(keyword, pageable))
                 .build();
     }
 
@@ -45,7 +47,7 @@ public class UserController {
     public ApiResponse<UserResponse> getMe() {
         return ApiResponse.<UserResponse>builder()
                 .success(true)
-                .data(mapper.toUserResponse(userQueryService.getMe()))
+                .response(mapper.toUserResponse(userQueryService.getMe()))
                 .build();
     }
 
@@ -57,7 +59,7 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .message("Create user successfully")
                 .success(true)
-                .data(mapper.toUserResponse(userCommandHandler.CreateSystemUser(createUserCommand)))
+                .response(mapper.toUserResponse(userCommandHandler.CreateSystemUser(createUserCommand)))
                 .build();
     }
 
@@ -68,7 +70,7 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .message("Update user successfully")
                 .success(true)
-                .data(mapper.toUserResponse(userCommandHandler.update(updateUserCommand)))
+                .response(mapper.toUserResponse(userCommandHandler.update(updateUserCommand)))
                 .build();
     }
 

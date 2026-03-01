@@ -102,7 +102,6 @@ public class AuthCommandHandler {
         }
 
         RefreshToken refreshToken = refreshTokenOpt.get();
-        refreshToken.verifyOwner(command.accountId());
 
         refreshToken.revoke();
 
@@ -117,8 +116,6 @@ public class AuthCommandHandler {
 
         RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(refreshTokenHash)
                 .orElseThrow(RefreshTokenNotFoundException::new);
-
-        refreshToken.verifyOwner(command.accountId());
 
         if(refreshToken.isRevoked()){
             throw new RefreshTokenRevokedException();
