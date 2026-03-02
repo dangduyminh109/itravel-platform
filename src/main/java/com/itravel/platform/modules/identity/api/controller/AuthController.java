@@ -27,6 +27,19 @@ public class AuthController {
     OtpRestMapper otpMapper;
     CustomerRestMapper customerMapper;
 
+    @PostMapping("/firebase-login")
+    ApiResponse<AuthTokenResponse> firebaseLogin(@RequestBody @Valid FirebaseLoginRequest request) {
+        FirebaseLoginCommand command = mapper.toFirebaseLoginCommand(request);
+        AuthTokenResponse authTokenResponse = mapper
+                .toAuthTokenResponse(authCommandHandler.authenticateWithFirebase(command));
+
+        return ApiResponse.<AuthTokenResponse>builder()
+                .success(true)
+                .message("login successfully")
+                .response(authTokenResponse)
+                .build();
+    }
+
     @PostMapping("/login")
     ApiResponse<AuthTokenResponse> login(@RequestBody @Valid LoginRequest request) throws JOSEException {
         LoginCommand loginCommand = mapper.toLoginCommand(request);
@@ -35,6 +48,7 @@ public class AuthController {
                 .toAuthTokenResponse(authCommandHandler.login(loginCommand));
 
         return ApiResponse.<AuthTokenResponse>builder()
+                .success(true)
                 .message("login successfully")
                 .response(authTokenResponse)
                 .build();
@@ -45,6 +59,7 @@ public class AuthController {
         LogoutCommand LogoutCommand = mapper.toLogoutCommand(request);
         authCommandHandler.logout(LogoutCommand);
         return ApiResponse.<Void>builder()
+                .success(true)
                 .message("logout successfully")
                 .build();
     }
@@ -58,7 +73,8 @@ public class AuthController {
 
         return ApiResponse.<AuthTokenResponse>builder()
                 .response(authTokenResponse)
-                .message("logout successfully")
+                .success(true)
+                .message("refresh successfully")
                 .build();
     }
 

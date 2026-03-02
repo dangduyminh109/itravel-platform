@@ -4,5 +4,6 @@ import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 
 public record CreateAccountByGoogleCommand(
         Email email,
-        CustomerId customerId
+        CustomerId customerId,
+        ProviderId providerId
 ) {}

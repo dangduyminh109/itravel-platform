@@ -79,7 +79,7 @@ public class AccountCommandHandler {
         Role role = roleRepository.findByRoleName(new RoleName("customer"))
                 .orElseThrow(RoleNotExistException::new);
 
-        Account account = Account.createByGoogle(command.email(),role);
+        Account account = Account.createByGoogle(command.email(),role, command.providerId());
 
         AccountLink accountLink = AccountLink.linkToSystemUser(account.getId(), command.customerId().value());
 

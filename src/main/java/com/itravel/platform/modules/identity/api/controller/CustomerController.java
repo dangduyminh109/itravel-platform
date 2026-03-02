@@ -31,7 +31,6 @@ public class CustomerController {
     CustomerCommandHandler customerCommandHandler;
     CustomerQueryService customerQueryService;
     CustomerRestMapper mapper;
-    private final AccountQueryService accountQueryService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")

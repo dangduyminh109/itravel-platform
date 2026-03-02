@@ -15,6 +15,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface AuthRestMapper {
     AuthTokenResponse toAuthTokenResponse(AuthToken authToken);
+    FirebaseLoginCommand toFirebaseLoginCommand(FirebaseLoginRequest request);
     LoginCommand toLoginCommand(LoginRequest request);
     LogoutCommand toLogoutCommand(LogoutRequest request);
     RefreshCommand toRefreshCommand(RefreshRequest request);

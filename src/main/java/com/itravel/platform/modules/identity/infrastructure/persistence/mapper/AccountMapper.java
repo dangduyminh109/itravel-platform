@@ -2,10 +2,7 @@ package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RoleJpaEntity;
@@ -34,6 +31,7 @@ public interface AccountMapper {
                 .username(entity.getUsername() !=null ? new Username(entity.getUsername()) : null)
                 .email(entity.getEmail() !=null ? new Email(entity.getEmail()) : null)
                 .authProvider(entity.getAuthProvider())
+                .providerId(entity.getProviderId() !=null ? new ProviderId(entity.getProviderId()) : null)
                 .status(entity.getStatus())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())

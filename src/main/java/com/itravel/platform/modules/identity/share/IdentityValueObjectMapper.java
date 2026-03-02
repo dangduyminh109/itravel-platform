@@ -119,6 +119,13 @@ public interface IdentityValueObjectMapper {
         return id != null ? id.value() : null;
     }
 
+    default ProviderId toProviderId(String providerId) {
+        return providerId != null ? new ProviderId(providerId) : null;
+    }
+    default String fromProviderId(ProviderId providerId) {
+        return providerId != null ? providerId.value() : null;
+    }
+
     default TokenHash toTokenHash(String hash) {
         return hash != null ? new TokenHash(hash) : null;
     }
@@ -190,7 +197,6 @@ public interface IdentityValueObjectMapper {
                 address.provinceId()
         );
     }
-
     // IdentityCard mappings
     default IdentityCard toIdentityCard(IdentityCardRequest request) {
         if (request == null) {
@@ -236,4 +242,6 @@ public interface IdentityValueObjectMapper {
                 passport.expiryDate()
         );
     }
+
+
 }

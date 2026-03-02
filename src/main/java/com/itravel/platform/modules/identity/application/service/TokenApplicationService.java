@@ -68,6 +68,8 @@ public class TokenApplicationService {
         );
         refreshTokenRepository.save(refreshToken);
         return new AuthToken(
+                account.getEmail(),
+                account.getUsername(),
                 accessToken,
                 refreshTokenRaw,
                 refreshToken.getExpiresAt()

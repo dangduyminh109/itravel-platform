@@ -35,6 +35,8 @@ public class AccountJpaEntity extends JpaBaseModel {
     @Column(nullable = false)
     AuthProvider authProvider;
 
+    String providerId;
+
     Instant createdAt;
     Instant updatedAt;
 

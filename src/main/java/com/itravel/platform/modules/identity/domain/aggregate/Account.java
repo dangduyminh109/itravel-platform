@@ -28,6 +28,7 @@ public class Account extends BaseAggregate<AccountId> {
     Email email;
     PasswordHash password;
     AuthProvider authProvider;
+    ProviderId providerId;
     final Set<Role> roleList = new HashSet<>();
     final Set<PermissionOverride> permissionOverrides = new HashSet<>();
     AccountStatus status;
@@ -36,7 +37,8 @@ public class Account extends BaseAggregate<AccountId> {
             Username username,
             Email email,
             PasswordHash password,
-            AuthProvider authProvider
+            AuthProvider authProvider,
+            ProviderId providerId
     ){
         super(AccountId.generate());
         this.email = email;
@@ -44,6 +46,7 @@ public class Account extends BaseAggregate<AccountId> {
         this.password = password;
         this.authProvider = authProvider;
         this.status = AccountStatus.ACTIVE;
+        this.providerId = providerId;
         validateInvariant();
     }
 
@@ -53,6 +56,7 @@ public class Account extends BaseAggregate<AccountId> {
             Email email,
             PasswordHash password,
             AuthProvider authProvider,
+            ProviderId providerId,
             AccountStatus status,
             Instant createdAt,
             Instant updatedAt,
@@ -68,6 +72,7 @@ public class Account extends BaseAggregate<AccountId> {
         this.username= username;
         this.password = password;
         this.authProvider = authProvider;
+        this.providerId = providerId;
         this.status = status;
     }
 
@@ -75,7 +80,7 @@ public class Account extends BaseAggregate<AccountId> {
             Username username,
             PasswordHash password
     ) {
-        return new Account(username, null, password, AuthProvider.USERNAME);
+        return new Account(username, null, password, AuthProvider.USERNAME,null);
     }
 
     public static Account createByEmail(
@@ -86,16 +91,16 @@ public class Account extends BaseAggregate<AccountId> {
         if(!Objects.equals(role.getName().value(), "customer")){
             throw new InvalidCustomerRoleException();
         }
-        Account account = new Account(null, email, password, AuthProvider.EMAIL);
+        Account account = new Account(null, email, password, AuthProvider.EMAIL, null);
         account.grantRole(role);
         return account;
     }
 
-    public static Account createByGoogle(Email email,Role role) {
+    public static Account createByGoogle(Email email,Role role, ProviderId providerId) {
         if(!Objects.equals(role.getName().value(), "customer")){
             throw new InvalidCustomerRoleException();
         }
-        Account account = new Account(null, email, null, AuthProvider.GOOGLE);
+        Account account = new Account(null, email, null, AuthProvider.GOOGLE, providerId);
         account.grantRole(role);
         return account;
     }
@@ -143,6 +148,7 @@ public class Account extends BaseAggregate<AccountId> {
             Email email,
             PasswordHash password,
             AuthProvider authProvider,
+            ProviderId providerId,
             AccountStatus status,
             Instant createdAt,
             Instant updatedAt,
@@ -155,6 +161,7 @@ public class Account extends BaseAggregate<AccountId> {
                 email,
                 password,
                 authProvider,
+                providerId,
                 status,
                 createdAt,
                 updatedAt,

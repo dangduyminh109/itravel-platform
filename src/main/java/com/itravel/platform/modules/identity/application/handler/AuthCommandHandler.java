@@ -1,5 +1,7 @@
 package com.itravel.platform.modules.identity.application.handler;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
 import com.itravel.platform.modules.identity.application.command.account.CreateAccountByEmailCommand;
 import com.itravel.platform.modules.identity.application.command.account.CreateAccountByGoogleCommand;
 import com.itravel.platform.modules.identity.application.command.auth.*;
@@ -15,8 +17,7 @@ import com.itravel.platform.modules.identity.domain.aggregate.Otp;
 import com.itravel.platform.modules.identity.domain.aggregate.RefreshToken;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.OtpCode;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.TokenHash;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.domain.exception.InvalidOtpCodeException;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
 import com.itravel.platform.modules.identity.domain.repository.CustomerRepository;
@@ -87,6 +88,33 @@ public class AuthCommandHandler {
         }
 
         return tokenApplicationService.createToken(account);
+    }
+
+    @Transactional
+    public AuthToken authenticateWithFirebase(FirebaseLoginCommand command){
+        try {
+            FirebaseToken decodedToken =
+                    FirebaseAuth.getInstance().verifyIdToken(command.idToken());
+
+            String email = decodedToken.getEmail();
+            String uid = decodedToken.getUid();
+            String name = decodedToken.getName();
+
+            Account account = accountRepository.findByEmail(new Email(email))
+                    .orElseGet(() -> {
+                        RegisterCustomerByGoogleCommand registerCommand = new RegisterCustomerByGoogleCommand(
+                                new Email(email),
+                                new FullName(name),
+                                new ProviderId(uid)
+                        );
+                        return RegisterCustomerByGoogle(registerCommand);
+                    });
+
+            return tokenApplicationService
+                    .createToken(account);
+        } catch (Exception e) {
+            throw new InvalidFirebaseTokenException();
+        }
     }
 
     @Transactional
@@ -197,7 +225,8 @@ public class AuthCommandHandler {
         CreateAccountByGoogleCommand createAccountByGoogleCommand =
                 new CreateAccountByGoogleCommand(
                         command.email(),
-                        customer.getId()
+                        customer.getId(),
+                        command.providerId()
                 );
         Account account = accountCommandHandler.CreateByGoogle(createAccountByGoogleCommand);
         customerRepository.save(customer);
@@ -205,7 +234,7 @@ public class AuthCommandHandler {
     }
 
     @Transactional
-    public String forgotPassword(CustomerForgotPasswordCommand command) throws JOSEException {
+    public String forgotPassword(CustomerForgotPasswordCommand command) {
         Otp otp = otpRepository.findByEmailAndCode(command.email(), command.otp())
                 .orElseThrow(InvalidOtpCodeException::new);
         otp.verify(command.otp());
