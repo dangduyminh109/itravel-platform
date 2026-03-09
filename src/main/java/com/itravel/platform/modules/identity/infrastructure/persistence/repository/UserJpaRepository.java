@@ -5,17 +5,46 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserJpaEntity,String> {
 
     @Query(
-            value = "select u from UserJpaEntity u " +
-                    "where :keyword is null or lower(u.fullName) " + "LIKE lower(concat('%', :keyword, '%'))",
+            value = "SELECT u.* FROM user u " +
+                    "JOIN account_link al ON u.id = al.target_id " +
+                    "JOIN account acc ON al.account_id = acc.id " +
 
-            countQuery = "select COUNT(u) FROM UserJpaEntity u " +
-                    "where :keyword is null or lower(u.fullName) LIKE lower(concat('%', :keyword, '%'))"
+                    "WHERE (:keyword IS NULL OR :keyword = '' " +
+
+                    "OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "LOWER(acc.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "u.phone_number LIKE CONCAT('%', :keyword, '%'))" +
+
+                    "AND (:isDeleted IS NULL" +
+                    "    OR (:isDeleted = true AND acc.deleted_at IS NOT NULL)" +
+                    "    OR (:isDeleted = false AND acc.deleted_at IS NULL)" +
+                    ")",
+
+            countQuery = "SELECT u.* FROM user u " +
+                    "JOIN account_link al ON u.id = al.target_id " +
+                    "JOIN account acc ON al.account_id = acc.id " +
+
+                    "WHERE (:keyword IS NULL OR :keyword = '' " +
+
+                    "OR LOWER(u.full_name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "LOWER(acc.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+                    "u.phone_number LIKE CONCAT('%', :keyword, '%'))" +
+
+                    "AND (:isDeleted IS NULL" +
+                    "    OR (:isDeleted = true AND acc.deleted_at IS NOT NULL)" +
+                    "    OR (:isDeleted = false AND acc.deleted_at IS NULL)" +
+                    ")",
+
+            nativeQuery = true
     )
-    Page<UserJpaEntity> getUsers(String keyword, Pageable pageable);
+    Page<UserJpaEntity> getUsers(@Param("keyword") String keyword, Pageable pageable,@Param("isDeleted") boolean isDeleted);
 }

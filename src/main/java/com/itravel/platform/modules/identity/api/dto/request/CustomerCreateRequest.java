@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public record CustomerCreateRequest(
    String gender,
 
    @PastOrPresentDate(message = "DATE_OF_BIRTH_MUST_BE_PAST_OR_PRESENT")
+   @DateTimeFormat(pattern = "dd/MM/yyyy")
    LocalDate dateOfBirth,
 
    @Valid

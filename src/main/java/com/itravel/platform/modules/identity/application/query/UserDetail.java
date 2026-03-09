@@ -4,11 +4,7 @@ import com.itravel.platform.modules.identity.application.command.account.Permiss
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Avatar;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PhoneNumber;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Username;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import lombok.Builder;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,6 +18,7 @@ public record UserDetail(
     PhoneNumber phoneNumber,
     Avatar avatar,
     Gender gender,
+    Email email,
     LocalDate dateOfBirth,
     Set<Role> roleList,
     Set<PermissionOverrideCommand> permissionOverrides,

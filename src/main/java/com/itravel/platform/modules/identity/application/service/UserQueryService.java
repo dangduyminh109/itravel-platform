@@ -38,8 +38,8 @@ public class UserQueryService {
     AccountRepository accountRepository;
     UserRestMapper mapper;
 
-    public PageResponse<UserResponse> getUsers(String keyword, Pageable pageable) {
-        Page<User> userPage = userRepository.getUsers(keyword, pageable);
+    public PageResponse<UserResponse> getUsers(String keyword, Pageable pageable,boolean isDeleted) {
+        Page<User> userPage = userRepository.getUsers(keyword, pageable, isDeleted);
 
         return PageResponse.<UserResponse>builder()
                 .currentPage(userPage.getNumber())
@@ -59,6 +59,18 @@ public class UserQueryService {
                                 }).toList()
                 )
                 .build();
+    }
+
+    public UserResponse getUser(UserId id) {
+        AccountLink accountLink = accountLinkRepository
+                .findByTargetId(id.value())
+                .orElseThrow(UserNotExistException::new);
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotExistException::new);
+        Account account = accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(UserNotExistException::new);
+
+        return mapper.toUserResponse(createResponse(user, account));
     }
 
     public UserDetail getMe() {
@@ -97,6 +109,7 @@ public class UserQueryService {
                 .phoneNumber(user.getPhoneNumber())
                 .avatar(user.getAvatar())
                 .gender(user.getGender())
+                .email(user.getEmail())
                 .dateOfBirth(user.getDateOfBirth())
                 .username(account.getUsername())
                 .roleList(account.getRoleList())

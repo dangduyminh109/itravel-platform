@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserRepository {
     Optional<User> findById(UserId id);
     List<User> getUsers();
-    Page<User> getUsers(String keyword, Pageable pageable);
+    Page<User> getUsers(String keyword, Pageable pageable, boolean isDeleted);
     void save(User user);
     void destroy(UserId id);
 }

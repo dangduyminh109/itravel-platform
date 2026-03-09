@@ -61,6 +61,7 @@ public class AccountRepositoryImpl implements AccountRepository {
                         .accountId(account.getId().value())
                         .permission(permissionOverride.getPermission().code())
                         .permissionType(permissionOverride.getPermissionType())
+                        .account(accountJpa)
                         .build())
                 .collect(Collectors.toSet());
         accountJpa.setPermissionOverrides(permissionOverrides);

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -37,7 +38,10 @@ public class CreateUserRequest{
         @Pattern(regexp = "^$|^(MALE|FEMALE|OTHER)$", message = "GENDER_INVALID")
         String gender;
 
+        String email;
+
         @PastOrPresentDate(message = "DATE_OF_BIRTH_MUST_BE_PAST_OR_PRESENT")
+        @DateTimeFormat(pattern = "dd/MM/yyyy")
         LocalDate dateOfBirth;
 
         @NotEmpty(message = "ROLE_LIST_CANNOT_BE_EMPTY")

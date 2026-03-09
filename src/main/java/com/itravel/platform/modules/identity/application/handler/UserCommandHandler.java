@@ -4,11 +4,9 @@ import com.itravel.platform.modules.identity.application.command.account.CreateA
 import com.itravel.platform.modules.identity.application.command.account.UpdateAccountCommand;
 import com.itravel.platform.modules.identity.application.command.account.UpdateAccountPasswordCommand;
 import com.itravel.platform.modules.identity.application.command.user.*;
-import com.itravel.platform.modules.identity.application.exception.UserNotDeleteOrUpdateException;
 import com.itravel.platform.modules.identity.application.exception.UserNotExistException;
 import com.itravel.platform.modules.identity.application.port.out.MediaUploadPort;
 import com.itravel.platform.modules.identity.application.query.UserDetail;
-import com.itravel.platform.modules.identity.application.service.AccountQueryService;
 import com.itravel.platform.modules.identity.application.service.UserQueryService;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.User;
@@ -27,7 +25,6 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserCommandHandler {
     UserRepository userRepository;
-    AccountQueryService accountQueryService;
     AccountCommandHandler accountCommandHandler;
     MediaUploadPort mediaUploadPort;
 
@@ -39,7 +36,7 @@ public class UserCommandHandler {
             avatar = new Avatar(avatarUrl);
         }
 
-        User user = User.create(command.fullName(), command.phoneNumber(), avatar, command.gender(), command.dateOfBirth());
+        User user = User.create(command.fullName(), command.phoneNumber(), avatar, command.gender(),command.email(), command.dateOfBirth());
 
         CreateAccountByUserNameCommand createAccountByUserNameCommand
                 = new CreateAccountByUserNameCommand( command.username(),
@@ -64,6 +61,7 @@ public class UserCommandHandler {
         user.updateName(command.fullName());
         user.updatePhoneNumber(command.phoneNumber());
         user.updateGender(command.gender());
+        user.updateEmail(command.email());
         user.updateDateOfBirth(command.dateOfBirth());
 
         if (command.avatar() != null && !command.avatar().isEmpty()) {
@@ -99,10 +97,7 @@ public class UserCommandHandler {
             return;
         }
         User user = optionalUser.get();
-        Account account = accountQueryService.getAccount(command.id().value());
-        if(account.getUsername().value().equals("admin")){
-            throw new UserNotDeleteOrUpdateException();
-        }
+        accountCommandHandler.delete(command.id().value());
         user.softDelete();
         userRepository.save(user);
     }
@@ -111,6 +106,7 @@ public class UserCommandHandler {
     public void restore(RestoreUserCommand command){
         User user = userRepository.findById(command.id())
                 .orElseThrow(UserNotExistException::new);
+        accountCommandHandler.restore(command.id().value());
         user.restore();
         userRepository.save(user);
     }

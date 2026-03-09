@@ -24,6 +24,8 @@ public class UserJpaEntity extends JpaBaseModel {
     @Column(nullable = false)
     String fullName;
 
+    String email;
+
     @Column
     String phoneNumber;
 

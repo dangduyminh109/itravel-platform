@@ -8,8 +8,10 @@ import com.itravel.platform.modules.identity.api.dto.response.UserResponse;
 import com.itravel.platform.modules.identity.api.mapper.UserRestMapper;
 import com.itravel.platform.modules.identity.application.command.user.CreateUserCommand;
 import com.itravel.platform.modules.identity.application.command.user.UpdateUserCommand;
+import com.itravel.platform.modules.identity.application.handler.AccountCommandHandler;
 import com.itravel.platform.modules.identity.application.handler.UserCommandHandler;
 import com.itravel.platform.modules.identity.application.service.UserQueryService;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,8 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,16 +30,29 @@ public class UserController {
     UserCommandHandler userCommandHandler;
     UserQueryService userQueryService;
     UserRestMapper mapper;
+    AccountCommandHandler accountCommandHandler;
 
     @GetMapping
     @PreAuthorize("hasAuthority('USER_VIEW')")
     public ApiResponse<PageResponse<UserResponse>> getUsers(
             @RequestParam (required = false) String keyword,
+            @RequestParam (required = false, defaultValue = "false") boolean isDeleted,
             @PageableDefault(size = 3, page = 0) Pageable pageable
     ) {
         return ApiResponse.<PageResponse<UserResponse>>builder()
                 .success(true)
-                .response(userQueryService.getUsers(keyword, pageable))
+                .response(userQueryService.getUsers(keyword, pageable, isDeleted))
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER_VIEW')")
+    public ApiResponse<UserResponse> getUser(
+            @PathVariable String id
+    ) {
+        return ApiResponse.<UserResponse>builder()
+                .success(true)
+                .response(userQueryService.getUser(new UserId(id)))
                 .build();
     }
 
@@ -78,7 +91,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
-        userCommandHandler.delete(mapper.toDeleteUserCommand(id));
+        accountCommandHandler.delete(id);
         return ApiResponse.<Void>builder()
                 .message("Delete user successfully")
                 .success(true)

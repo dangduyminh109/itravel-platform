@@ -4,6 +4,7 @@ import com.itravel.platform.modules.identity.application.command.account.*;
 import com.itravel.platform.modules.identity.application.exception.*;
 import com.itravel.platform.modules.identity.application.service.AccountQueryService;
 import com.itravel.platform.modules.identity.domain.aggregate.*;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
 import com.itravel.platform.modules.identity.domain.repository.AccountLinkRepository;
 import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
@@ -174,6 +175,34 @@ public class AccountCommandHandler {
 
         accountRepository.save(account);
         return account;
+    }
+
+    @Transactional
+    public void delete(String targetId){
+        AccountLink accountLink = accountLinkRepository.findByTargetId(targetId)
+                .orElseThrow(AccountNotExistException::new);
+        Account account = accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(UserNotExistException::new);
+
+        if(account.getUsername() != null && "admin".equals(account.getUsername().value())){
+            throw new UserNotDeleteOrUpdateException();
+        }
+        account.softDelete();
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    public void restore(String targetId){
+        AccountLink accountLink = accountLinkRepository.findByTargetId(targetId)
+                .orElseThrow(AccountNotExistException::new);
+        Account account = accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(UserNotExistException::new);
+
+        if(account.getUsername() != null && "admin".equals(account.getUsername().value())){
+            throw new UserNotDeleteOrUpdateException();
+        }
+        account.restore();
+        accountRepository.save(account);
     }
 
     @Transactional

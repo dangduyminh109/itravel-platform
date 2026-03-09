@@ -35,6 +35,7 @@ public interface AccountMapper {
                 .status(entity.getStatus())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
                 .roleList(entity.getRoleList().stream()
                         .map(RoleMapper::toRoleDomain).collect(Collectors.toSet())
                 )

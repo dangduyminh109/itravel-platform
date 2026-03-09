@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
 import com.itravel.platform.modules.identity.domain.repository.RoleRepository;
@@ -43,7 +44,14 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public List<Role> getRoles() {
+    public List<Role> getRoles(RoleStatus status) {
+        if(status != null){
+            return roleJpaRepository
+                    .findByStatus(status.name())
+                    .stream()
+                    .map(RoleMapper::toRoleDomain)
+                    .toList();
+        }
         return roleJpaRepository
                 .findAll()
                 .stream()

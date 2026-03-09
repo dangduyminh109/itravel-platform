@@ -15,6 +15,7 @@ public record UpdateUserCommand(
         PhoneNumber phoneNumber,
         MultipartFile avatar,
         Gender gender,
+        Email email,
         LocalDate dateOfBirth,
         AccountStatus status,
         RawPassword newPassword,

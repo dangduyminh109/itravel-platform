@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.application.service;
 
 import com.itravel.platform.modules.identity.domain.aggregate.Role;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
 import com.itravel.platform.modules.identity.domain.repository.RoleRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleQueryService {
     RoleRepository roleRepository;
-    public List<Role> getRoles(){
-        return roleRepository.getRoles();
+    public List<Role> getRoles(RoleStatus status){
+        return roleRepository.getRoles(status);
     }
 }

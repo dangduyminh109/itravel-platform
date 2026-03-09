@@ -38,9 +38,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Page<User> getUsers(String keyword, Pageable pageable) {
+    public Page<User> getUsers(String keyword, Pageable pageable,boolean isDeleted) {
         return userJpaRepository
-                .getUsers(keyword, pageable)
+                .getUsers(keyword, pageable,isDeleted)
                 .map(UserMapper::toUserDomain);
     }
 

@@ -2,10 +2,7 @@ package com.itravel.platform.modules.identity.domain.aggregate;
 
 import com.itravel.platform.common.domain.BaseAggregate;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Avatar;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PhoneNumber;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +18,7 @@ public class User extends BaseAggregate<UserId> {
     PhoneNumber phoneNumber;
     Avatar avatar;
     Gender gender;
+    Email email;
     LocalDate dateOfBirth;
 
     private User(
@@ -28,6 +26,7 @@ public class User extends BaseAggregate<UserId> {
             PhoneNumber phoneNumber,
             Avatar avatar,
             Gender gender,
+            Email email,
             LocalDate dateOfBirth
     ) {
         super(UserId.generate());
@@ -35,6 +34,7 @@ public class User extends BaseAggregate<UserId> {
         this.phoneNumber = phoneNumber;
         this.avatar = avatar;
         this.gender = gender;
+        this.email = email;
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -43,6 +43,7 @@ public class User extends BaseAggregate<UserId> {
                  PhoneNumber phoneNumber,
                  Avatar avatar,
                  Gender gender,
+                 Email email,
                  LocalDate dateOfBirth,
                  Instant createdAt,
                  Instant updatedAt,
@@ -53,6 +54,7 @@ public class User extends BaseAggregate<UserId> {
         this.phoneNumber = phoneNumber;
         this.avatar = avatar;
         this.gender = gender;
+        this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -64,6 +66,7 @@ public class User extends BaseAggregate<UserId> {
             PhoneNumber phoneNumber,
             Avatar avatar,
             Gender gender,
+            Email email,
             LocalDate dateOfBirth
     ) {
         return new User(
@@ -71,6 +74,7 @@ public class User extends BaseAggregate<UserId> {
                 phoneNumber,
                 avatar,
                 gender,
+                email,
                 dateOfBirth
         );
     }
@@ -81,6 +85,7 @@ public class User extends BaseAggregate<UserId> {
                                     PhoneNumber phoneNumber,
                                     Avatar avatar,
                                     Gender gender,
+                                    Email email,
                                     LocalDate dateOfBirth,
                                     Instant createdAt,
                                     Instant updatedAt,
@@ -92,6 +97,7 @@ public class User extends BaseAggregate<UserId> {
                 phoneNumber,
                 avatar,
                 gender,
+                email,
                 dateOfBirth,
                 createdAt,
                 updatedAt,
@@ -121,6 +127,11 @@ public class User extends BaseAggregate<UserId> {
 
     public void updateDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+        touch();
+    }
+
+    public void updateEmail(Email email) {
+        this.email = email;
         touch();
     }
 }

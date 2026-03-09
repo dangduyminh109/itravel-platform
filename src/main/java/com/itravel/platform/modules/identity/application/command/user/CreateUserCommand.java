@@ -15,6 +15,7 @@ public record CreateUserCommand(
         PhoneNumber phoneNumber,
         MultipartFile avatar,
         Gender gender,
+        Email email,
         LocalDate dateOfBirth,
         Set<RoleId> roleList,
         Set<PermissionOverrideCommand> permissionOverrides

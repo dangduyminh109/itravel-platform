@@ -11,6 +11,7 @@ import com.itravel.platform.modules.identity.application.command.role.UpdatePerm
 import com.itravel.platform.modules.identity.api.dto.request.UpdatePermissionsForRoleRequest;
 import com.itravel.platform.modules.identity.application.handler.RoleCommandHandler;
 import com.itravel.platform.modules.identity.application.service.RoleQueryService;
+import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,12 @@ public class RoleController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_VIEW')")
-    public ApiResponse<List<RoleResponse>> getRoles() {
+    public ApiResponse<List<RoleResponse>> getRoles(
+            @RequestParam(required = false) RoleStatus status
+    ) {
         return ApiResponse.<List<RoleResponse>>builder()
                 .success(true)
-                .response(roleQueryService.getRoles().stream().map(mapper::toRoleResponse).toList())
+                .response(roleQueryService.getRoles(status).stream().map(mapper::toRoleResponse).toList())
                 .build();
     }
 

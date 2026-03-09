@@ -1,10 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
 import com.itravel.platform.modules.identity.domain.aggregate.User;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Avatar;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.FullName;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PhoneNumber;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
+import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.UserJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
@@ -25,6 +22,7 @@ public interface UserMapper {
                 .phoneNumber(entity.getPhoneNumber() != null ? new PhoneNumber(entity.getPhoneNumber()) : null)
                 .avatar(entity.getAvatar() != null ? new Avatar(entity.getAvatar()) : null)
                 .gender(entity.getGender())
+                .email(entity.getEmail() != null ? new Email(entity.getEmail()) : null)
                 .dateOfBirth(entity.getDateOfBirth())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())

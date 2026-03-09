@@ -39,9 +39,10 @@ public class DataSeeder implements ApplicationRunner {
             List<PermissionCode> permissionList = Arrays.asList(PermissionCode.values());
             Set<PermissionJpaEntity> permissionJpaEntityList = permissionList.stream()
                     .map(item -> PermissionJpaEntity.builder()
-                        .code(item.name())
-                        .build()
-                    ).collect(Collectors.toSet());
+                            .code(item.getCode())
+                            .build()
+                    )
+                    .collect(Collectors.toSet());
             permissionJpaRepository.saveAll(permissionJpaEntityList);
         }
         if(!roleJpaRepository.existsByName("admin")){
