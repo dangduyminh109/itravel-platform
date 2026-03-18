@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
+import com.itravel.platform.modules.identity.application.query.UserGeneralInfo;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.UserJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,22 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserJpaRepository extends JpaRepository<UserJpaEntity,String> {
+
+    @Query(value = "SELECT " +
+            "    COUNT(*) AS totalUsers, " +
+            "    COUNT(CASE WHEN acc.status = 1 THEN 1 END) AS totalActiveUsers, " +
+            "    COUNT(CASE WHEN acc.status = 0 THEN 1 END) AS totalInactiveUsers, " +
+            "    COUNT(" +
+            "       CASE " +
+            "           WHEN acc.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+            "           THEN 1 " +
+            "       END" +
+            "    ) AS newUsers " +
+            "FROM user u " +
+            "LEFT JOIN account_link al ON al.target_id = u.id " +
+            "LEFT JOIN account acc ON al.account_id = acc.id; ",
+            nativeQuery = true)
+    UserGeneralInfo getUserGeneralInfo();
 
     @Query(
             value = "SELECT u.* FROM user u " +

@@ -4,6 +4,7 @@ import com.itravel.platform.common.dto.ApiResponse;
 import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.identity.api.dto.request.CreateUserRequest;
 import com.itravel.platform.modules.identity.api.dto.request.UpdateUserRequest;
+import com.itravel.platform.modules.identity.api.dto.response.UserGeneralInfoResponse;
 import com.itravel.platform.modules.identity.api.dto.response.UserResponse;
 import com.itravel.platform.modules.identity.api.mapper.UserRestMapper;
 import com.itravel.platform.modules.identity.application.command.user.CreateUserCommand;
@@ -32,12 +33,21 @@ public class UserController {
     UserRestMapper mapper;
     AccountCommandHandler accountCommandHandler;
 
+    @GetMapping("/general-info")
+    @PreAuthorize("hasAuthority('USER_VIEW')")
+    public ApiResponse<UserGeneralInfoResponse> getUserGeneralInfo() {
+        return ApiResponse.<UserGeneralInfoResponse>builder()
+                .success(true)
+                .response(mapper.toUserGeneralInfoResponse(userQueryService.getUserGeneralInfo()))
+                .build();
+    }
+
     @GetMapping
     @PreAuthorize("hasAuthority('USER_VIEW')")
     public ApiResponse<PageResponse<UserResponse>> getUsers(
             @RequestParam (required = false) String keyword,
             @RequestParam (required = false, defaultValue = "false") boolean isDeleted,
-            @PageableDefault(size = 3, page = 0) Pageable pageable
+            @PageableDefault(size = 5, page = 0) Pageable pageable
     ) {
         return ApiResponse.<PageResponse<UserResponse>>builder()
                 .success(true)

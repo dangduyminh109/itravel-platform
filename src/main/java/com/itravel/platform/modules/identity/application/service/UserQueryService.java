@@ -2,6 +2,7 @@ package com.itravel.platform.modules.identity.application.service;
 
 import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.common.utils.SecurityUtils;
+import com.itravel.platform.modules.identity.application.query.UserGeneralInfo;
 import com.itravel.platform.modules.identity.api.dto.response.UserResponse;
 import com.itravel.platform.modules.identity.api.mapper.UserRestMapper;
 import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
@@ -15,7 +16,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.itravel.platform.modules.identity.application.command.user.*;
 import com.itravel.platform.modules.identity.application.exception.UserNotExistException;
 import com.itravel.platform.modules.identity.application.query.UserDetail;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
@@ -37,6 +37,10 @@ public class UserQueryService {
     AccountLinkRepository accountLinkRepository;
     AccountRepository accountRepository;
     UserRestMapper mapper;
+
+    public UserGeneralInfo getUserGeneralInfo() {
+        return userRepository.getUserGeneralInfo();
+    }
 
     public PageResponse<UserResponse> getUsers(String keyword, Pageable pageable,boolean isDeleted) {
         Page<User> userPage = userRepository.getUsers(keyword, pageable, isDeleted);

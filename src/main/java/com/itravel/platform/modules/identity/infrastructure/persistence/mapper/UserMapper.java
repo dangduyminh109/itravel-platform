@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
+import com.itravel.platform.modules.identity.application.query.UserGeneralInfo;
 import com.itravel.platform.modules.identity.domain.aggregate.User;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.UserJpaEntity;
@@ -14,6 +15,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 )
 public interface UserMapper {
     UserJpaEntity toUserJpaEntity(User user);
+
+    UserGeneralInfo toUserGeneralInfo(User user);
 
     static User toUserDomain(UserJpaEntity entity) {
         return User.fromExistingBuilder()

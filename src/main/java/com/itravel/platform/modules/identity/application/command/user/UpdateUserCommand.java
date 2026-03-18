@@ -20,6 +20,7 @@ public record UpdateUserCommand(
         AccountStatus status,
         RawPassword newPassword,
         Set<RoleId> roleList,
-        Set<PermissionOverrideCommand> permissionOverrides
+        Set<PermissionOverrideCommand> permissionOverrides,
+        boolean removeAvatar
 ) {
 }

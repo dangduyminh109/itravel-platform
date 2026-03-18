@@ -47,4 +47,6 @@ public class UpdateUserRequest{
         List<@NotNull(message = "ROLE_ID_CANNOT_BE_NULL") Long> roleList;
 
         List<@Valid PermissionOverrideRequest> permissionOverrides;
+
+        boolean removeAvatar;
 }

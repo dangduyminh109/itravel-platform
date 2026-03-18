@@ -9,6 +9,7 @@ import com.itravel.platform.modules.identity.application.exception.AccountInActi
 import com.itravel.platform.modules.identity.application.exception.CustomerDeletedException;
 import com.itravel.platform.modules.identity.application.exception.CustomerNotExistException;
 import com.itravel.platform.modules.identity.application.query.CustomerDetail;
+import com.itravel.platform.modules.identity.application.query.CustomerGeneralInfo;
 import com.itravel.platform.modules.identity.domain.aggregate.Account;
 import com.itravel.platform.modules.identity.domain.aggregate.AccountLink;
 import com.itravel.platform.modules.identity.domain.aggregate.Customer;
@@ -34,8 +35,12 @@ public class CustomerQueryService {
     AccountRepository accountRepository;
     CustomerRestMapper mapper;
 
-    public PageResponse<CustomerResponse> getCustomers(String keyword, Pageable pageable) {
-        Page<Customer> responsePage = customerRepository.getCustomers(keyword,pageable);
+    public CustomerGeneralInfo getCustomerGeneralInfo() {
+        return customerRepository.getCustomerGeneralInfo();
+    }
+
+    public PageResponse<CustomerResponse> getCustomers(String keyword, Pageable pageable, boolean isDeleted) {
+        Page<Customer> responsePage = customerRepository.getCustomers(keyword,pageable,isDeleted);
 
         return PageResponse.<CustomerResponse>builder()
                 .currentPage(responsePage.getNumber())
@@ -56,6 +61,18 @@ public class CustomerQueryService {
                                 }).toList()
                 )
                 .build();
+    }
+
+    public CustomerResponse getCustomer(CustomerId id) {
+        AccountLink accountLink = accountLinkRepository
+                .findByTargetId(id.value())
+                .orElseThrow(CustomerNotExistException::new);
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(CustomerNotExistException::new);
+        Account account = accountRepository.findById(accountLink.getAccountId())
+                .orElseThrow(CustomerNotExistException::new);
+
+        return mapper.toCustomerResponse(createCustomerDetail(customer, account));
     }
 
     public CustomerDetail getMe() {

@@ -18,5 +18,6 @@ public record UpdateCustomerCommand(
         Address address,
         IdentityCard identityCard,
         Passport passport,
-        RawPassword newPassword
+        RawPassword newPassword,
+        boolean removeAvatar
 ) { }

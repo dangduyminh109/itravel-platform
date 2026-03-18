@@ -36,5 +36,7 @@ public record UpdateCustomerRequest(
         @Pattern(regexp = "^$|^(ACTIVE|INACTIVE)$", message = "STATUS_INVALID")
         String status,
 
-        String newPassword
+        String newPassword,
+
+        boolean removeAvatar
 ) { }

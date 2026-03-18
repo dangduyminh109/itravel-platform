@@ -18,7 +18,7 @@ public record CustomerResponse(
         IdentityCardResponse identityCard,
         PassportResponse passport,
         String email,
-        Set<Long> roleList,
+        Set<RoleResponse> roleList,
         AccountStatus status,
         Instant createdAt,
         Instant updatedAt,

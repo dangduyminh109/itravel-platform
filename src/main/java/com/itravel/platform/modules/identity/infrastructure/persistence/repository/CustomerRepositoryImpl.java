@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
+import com.itravel.platform.modules.identity.application.query.CustomerGeneralInfo;
 import com.itravel.platform.modules.identity.domain.aggregate.Customer;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.CustomerId;
 import com.itravel.platform.modules.identity.domain.repository.CustomerRepository;
@@ -23,15 +24,20 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     CustomerMapper mapper;
 
     @Override
+    public CustomerGeneralInfo getCustomerGeneralInfo() {
+        return customerJpaRepository.getCustomerGeneralInfo();
+    }
+
+    @Override
     public Optional<Customer> findById(CustomerId id) {
         return customerJpaRepository
                 .findById(id.value()).map(CustomerMapper::toCustomerDomain);
     }
 
     @Override
-    public Page<Customer> getCustomers(String keyword, Pageable pageable) {
+    public Page<Customer> getCustomers(String keyword, Pageable pageable, boolean isDeleted) {
         return customerJpaRepository
-                .searchCustomer(keyword, pageable)
+                .searchCustomer(keyword, pageable,isDeleted)
                 .map(CustomerMapper::toCustomerDomain);
     }
 

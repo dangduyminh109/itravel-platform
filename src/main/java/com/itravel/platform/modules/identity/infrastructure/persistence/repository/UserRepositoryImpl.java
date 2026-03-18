@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
+import com.itravel.platform.modules.identity.application.query.UserGeneralInfo;
 import com.itravel.platform.modules.identity.domain.aggregate.User;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
 import com.itravel.platform.modules.identity.domain.repository.UserRepository;
@@ -20,6 +21,11 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
     UserJpaRepository userJpaRepository;
     UserMapper userMapper;
+
+    @Override
+    public UserGeneralInfo getUserGeneralInfo() {
+        return userJpaRepository.getUserGeneralInfo();
+    }
 
     @Override
     public Optional<User> findById(UserId id) {

@@ -141,6 +141,7 @@ public class CustomerCommandHandler {
     public void restore(RestoreCustomerCommand command){
         Customer customer = customerRepository.findById(command.id())
                 .orElseThrow(CustomerNotExistException::new);
+        accountCommandHandler.restore(command.id().value());
         customer.restore();
         customerRepository.save(customer);
     }

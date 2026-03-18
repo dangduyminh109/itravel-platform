@@ -25,6 +25,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse<Void>> ExceptionHandler(Exception e) {
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+        e.printStackTrace();
+        log.error("Exception: ",e);
         return ResponseEntity.status(errorCode.getHttpStatusCode()).body(
                 ApiResponse.<Void>builder()
                         .message(errorCode.getMessage())
