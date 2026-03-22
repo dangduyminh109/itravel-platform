@@ -33,11 +33,12 @@ public class RoleController {
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_VIEW')")
     public ApiResponse<List<RoleResponse>> getRoles(
-            @RequestParam(required = false) RoleStatus status
+            @RequestParam(required = false) RoleStatus status,
+            @RequestParam (required = false) String keyword
     ) {
         return ApiResponse.<List<RoleResponse>>builder()
                 .success(true)
-                .response(roleQueryService.getRoles(status).stream().map(mapper::toRoleResponse).toList())
+                .response(roleQueryService.getRoles(status,keyword).stream().map(mapper::toRoleResponse).toList())
                 .build();
     }
 

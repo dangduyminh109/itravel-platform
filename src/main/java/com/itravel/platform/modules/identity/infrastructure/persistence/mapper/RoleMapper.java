@@ -30,6 +30,8 @@ public interface RoleMapper {
                         .map(e -> new Permission(e.getCode()))
                         .collect(Collectors.toSet())
                 )
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 }

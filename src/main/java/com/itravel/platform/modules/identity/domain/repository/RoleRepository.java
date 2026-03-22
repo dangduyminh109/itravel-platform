@@ -13,7 +13,7 @@ public interface RoleRepository {
     Optional<Role> findById(RoleId roleId);
     List<Role> findAllById(List<RoleId> roleIds);
     Optional<Role> findByRoleName(RoleName roleName);
-    List<Role> getRoles(RoleStatus status);
+    List<Role> getRoles(RoleStatus status,String keyword);
     Role save(Role role);
     void destroy(RoleId roleId);
 }

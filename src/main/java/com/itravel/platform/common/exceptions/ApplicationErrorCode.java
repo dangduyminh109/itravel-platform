@@ -15,7 +15,7 @@ public enum ApplicationErrorCode {
     ROLE_EXISTED("ROLE_EXISTED", "Role already exists", HttpStatus.BAD_REQUEST, null),
     ROLE_NOT_EXIST("ROLE_NOT_EXIST", "Role does not exist", HttpStatus.BAD_REQUEST, null),
     ROLE_INACTIVE("ROLE_INACTIVE", "Role is inactive", HttpStatus.BAD_REQUEST, "roleStatus"),
-    ADMIN_ROLE_CAN_NOT_DELETE("ADMIN_ROLE_CAN_NOT_DELETE", "Admin role cannot be deleted", HttpStatus.FORBIDDEN, null),
+    ADMIN_AND_CUSTOMER_ROLE_CAN_NOT_DELETE("ADMIN_AND_CUSTOMER_ROLE_CAN_NOT_DELETE", "Admin and Customer role cannot be deleted", HttpStatus.FORBIDDEN, null),
 
     // ===== USER =====
     USERNAME_EXISTED("USERNAME_EXISTED", "Username already exists", HttpStatus.BAD_REQUEST, "username"),

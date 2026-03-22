@@ -14,7 +14,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleQueryService {
     RoleRepository roleRepository;
-    public List<Role> getRoles(RoleStatus status){
-        return roleRepository.getRoles(status);
+    public List<Role> getRoles(RoleStatus status,String keyword) {
+        return roleRepository.getRoles(status,keyword);
     }
 }

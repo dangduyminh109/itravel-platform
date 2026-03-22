@@ -3,6 +3,8 @@ package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -30,4 +32,7 @@ public class RoleJpaEntity {
             inverseJoinColumns = @JoinColumn(name = "permission_code")
     )
     Set<PermissionJpaEntity> permissionList;
+
+    Instant createdAt;
+    Instant updatedAt;
 }

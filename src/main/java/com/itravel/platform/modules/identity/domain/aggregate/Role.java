@@ -4,12 +4,14 @@ import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
-import com.itravel.platform.modules.identity.domain.exception.AdminRoleImmutableException;
+import com.itravel.platform.modules.identity.domain.exception.RoleImmutableException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,12 +22,17 @@ public class Role {
     RoleId id;
     RoleName name;
     RoleStatus status;
+    Instant createdAt;
+    Instant updatedAt;
+
     final Set<Permission> permissionList = new HashSet<>();
 
     private Role(RoleName name, RoleStatus status) {
         this.id = null;
         this.name = name;
         this.status = status;
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @Builder(builderMethodName = "fromExistingBuilder")
@@ -33,38 +40,46 @@ public class Role {
             RoleId id,
             RoleName name,
             RoleStatus status,
-            Set<Permission> permissionList
+            Set<Permission> permissionList,
+            Instant createdAt,
+            Instant updatedAt
     ) {
-        Role r = new Role(id, name, status);
+        Role r = new Role(id, name, status, createdAt, updatedAt);
         r.permissionList.addAll(permissionList);
         return r;
     }
+    void touch(){
+        this.updatedAt = Instant.now();
+    }
+    public void checkUpdate(){
+        if(this.name.value().equals("admin") || this.name.value().equals("customer") ){
+            throw new RoleImmutableException();
+        }
+    }
+
     public static Role create(RoleName name, RoleStatus status){
         return new Role(name,status);
     }
+
     public void rename(RoleName name) {
-        if(this.name.value().equals("admin")){
-            throw new AdminRoleImmutableException();
-        }
+        checkUpdate();
         this.name = name;
+        touch();
     }
     public void changeStatus(RoleStatus status) {
-        if(this.name.value().equals("admin")){
-            throw new AdminRoleImmutableException();
-        }
+        checkUpdate();
         this.status = status;
+        touch();
     }
     public void grantPermission(Permission permission) {
-        if(this.name.value().equals("admin")){
-            throw new AdminRoleImmutableException();
-        }
+        checkUpdate();
         this.permissionList.add(permission);
+        touch();
     }
 
     public void revokePermission(Permission permission) {
-        if(this.name.value().equals("admin")){
-            throw new AdminRoleImmutableException();
-        }
+        checkUpdate();
         this.permissionList.remove(permission);
+        touch();
     }
 }

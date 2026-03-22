@@ -111,11 +111,7 @@ public class AccountCommandHandler {
     @Transactional
     public Account update(UpdateAccountCommand command){
         Account account = accountQueryService.getAccount(command.targetId());
-
-        if("admin".equals(account.getUsername().value())){
-            throw new UserNotDeleteOrUpdateException();
-        }
-
+        account.checkUpdate();
         Set<Role> newRoles = new HashSet<>(roleRepository.findAllById(command.roleList().stream().toList()));
         Set<Role> oldRoles = new HashSet<>(account.getRoleList());
 
@@ -184,9 +180,7 @@ public class AccountCommandHandler {
         Account account = accountRepository.findById(accountLink.getAccountId())
                 .orElseThrow(UserNotExistException::new);
 
-        if(account.getUsername() != null && "admin".equals(account.getUsername().value())){
-            throw new UserNotDeleteOrUpdateException();
-        }
+        account.checkUpdate();
         account.softDelete();
         accountRepository.save(account);
     }
@@ -201,6 +195,7 @@ public class AccountCommandHandler {
         if(account.getUsername() != null && "admin".equals(account.getUsername().value())){
             throw new UserNotDeleteOrUpdateException();
         }
+        account.checkUpdate();
         account.restore();
         accountRepository.save(account);
     }
@@ -212,10 +207,7 @@ public class AccountCommandHandler {
         Account account = accountRepository.findById(accountLink.getAccountId())
                 .orElseThrow(UserNotExistException::new);
 
-        if(account.getUsername() != null && "admin".equals(account.getUsername().value())){
-            throw new UserNotDeleteOrUpdateException();
-        }
-
+        account.checkUpdate();
         accountLinkRepository.destroy(accountLink.getId());
         List<AccountLink> remainingLinks = accountLinkRepository.findAllByAccountId(account.getId());
         if (remainingLinks.isEmpty()) {

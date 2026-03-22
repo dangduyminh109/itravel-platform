@@ -106,6 +106,7 @@ public class Account extends BaseAggregate<AccountId> {
     }
 
     public void changePassword(PasswordHash newPassword) {
+        checkUpdate();
         if (authProvider == AuthProvider.GOOGLE) {
             throw new InvalidCustomerRoleException();
         }
@@ -114,9 +115,7 @@ public class Account extends BaseAggregate<AccountId> {
     }
 
     public void changeStatus(AccountStatus newStatus) {
-        if(username != null && "admin".equals(username.value())){
-            throw new UserNotDeleteOrUpdateException();
-        }
+        checkUpdate();
         this.status = newStatus;
         touch();
     }
@@ -171,7 +170,15 @@ public class Account extends BaseAggregate<AccountId> {
         acc.permissionOverrides.addAll(permissionOverrides);
         return acc;
     }
+
+    public void checkUpdate() {
+        if(this.username != null && "admin".equals(this.username.value())){
+            throw new UserNotDeleteOrUpdateException();
+        }
+    }
+
     public void grantRole(Role role) {
+        checkUpdate();
         if(RoleStatus.INACTIVE.equals(role.getStatus())){
             throw new RoleInActiveException();
         }
@@ -179,10 +186,12 @@ public class Account extends BaseAggregate<AccountId> {
     }
 
     public void revokeRole(Role role) {
+        checkUpdate();
         this.roleList.remove(role);
     }
 
     public void grantPermissionOverride(PermissionOverride permission) {
+        checkUpdate();
         Set<Permission> rolePermissions = new HashSet<>();
         for (Role role : roleList) {
             rolePermissions.addAll(role.getPermissionList());
@@ -204,10 +213,12 @@ public class Account extends BaseAggregate<AccountId> {
     }
 
     public void revokePermissionOverride(PermissionOverride permission) {
+        checkUpdate();
         this.permissionOverrides.remove(permission);
     }
 
     public void syncPermissionOverride() {
+        checkUpdate();
         Set<Permission> rolePermissions = new HashSet<>();
         for (Role role : roleList) {
             rolePermissions.addAll(role.getPermissionList());

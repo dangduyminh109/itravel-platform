@@ -32,7 +32,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Override
     public List<Role> findAllById(List<RoleId> roleIds) {
         return roleJpaRepository
-                .findAllById(roleIds.stream().map(RoleId::value).collect(Collectors.toSet()))
+                .findByIdIn(roleIds.stream().map(RoleId::value).collect(Collectors.toSet()))
                 .stream().map(RoleMapper::toRoleDomain).toList();
     }
 
@@ -44,16 +44,9 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public List<Role> getRoles(RoleStatus status) {
-        if(status != null){
-            return roleJpaRepository
-                    .findByStatus(status.name())
-                    .stream()
-                    .map(RoleMapper::toRoleDomain)
-                    .toList();
-        }
+    public List<Role> getRoles(RoleStatus status, String keyword) {
         return roleJpaRepository
-                .findAll()
+                .findByStatus(status == null ? null: status.name(),keyword)
                 .stream()
                 .map(RoleMapper::toRoleDomain)
                 .toList();

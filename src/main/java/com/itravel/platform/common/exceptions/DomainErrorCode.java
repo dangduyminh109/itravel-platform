@@ -19,7 +19,7 @@ public enum DomainErrorCode {
     INVALID_ROLE_NAME("INVALID_ROLE_NAME", "Invalid role name", HttpStatus.BAD_REQUEST, "roleName"),
     ROLE_NAME_TOO_LONG("ROLE_NAME_TOO_LONG", "Role name is too long", HttpStatus.BAD_REQUEST, "roleName"),
     INVALID_ROLE_ID("INVALID_ROLE_ID", "Invalid role id", HttpStatus.BAD_REQUEST, "roleId"),
-    ADMIN_ROLE_IMMUTABLE("ADMIN_ROLE_IMMUTABLE", "Admin role cannot be modified", HttpStatus.FORBIDDEN, null),
+    ROLE_IMMUTABLE("ROLE_IMMUTABLE", "Admin and Customer role cannot be modified", HttpStatus.FORBIDDEN, null),
     INVALID_PERMISSION_CODE("INVALID_PERMISSION_CODE", "Invalid permission code", HttpStatus.BAD_REQUEST, "permissionCode"),
 
     INVALID_EMAIL("INVALID_EMAIL", "Invalid email", HttpStatus.BAD_REQUEST, "email"),

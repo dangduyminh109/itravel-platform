@@ -16,6 +16,6 @@ import java.util.List;
 public class PermissionQueryService {
     public List<PermissionResponse> getPermissions(){
          return Arrays.stream(PermissionCode.values())
-                 .map(item -> new PermissionResponse(item.getCode(),item.getDescription())).toList();
+                 .map(item -> new PermissionResponse(item.getCode(),item.getDescription(), item.getGroup())).toList();
     }
 }

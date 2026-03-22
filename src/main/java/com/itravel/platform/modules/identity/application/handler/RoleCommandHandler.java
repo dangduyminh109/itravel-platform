@@ -32,6 +32,10 @@ public class RoleCommandHandler {
             throw new RoleExistedException();
         });
         Role role = Role.create(command.name(),command.status());
+        Set<Permission> permissions = new HashSet<>(command.permissionCodeList());
+        for (Permission p : new HashSet<>(permissions)) {
+            role.grantPermission(p);
+        }
         return roleRepository.save(role);
     }
 
@@ -39,9 +43,6 @@ public class RoleCommandHandler {
     public Role update(UpdateRoleCommand command){
         Role role = roleRepository.findById(command.id())
                 .orElseThrow(RoleNotExistException::new);
-        if(role.getName().value().equals("admin")){
-            throw new AdminRoleCanNotDeleteException();
-        }
         if(!role.getName().equals(command.name())){
             roleRepository.findByRoleName(command.name()).ifPresent(e -> {
                 throw new RoleExistedException();
@@ -57,9 +58,7 @@ public class RoleCommandHandler {
     public void destroy(DeleteRoleCommand command){
         Role role = roleRepository.findById(command.id())
                 .orElseThrow(RoleNotExistException::new);
-        if(role.getName().value().equals("admin")){
-            throw new AdminRoleCanNotDeleteException();
-        }
+       role.checkUpdate();
         roleRepository.destroy(command.id());
     }
 
@@ -68,9 +67,13 @@ public class RoleCommandHandler {
         for (UpdatePermissionForRoleCommand command : updatePermissionForRoleCommands) {
             Role role = roleRepository.findById(command.id())
                     .orElseThrow(RoleNotExistException::new);
-            if(role.getName().value().equals("admin")){
-                throw new AdminRoleCanNotDeleteException();
+            if(!role.getName().equals(command.name())){
+                roleRepository.findByRoleName(command.name()).ifPresent(e -> {
+                    throw new RoleExistedException();
+                });
+                role.rename(command.name());
             }
+            role.changeStatus(command.status());
             Set<Permission> newPermissions = new HashSet<>(command.permissionCodeList());
             Set<Permission> oldPermissions = role.getPermissionList();
 
