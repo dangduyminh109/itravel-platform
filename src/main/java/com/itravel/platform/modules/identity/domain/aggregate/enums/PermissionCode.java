@@ -22,7 +22,12 @@ public enum PermissionCode {
     ROLE_VIEW("ROLE_VIEW", "View role", "ROLE"),
     ROLE_CREATE("ROLE_CREATE", "Create role", "ROLE"),
     ROLE_UPDATE("ROLE_UPDATE", "Update role", "ROLE"),
-    ROLE_DELETE("ROLE_DELETE", "Delete role", "ROLE");
+    ROLE_DELETE("ROLE_DELETE", "Delete role", "ROLE"),
+
+    LOCATION_VIEW("LOCATION_VIEW", "View location", "LOCATION"),
+    LOCATION_CREATE("LOCATION_CREATE", "Create location", "LOCATION"),
+    LOCATION_UPDATE("LOCATION_UPDATE", "Update location", "LOCATION"),
+    LOCATION_DELETE("LOCATION_DELETE", "Delete location", "LOCATION");
 
     String code;
     String description;

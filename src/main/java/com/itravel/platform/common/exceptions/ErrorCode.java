@@ -68,7 +68,11 @@ public enum ErrorCode {
     EXPIRY_DATE_MUST_BE_FUTURE("EXPIRY_DATE_MUST_BE_FUTURE", "Expiry date must be in the future.", HttpStatus.BAD_REQUEST, "expiryDate"),
     ISSUE_DATE_MUST_BE_BEFORE_EXPIRY_DATE("ISSUE_DATE_MUST_BE_BEFORE_EXPIRY_DATE", "Issue date must be before expiry date.", HttpStatus.BAD_REQUEST, "issueDate"),
 
-    UPLOAD_FAILED("UPLOAD_FAILED", "Failed to upload file to cloud storage.", HttpStatus.INTERNAL_SERVER_ERROR, "file")
+    UPLOAD_FAILED("UPLOAD_FAILED", "Failed to upload file to cloud storage.", HttpStatus.INTERNAL_SERVER_ERROR, "file"),
+
+    // location validation
+    TYPE_CANNOT_BE_BLANK("TYPE_CANNOT_BE_BLANK", "Type cannot be left blank.", HttpStatus.BAD_REQUEST, "type"),
+
     ;
 
     String code;
