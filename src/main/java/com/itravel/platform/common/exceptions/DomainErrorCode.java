@@ -67,6 +67,13 @@ public enum DomainErrorCode {
     INVALID_CATEGORY_NAME("INVALID_CATEGORY_NAME", "Invalid category name", HttpStatus.BAD_REQUEST, "categoryName"),
     CATEGORY_NAME_TOO_LONG("CATEGORY_NAME_TOO_LONG", "Category name is too long", HttpStatus.BAD_REQUEST, "categoryName"),
 
+    // ===== TOUR - ITINERARY =====
+    INVALID_ITINERARY_ID("INVALID_ITINERARY_ID", "Invalid itinerary id", HttpStatus.BAD_REQUEST, "itineraryId"),
+    INVALID_ITINERARY_DAY_NUMBER("INVALID_ITINERARY_DAY_NUMBER", "Invalid itinerary day number", HttpStatus.BAD_REQUEST, "dayNumber"),
+    INVALID_ITINERARY_TITLE("INVALID_ITINERARY_TITLE", "Invalid itinerary title", HttpStatus.BAD_REQUEST, "title"),
+    ITINERARY_TITLE_TOO_LONG("ITINERARY_TITLE_TOO_LONG", "Itinerary title is too long", HttpStatus.BAD_REQUEST, "title"),
+    INVALID_ITINERARY_ACTIVITIES("INVALID_ITINERARY_ACTIVITIES", "Invalid itinerary activities", HttpStatus.BAD_REQUEST, "activities"),
+
     ;
     String code;
     String message;
