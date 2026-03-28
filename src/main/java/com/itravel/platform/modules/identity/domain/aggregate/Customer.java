@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.domain.aggregate;
 
-import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Address;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Avatar;
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Customer extends BaseAggregate<CustomerId> {
+public class Customer extends SoftDeletableAggregate<CustomerId> {
     FullName fullName;
     PhoneNumber phoneNumber;
     Avatar avatar;
@@ -63,7 +63,7 @@ public class Customer extends BaseAggregate<CustomerId> {
                      Instant updatedAt,
                      Instant deletedAt
     ) {
-        super(id);
+        super(id, createdAt, updatedAt, deletedAt);
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.avatar = avatar;
@@ -72,9 +72,6 @@ public class Customer extends BaseAggregate<CustomerId> {
         this.address = address;
         this.identityCard = identityCard;
         this.passport = passport;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 
     public static Customer create(

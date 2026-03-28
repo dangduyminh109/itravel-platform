@@ -1,5 +1,5 @@
 package com.itravel.platform.modules.identity.domain.aggregate;
-import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.identity.application.exception.RoleInActiveException;
 import com.itravel.platform.modules.identity.application.exception.UserNotDeleteOrUpdateException;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
@@ -23,7 +23,7 @@ import java.util.Set;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Account extends BaseAggregate<AccountId> {
+public class Account extends SoftDeletableAggregate<AccountId> {
     Username username;
     Email email;
     PasswordHash password;
@@ -62,12 +62,7 @@ public class Account extends BaseAggregate<AccountId> {
             Instant updatedAt,
             Instant deletedAt
     ){
-        super(
-                id,
-                createdAt,
-                updatedAt,
-                deletedAt
-        );
+        super(id, createdAt, updatedAt, deletedAt);
         this.email = email;
         this.username= username;
         this.password = password;

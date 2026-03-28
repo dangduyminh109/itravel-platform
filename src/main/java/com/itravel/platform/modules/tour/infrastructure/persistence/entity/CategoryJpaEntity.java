@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.entity;
 
-import com.itravel.platform.common.infrastructure.JpaBaseModel;
+import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
 import com.itravel.platform.modules.tour.domain.aggregate.enums.CategoryStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 @Table(name = "category")
-public class CategoryJpaEntity extends JpaBaseModel {
+public class CategoryJpaEntity extends SoftDeletableJpaBaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +33,3 @@ public class CategoryJpaEntity extends JpaBaseModel {
     @Column(columnDefinition = "TEXT")
     String description;
 }
-

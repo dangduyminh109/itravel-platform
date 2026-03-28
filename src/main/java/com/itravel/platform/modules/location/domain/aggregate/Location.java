@@ -1,12 +1,12 @@
 package com.itravel.platform.modules.location.domain.aggregate;
 
-import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.common.domain.SoftDeletableAggregate;
+import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
 import com.itravel.platform.modules.location.domain.aggregate.enums.LocationType;
 import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
 import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationName;
-import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
 import com.itravel.platform.modules.location.domain.exception.InvalidTypeOrParentException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,8 +19,7 @@ import java.util.List;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Location extends BaseAggregate<LocationId> {
-    LocationId id;
+public class Location extends SoftDeletableAggregate<LocationId> {
     LocationName name;
     Slug slug;
     LocationType type;
@@ -29,12 +28,13 @@ public class Location extends BaseAggregate<LocationId> {
     LocationStatus status;
 
     private Location(
+            LocationId id,
             LocationName name,
             LocationType type,
             Location parent,
             LocationStatus status
     ) {
-        super(null);
+        super(id);
         this.name = name;
         this.type = type;
         this.status = status;
@@ -55,17 +55,13 @@ public class Location extends BaseAggregate<LocationId> {
             Instant updatedAt,
             Instant deletedAt
     ) {
-        super(id);
-        this.id = id;
+        super(id, createdAt, updatedAt, deletedAt);
         this.name = name;
         this.type = type;
         this.status = status;
         this.slug = slug;
         this.parent = parent;
         this.children = children;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 
     public static Location create(
@@ -76,6 +72,7 @@ public class Location extends BaseAggregate<LocationId> {
     ) {
         checkType(parent, type);
         return new Location(
+                null,
                 name,
                 type,
                 parent,

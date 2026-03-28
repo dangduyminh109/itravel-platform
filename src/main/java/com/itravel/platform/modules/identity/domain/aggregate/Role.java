@@ -1,12 +1,12 @@
 package com.itravel.platform.modules.identity.domain.aggregate;
 
+import com.itravel.platform.common.domain.BaseAggregate;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleId;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RoleName;
 import com.itravel.platform.modules.identity.domain.exception.RoleImmutableException;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -17,22 +17,16 @@ import java.util.Set;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Role {
-    RoleId id;
+public class Role extends BaseAggregate<RoleId> {
     RoleName name;
     RoleStatus status;
-    Instant createdAt;
-    Instant updatedAt;
 
     final Set<Permission> permissionList = new HashSet<>();
 
-    private Role(RoleName name, RoleStatus status) {
-        this.id = null;
+    private Role(RoleId id,RoleName name, RoleStatus status) {
+        super(id);
         this.name = name;
         this.status = status;
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
     }
 
     @Builder(builderMethodName = "fromExistingBuilder")
@@ -48,8 +42,17 @@ public class Role {
         r.permissionList.addAll(permissionList);
         return r;
     }
-    void touch(){
-        this.updatedAt = Instant.now();
+
+    private Role(
+            RoleId id,
+            RoleName name,
+            RoleStatus status,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
+        super(id, createdAt, updatedAt);
+        this.name = name;
+        this.status = status;
     }
     public void checkUpdate(){
         if(this.name.value().equals("admin") || this.name.value().equals("customer") ){
@@ -58,7 +61,7 @@ public class Role {
     }
 
     public static Role create(RoleName name, RoleStatus status){
-        return new Role(name,status);
+        return new Role(null,name,status);
     }
 
     public void rename(RoleName name) {

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+
 import java.time.Instant;
 
 @Getter
@@ -15,7 +16,7 @@ import java.time.Instant;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @MappedSuperclass
-public abstract class JpaBaseModel {
-    Instant createdAt;
-    Instant updatedAt;
+public abstract class SoftDeletableJpaBaseModel extends JpaBaseModel {
+    Instant deletedAt;
 }
+
