@@ -31,7 +31,6 @@ public class UserController {
     UserCommandHandler userCommandHandler;
     UserQueryService userQueryService;
     UserRestMapper mapper;
-    AccountCommandHandler accountCommandHandler;
 
     @GetMapping("/general-info")
     @PreAuthorize("hasAuthority('USER_VIEW')")
@@ -101,7 +100,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
-        accountCommandHandler.delete(id);
+        userCommandHandler.delete(mapper.toDeleteUserCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Delete user successfully")
                 .success(true)

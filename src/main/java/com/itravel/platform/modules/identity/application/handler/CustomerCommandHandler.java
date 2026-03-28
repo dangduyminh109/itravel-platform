@@ -133,6 +133,7 @@ public class CustomerCommandHandler {
             return;
         }
         Customer customer = optionalCustomer.get();
+        accountCommandHandler.delete(command.id().value());
         customer.softDelete();
         customerRepository.save(customer);
     }

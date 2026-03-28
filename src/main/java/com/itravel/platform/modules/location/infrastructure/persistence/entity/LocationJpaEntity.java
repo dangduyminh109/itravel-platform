@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.location.infrastructure.persistence.entity;
 
-import com.itravel.platform.common.infrastructure.JpaBaseModel;
+import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
 import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
 import com.itravel.platform.modules.location.domain.aggregate.enums.LocationType;
 import jakarta.persistence.*;
@@ -18,7 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 @Table(name = "location")
-public class LocationJpaEntity extends JpaBaseModel {
+public class LocationJpaEntity extends SoftDeletableJpaBaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,4 +47,3 @@ public class LocationJpaEntity extends JpaBaseModel {
     @JoinColumn(name = "parent_id")
     LocationJpaEntity parent;
 }
-

@@ -31,7 +31,6 @@ public class CustomerController {
     CustomerCommandHandler customerCommandHandler;
     CustomerQueryService customerQueryService;
     CustomerRestMapper mapper;
-    AccountCommandHandler accountCommandHandler;
 
     @GetMapping("/general-info")
     @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")
@@ -104,7 +103,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
-        accountCommandHandler.delete(id);
+        customerCommandHandler.delete(mapper.toDeleteCustomerCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Delete customer successfully")
                 .success(true)

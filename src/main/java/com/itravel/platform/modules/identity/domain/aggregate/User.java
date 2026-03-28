@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.domain.aggregate;
 
-import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
 import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import lombok.AccessLevel;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User extends BaseAggregate<UserId> {
+public class User extends SoftDeletableAggregate<UserId> {
     FullName fullName;
     PhoneNumber phoneNumber;
     Avatar avatar;
@@ -49,16 +49,13 @@ public class User extends BaseAggregate<UserId> {
                  Instant updatedAt,
                  Instant deletedAt
     ) {
-        super(id);
+        super(id, createdAt, updatedAt, deletedAt);
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.avatar = avatar;
         this.gender = gender;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 
     public static User create(
