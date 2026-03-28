@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.entity;
 
-import com.itravel.platform.common.infrastructure.JpaBaseModel;
+import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +17,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 @Table(name = "itinerary")
-public class ItineraryJpaEntity extends JpaBaseModel {
+public class ItineraryJpaEntity extends SoftDeletableJpaBaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +38,3 @@ public class ItineraryJpaEntity extends JpaBaseModel {
     @OrderColumn(name = "activity_order")
     List<String> activities = new ArrayList<>();
 }
-

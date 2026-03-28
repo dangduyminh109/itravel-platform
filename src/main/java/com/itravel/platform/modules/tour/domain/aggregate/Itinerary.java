@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.tour.domain.aggregate;
 
-import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryDayNumber;
 import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryId;
 import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryTitle;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Itinerary extends BaseAggregate<ItineraryId> {
+public class Itinerary extends SoftDeletableAggregate<ItineraryId> {
     ItineraryId id;
     ItineraryDayNumber dayNumber;
     ItineraryTitle title;
@@ -47,15 +47,12 @@ public class Itinerary extends BaseAggregate<ItineraryId> {
             Instant updatedAt,
             Instant deletedAt
     ) {
-        super(id);
+        super(id, createdAt, updatedAt, deletedAt);
         this.id = id;
         this.dayNumber = dayNumber;
         this.title = title;
         this.description = description;
         this.activities = normalizeActivities(activities);
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 
     public static Itinerary create(
