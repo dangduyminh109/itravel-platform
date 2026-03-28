@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.tour.domain.aggregate;
 
-import com.itravel.platform.common.domain.BaseAggregate;
+import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
 import com.itravel.platform.modules.tour.domain.aggregate.enums.CategoryStatus;
 import com.itravel.platform.modules.tour.domain.aggregate.valueobject.CategoryId;
@@ -14,7 +14,7 @@ import java.time.Instant;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category extends BaseAggregate<CategoryId> {
+public class Category extends SoftDeletableAggregate<CategoryId> {
     CategoryId id;
     CategoryName name;
     Slug slug;
@@ -43,15 +43,12 @@ public class Category extends BaseAggregate<CategoryId> {
             Instant updatedAt,
             Instant deletedAt
     ) {
-        super(id);
+        super(id, createdAt, updatedAt, deletedAt);
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
         this.slug = slug;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 
     public static Category create(
