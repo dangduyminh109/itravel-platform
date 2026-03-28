@@ -1,10 +1,11 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 
+import com.itravel.platform.common.infrastructure.JpaBaseModel;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -13,9 +14,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder(toBuilder = true)
 @Table(name = "role")
-public class RoleJpaEntity {
+public class RoleJpaEntity extends JpaBaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -32,7 +33,4 @@ public class RoleJpaEntity {
             inverseJoinColumns = @JoinColumn(name = "permission_code")
     )
     Set<PermissionJpaEntity> permissionList;
-
-    Instant createdAt;
-    Instant updatedAt;
 }
