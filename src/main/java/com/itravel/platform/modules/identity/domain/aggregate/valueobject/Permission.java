@@ -10,7 +10,7 @@ public record Permission(String code) {
             throw new InvalidPermissionCodeException();
         }
         try {
-            PermissionCode.valueOf(code);
+//            PermissionCode.valueOf(code);
         } catch (IllegalArgumentException e) {
             throw new InvalidPermissionCodeException();
         }

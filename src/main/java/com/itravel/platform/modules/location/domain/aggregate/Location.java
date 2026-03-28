@@ -2,7 +2,6 @@ package com.itravel.platform.modules.location.domain.aggregate;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
 import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
 import com.itravel.platform.modules.location.domain.aggregate.enums.LocationType;
 import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
@@ -131,5 +130,9 @@ public class Location extends SoftDeletableAggregate<LocationId> {
         checkType(newParent, this.type);
         this.parent = newParent;
         touch();
+    }
+
+    public void setParentForRead(Location newParent) {
+        this.parent = newParent;
     }
 }

@@ -65,7 +65,11 @@ public class LocationRepositoryImpl implements LocationRepository {
             }else {
                 Location parent = map.get(entity.getParent().getId());
                 if(parent != null){
-                    parent.getChildren().add(map.get(entity.getId()));
+                    Location child = map.get(entity.getId());
+                    if(child != null){
+                        child.setParentForRead(parent);
+                        parent.getChildren().add(child);
+                    }
                 }
             }
         }
@@ -91,7 +95,7 @@ public class LocationRepositoryImpl implements LocationRepository {
             if(entity.getParent() != null){
                 Location parent = mapLocation.get(entity.getParent().getId());
                 if(parent != null){
-                    location.updatePrent(mapOriginal.get(entity.getParent().getId()));
+                    location.setParentForRead(mapOriginal.get(entity.getParent().getId()));
                 }
             }
         }
@@ -115,6 +119,7 @@ public class LocationRepositoryImpl implements LocationRepository {
             locationJpaEntity.setSlug(location.getSlug().value());
             locationJpaEntity.setType(location.getType());
             locationJpaEntity.setStatus(location.getStatus());
+            locationJpaEntity.setUpdatedAt(location.getUpdatedAt());
             if(location.getParent() != null && locationJpaEntity.getParent() != null){
                 if(!location.getParent().getId().value().equals(locationJpaEntity.getParent().getId())){
                     Optional<LocationJpaEntity> newParent =  locationJpaRepository.findById(location.getParent().getId().value());
@@ -150,6 +155,7 @@ public class LocationRepositoryImpl implements LocationRepository {
         locationJpaRepository.findById(location.getId().value())
                 .ifPresent((entity) -> {
                     entity.setStatus(location.getStatus());
+                    entity.setUpdatedAt(location.getUpdatedAt());
                     locationJpaRepository.save(entity);
                 });
     }
@@ -159,6 +165,7 @@ public class LocationRepositoryImpl implements LocationRepository {
         locationJpaRepository.findById(location.getId().value())
                 .ifPresent((entity) -> {
                     entity.setDeletedAt(null);
+                    entity.setUpdatedAt(location.getUpdatedAt());
                     locationJpaRepository.save(entity);
                 });
     }
