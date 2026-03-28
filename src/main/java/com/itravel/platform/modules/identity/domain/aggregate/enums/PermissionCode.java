@@ -27,7 +27,12 @@ public enum PermissionCode {
     LOCATION_VIEW("LOCATION_VIEW", "View location", "LOCATION"),
     LOCATION_CREATE("LOCATION_CREATE", "Create location", "LOCATION"),
     LOCATION_UPDATE("LOCATION_UPDATE", "Update location", "LOCATION"),
-    LOCATION_DELETE("LOCATION_DELETE", "Delete location", "LOCATION");
+    LOCATION_DELETE("LOCATION_DELETE", "Delete location", "LOCATION"),
+
+    CATEGORY_VIEW("CATEGORY_VIEW", "View category", "CATEGORY"),
+    CATEGORY_CREATE("CATEGORY_CREATE", "Create category", "CATEGORY"),
+    CATEGORY_UPDATE("CATEGORY_UPDATE", "Update category", "CATEGORY"),
+    CATEGORY_DELETE("CATEGORY_DELETE", "Delete category", "CATEGORY");
 
     String code;
     String description;
