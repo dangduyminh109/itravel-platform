@@ -80,6 +80,10 @@ public enum DomainErrorCode {
     INVALID_AVAILABLE_SEATS("INVALID_AVAILABLE_SEATS", "Invalid available seats", HttpStatus.BAD_REQUEST, "availableSeats"),
     INVALID_SCHEDULE_STATUS("INVALID_SCHEDULE_STATUS", "Invalid schedule status", HttpStatus.BAD_REQUEST, "status"),
 
+    // ===== TOUR - IMAGE =====
+    INVALID_TOUR_IMAGE_ID("INVALID_TOUR_IMAGE_ID", "Invalid tour image id", HttpStatus.BAD_REQUEST, "tourImageId"),
+    INVALID_TOUR_IMAGE_URL("INVALID_TOUR_IMAGE_URL", "Invalid tour image url", HttpStatus.BAD_REQUEST, "imageUrl"),
+
     ;
     String code;
     String message;
