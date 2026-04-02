@@ -7,16 +7,16 @@ import com.itravel.platform.modules.tour.api.dto.request.UpdateCategoryRequest;
 import com.itravel.platform.modules.tour.api.dto.request.UpdateStatusCategoryRequest;
 import com.itravel.platform.modules.tour.api.dto.response.CategoryResponse;
 import com.itravel.platform.modules.tour.api.mapper.CategoryRestMapper;
-import com.itravel.platform.modules.tour.application.command.location.CreateCategoryCommand;
-import com.itravel.platform.modules.tour.application.command.location.UpdateCategoryCommand;
-import com.itravel.platform.modules.tour.application.handler.CategoryCommandHandler;
-import com.itravel.platform.modules.tour.application.service.CategoryQueryService;
-import com.itravel.platform.modules.tour.domain.aggregate.enums.CategoryStatus;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.CategoryId;
+import com.itravel.platform.modules.tour.application.command.model.category.CreateCategoryCommand;
+import com.itravel.platform.modules.tour.application.command.model.category.UpdateCategoryCommand;
+import com.itravel.platform.modules.tour.application.dto.CategoryDetailDTO;
+import com.itravel.platform.modules.tour.application.port.in.category.facade.CategoryCommandFacade;
+import com.itravel.platform.modules.tour.application.port.in.category.facade.CategoryQueryFacade;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -28,21 +28,30 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/category")
 public class CategoryController {
-    CategoryCommandHandler categoryCommandHandler;
-    CategoryQueryService categoryQueryService;
     CategoryRestMapper mapper;
+    CategoryQueryFacade queryFacade;
+    CategoryCommandFacade commandFacade;
 
     @GetMapping
     @PreAuthorize("hasAuthority('CATEGORY_VIEW')")
     public ApiResponse<PageResponse<CategoryResponse>> getCategories(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Boolean isDeleted,
-            @RequestParam(required = false) CategoryStatus status,
+            @RequestParam(required = false) String status,
             @PageableDefault(size = 5, page = 0) Pageable pageable
     ) {
+        Page<CategoryDetailDTO> categoryPage = queryFacade.getAll(keyword, pageable, isDeleted, status);
+        PageResponse<CategoryResponse> response = PageResponse.<CategoryResponse>builder()
+                .currentPage(categoryPage.getNumber())
+                .pageSize(categoryPage.getSize())
+                .totalElements(categoryPage.getTotalElements())
+                .totalPages(categoryPage.getTotalPages())
+                .data(categoryPage.getContent().stream().map(mapper::toCategoryResponse).toList())
+                .build();
+
         return ApiResponse.<PageResponse<CategoryResponse>>builder()
                 .success(true)
-                .response(categoryQueryService.getCategories(keyword, pageable, isDeleted, status))
+                .response(response)
                 .build();
     }
 
@@ -51,41 +60,41 @@ public class CategoryController {
     public ApiResponse<CategoryResponse> getCategory(@PathVariable Long id) {
         return ApiResponse.<CategoryResponse>builder()
                 .success(true)
-                .response(categoryQueryService.getCategory(new CategoryId(id)))
+                .response(mapper.toCategoryResponse(queryFacade.getById(id)))
                 .build();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
-    public ApiResponse<CategoryResponse> create(@RequestBody @Valid CreateCategoryRequest request) {
+    public ApiResponse<Void> create(@RequestBody @Valid CreateCategoryRequest request) {
         CreateCategoryCommand createCategoryCommand = mapper.toCreateCategoryCommand(request);
-        return ApiResponse.<CategoryResponse>builder()
+        commandFacade.create(createCategoryCommand);
+        return ApiResponse.<Void>builder()
                 .message("Create category successfully")
                 .success(true)
-                .response(mapper.toCategoryResponse(categoryCommandHandler.create(createCategoryCommand)))
                 .build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
-    public ApiResponse<CategoryResponse> update(
-            @PathVariable String id,
+    public ApiResponse<Void> update(
+            @PathVariable Long id,
             @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest
     ) {
         UpdateCategoryCommand updateCategoryCommand = mapper.toUpdateCategoryCommand(id, updateCategoryRequest);
-        return ApiResponse.<CategoryResponse>builder()
+        commandFacade.update(updateCategoryCommand);
+        return ApiResponse.<Void>builder()
                 .message("Update category successfully")
                 .success(true)
-                .response(mapper.toCategoryResponse(categoryCommandHandler.update(updateCategoryCommand)))
                 .build();
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
-    public ApiResponse<Void> delete(@PathVariable String id) {
-        categoryCommandHandler.delete(mapper.toDeleteCategoryCommand(id));
+    public ApiResponse<Void> delete(@PathVariable Long id) {
+        commandFacade.delete(mapper.toDeleteCategoryCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Delete category successfully")
                 .success(true)
@@ -95,7 +104,7 @@ public class CategoryController {
     @PatchMapping("/{id}/restore")
     @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
     public ApiResponse<Void> restore(@PathVariable Long id) {
-        categoryCommandHandler.restore(new CategoryId(id));
+        commandFacade.restore(mapper.toRestoreCategoryCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Restore category successfully")
                 .success(true)
@@ -104,10 +113,10 @@ public class CategoryController {
 
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
-    public ApiResponse<Void> status(@PathVariable String id,
+    public ApiResponse<Void> status(@PathVariable Long id,
                                     @RequestBody @Valid UpdateStatusCategoryRequest request
     ) {
-        categoryCommandHandler.status(mapper.toUpdateStatusCategoryCommand(id,request));
+        commandFacade.updateStatus(mapper.toUpdateStatusCategoryCommand(id,request));
         return ApiResponse.<Void>builder()
                 .message("Update category status successfully")
                 .success(true)
@@ -117,8 +126,8 @@ public class CategoryController {
     @DeleteMapping("/{id}/destroy")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
-    public ApiResponse<Void> destroy(@PathVariable String id) {
-        categoryCommandHandler.destroy(mapper.toDeleteCategoryCommand(id));
+    public ApiResponse<Void> destroy(@PathVariable Long id) {
+        commandFacade.destroy(mapper.toDeleteCategoryCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Destroy category successfully")
                 .success(true)

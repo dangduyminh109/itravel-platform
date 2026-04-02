@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.tour.share;
 
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryDayNumber;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryId;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryTitle;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryId;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 

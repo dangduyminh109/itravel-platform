@@ -1,9 +1,9 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.tour.domain.aggregate.Schedule;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.AvailableSeats;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.DepartureDate;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ScheduleId;
+import com.itravel.platform.modules.tour.domain.schedule.Schedule;
+import com.itravel.platform.modules.tour.domain.schedule.AvailableSeats;
+import com.itravel.platform.modules.tour.domain.schedule.DepartureDate;
+import com.itravel.platform.modules.tour.domain.schedule.ScheduleId;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.ScheduleJpaEntity;
 import com.itravel.platform.modules.tour.share.ScheduleValueObjectMapper;
 import org.mapstruct.Mapper;

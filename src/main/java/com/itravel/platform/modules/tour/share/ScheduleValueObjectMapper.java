@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.tour.share;
 
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.AvailableSeats;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.DepartureDate;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ScheduleId;
+import com.itravel.platform.modules.tour.domain.schedule.AvailableSeats;
+import com.itravel.platform.modules.tour.domain.schedule.DepartureDate;
+import com.itravel.platform.modules.tour.domain.schedule.ScheduleId;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 

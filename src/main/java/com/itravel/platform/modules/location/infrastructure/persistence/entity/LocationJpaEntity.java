@@ -41,6 +41,7 @@ public class LocationJpaEntity extends SoftDeletableJpaBaseModel {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY
     )
+    @Builder.Default
     List<LocationJpaEntity> children = new ArrayList<>();
 
     @ManyToOne

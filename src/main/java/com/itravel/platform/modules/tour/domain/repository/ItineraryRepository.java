@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.tour.domain.repository;
 
-import com.itravel.platform.modules.tour.domain.aggregate.Itinerary;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryId;
+import com.itravel.platform.modules.tour.domain.itinerary.Itinerary;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryId;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

@@ -62,6 +62,19 @@ public enum DomainErrorCode {
     LOCATION_NAME_TOO_LONG("LOCATION_NAME_TOO_LONG", "Location name is too long", HttpStatus.BAD_REQUEST, "locationName"),
     INVALID_TYPE_OR_PARENT("INVALID_TYPE_OR_PARENT", "Invalid type or parent", HttpStatus.BAD_REQUEST, "parentId,type"),
 
+    // ===== TOUR  =====
+    INVALID_TOUR_NAME("INVALID_TOUR_NAME", "Invalid tour name", HttpStatus.BAD_REQUEST, "tourName"),
+    TOUR_NAME_TOO_LONG("TOUR_NAME_TOO_LONG", "Tour name is too long", HttpStatus.BAD_REQUEST, "tourName"),
+    INVALID_CURRENCY("INVALID_CURRENCY", "Invalid currency", HttpStatus.BAD_REQUEST, "currency"),
+    INVALID_ORIGIN_PRICE("INVALID_ORIGIN_PRICE", "Invalid origin price", HttpStatus.BAD_REQUEST, "originPrice"),
+    INVALID_DISCOUNT_PRICE("INVALID_DISCOUNT_PRICE", "Invalid discount price", HttpStatus.BAD_REQUEST, "discountPrice"),
+
+    INVALID_DAYS("INVALID_DAYS", "Days must be greater than or equal to 1", HttpStatus.BAD_REQUEST, "days"),
+    INVALID_NIGHTS("INVALID_NIGHTS", "Nights must not be negative", HttpStatus.BAD_REQUEST, "nights"),
+    INVALID_DAYS_NIGHTS_RELATION("INVALID_DAYS_NIGHTS_RELATION", "Days and nights difference must not exceed 1", HttpStatus.BAD_REQUEST, "days"),
+
+    INVALID_MIN_PARTICIPANTS("INVALID_MIN_PARTICIPANTS", "Minimum participants must not be negative", HttpStatus.BAD_REQUEST, "minParticipants"),
+    INVALID_PARTICIPANTS_RANGE("INVALID_PARTICIPANTS_RANGE", "Minimum participants must not exceed maximum participants", HttpStatus.BAD_REQUEST, "minParticipants"),
     // ===== TOUR - CATEGORY =====
     INVALID_CATEGORY_ID("INVALID_CATEGORY_ID", "Invalid category id", HttpStatus.BAD_REQUEST, "categoryId"),
     INVALID_CATEGORY_NAME("INVALID_CATEGORY_NAME", "Invalid category name", HttpStatus.BAD_REQUEST, "categoryName"),

@@ -1,9 +1,9 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.tour.domain.aggregate.Itinerary;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryDayNumber;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryId;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ItineraryTitle;
+import com.itravel.platform.modules.tour.domain.itinerary.Itinerary;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryId;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.ItineraryJpaEntity;
 import com.itravel.platform.modules.tour.share.ItineraryValueObjectMapper;
 import org.mapstruct.Mapper;

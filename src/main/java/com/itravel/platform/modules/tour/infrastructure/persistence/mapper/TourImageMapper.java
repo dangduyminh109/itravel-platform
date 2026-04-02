@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.tour.domain.aggregate.TourImage;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ImageUrl;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.TourImageId;
+import com.itravel.platform.modules.tour.domain.tourImage.TourImage;
+import com.itravel.platform.modules.tour.domain.tourImage.ImageUrl;
+import com.itravel.platform.modules.tour.domain.tour.TourImageId;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.TourImageJpaEntity;
 import com.itravel.platform.modules.tour.share.TourImageValueObjectMapper;
 import org.mapstruct.Mapper;

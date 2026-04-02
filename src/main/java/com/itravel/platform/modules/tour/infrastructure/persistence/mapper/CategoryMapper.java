@@ -1,9 +1,10 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.mapper;
 
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.tour.domain.aggregate.Category;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.CategoryId;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.CategoryName;
+import com.itravel.platform.modules.tour.application.dto.CategoryDetailDTO;
+import com.itravel.platform.modules.tour.domain.category.Category;
+import com.itravel.platform.modules.tour.domain.category.CategoryId;
+import com.itravel.platform.modules.tour.domain.category.CategoryName;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.CategoryJpaEntity;
 import com.itravel.platform.modules.tour.share.CategoryValueObjectMapper;
 import org.mapstruct.Mapper;
@@ -24,6 +25,19 @@ public interface CategoryMapper {
                 .slug(new Slug(entity.getSlug()))
                 .description(entity.getDescription())
                 .status(entity.getStatus())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
+                .build();
+    }
+
+    static CategoryDetailDTO toCategoryDetailDTO(CategoryJpaEntity entity) {
+        return CategoryDetailDTO.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .slug(entity.getSlug())
+                .description(entity.getDescription())
+                .status(entity.getStatus().toString())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())

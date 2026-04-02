@@ -1,6 +1,5 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.repository;
 
-import com.itravel.platform.modules.tour.domain.aggregate.enums.CategoryStatus;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.CategoryJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +34,7 @@ public interface CategoryJpaRepository extends JpaRepository<CategoryJpaEntity, 
             @Param("keyword") String keyword,
             Pageable pageable,
             @Param("isDeleted") Boolean isDeleted,
-            @Param("status") CategoryStatus status
+            @Param("status") String status
     );
 
     boolean existsByName(String name);

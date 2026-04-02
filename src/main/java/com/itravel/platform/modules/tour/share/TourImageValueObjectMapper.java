@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.tour.share;
 
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.ImageUrl;
-import com.itravel.platform.modules.tour.domain.aggregate.valueobject.TourImageId;
+import com.itravel.platform.modules.tour.domain.tourImage.ImageUrl;
+import com.itravel.platform.modules.tour.domain.tour.TourImageId;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
