@@ -1,0 +1,45 @@
+package com.itravel.platform.modules.tour.application.command.model.tour;
+
+import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
+import com.itravel.platform.modules.tour.domain.category.CategoryId;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
+import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
+import com.itravel.platform.modules.tour.domain.tour.*;
+import com.itravel.platform.modules.tour.domain.tourImage.ImageUrl;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+public record CreateTourCommand(
+        TourName name,
+        String summary,
+        String description,
+        TourStatus status,
+        Pricing pricing,
+        TourDuration duration,
+        ParticipantLimit participantLimit,
+        Services services,
+        CategoryId categoryId,
+        LocationId departureLocationId,
+        LocationId destinationLocationId,
+        List<ItineraryCommand> itineraries,
+        List<TourImageCommand> tourImages
+) {
+    public CreateTourCommand {
+        itineraries = itineraries == null ? List.of() : itineraries;
+        tourImages = tourImages == null ? List.of() : tourImages;
+    }
+
+    public record ItineraryCommand(
+            ItineraryDayNumber dayNumber,
+            ItineraryTitle title,
+            String description,
+            List<String> activities
+    ) {}
+
+    public record TourImageCommand(
+            MultipartFile image,
+            Boolean isThumbnail
+    ) {}
+}
+

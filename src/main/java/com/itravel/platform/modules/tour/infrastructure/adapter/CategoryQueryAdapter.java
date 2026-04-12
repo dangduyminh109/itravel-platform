@@ -39,6 +39,11 @@ public class CategoryQueryAdapter implements CategoryQueryPort {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
     public boolean existsByNameAndIdNot(String name, Long id) {
         return repository.existsByNameAndIdNot(name, id);
     }

@@ -7,13 +7,15 @@ import com.itravel.platform.modules.location.api.dto.response.LocationResponse;
 import com.itravel.platform.modules.location.application.command.location.*;
 import com.itravel.platform.modules.location.domain.aggregate.Location;
 import com.itravel.platform.modules.location.share.LocationValueObjectMapper;
+import com.itravel.platform.modules.tour.share.CommonValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(
         componentModel = "spring",
         uses = {
-                LocationValueObjectMapper.class
+                LocationValueObjectMapper.class,
+                CommonValueObjectMapper.class
         },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )

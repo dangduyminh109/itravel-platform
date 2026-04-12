@@ -67,26 +67,28 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
-    public ApiResponse<Void> create(@RequestBody @Valid CreateCategoryRequest request) {
+    public ApiResponse<CategoryResponse> create(@RequestBody @Valid CreateCategoryRequest request) {
         CreateCategoryCommand createCategoryCommand = mapper.toCreateCategoryCommand(request);
-        commandFacade.create(createCategoryCommand);
-        return ApiResponse.<Void>builder()
+        CategoryDetailDTO dto = commandFacade.create(createCategoryCommand);
+        return ApiResponse.<CategoryResponse>builder()
                 .message("Create category successfully")
                 .success(true)
+                .response(mapper.toCategoryResponse(dto))
                 .build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
-    public ApiResponse<Void> update(
+    public ApiResponse<CategoryResponse> update(
             @PathVariable Long id,
             @RequestBody @Valid UpdateCategoryRequest updateCategoryRequest
     ) {
         UpdateCategoryCommand updateCategoryCommand = mapper.toUpdateCategoryCommand(id, updateCategoryRequest);
-        commandFacade.update(updateCategoryCommand);
-        return ApiResponse.<Void>builder()
+        CategoryDetailDTO dto = commandFacade.update(updateCategoryCommand);
+        return ApiResponse.<CategoryResponse>builder()
                 .message("Update category successfully")
                 .success(true)
+                .response(mapper.toCategoryResponse(dto))
                 .build();
     }
 

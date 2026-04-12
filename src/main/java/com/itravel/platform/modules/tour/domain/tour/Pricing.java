@@ -6,9 +6,9 @@ import com.itravel.platform.modules.tour.domain.tour.exception.InvalidOriginPric
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public record Pricing(BigDecimal originPrice, BigDecimal discountPrice, CurrencyCode currency) {
+public record Pricing(BigDecimal originalPrice, BigDecimal discountPrice, CurrencyCode currency) {
     public Pricing {
-        if (Objects.isNull(originPrice) || originPrice.compareTo(BigDecimal.ZERO) <= 0) {
+        if (Objects.isNull(originalPrice) || originalPrice.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidOriginPriceException();
         }
 
@@ -16,7 +16,7 @@ public record Pricing(BigDecimal originPrice, BigDecimal discountPrice, Currency
             throw new InvalidDiscountPriceException();
         }
 
-        if (!Objects.isNull(discountPrice) && discountPrice.compareTo(originPrice) >= 0) {
+        if (!Objects.isNull(discountPrice) && discountPrice.compareTo(originalPrice) >= 0) {
             throw new InvalidDiscountPriceException();
         }
 

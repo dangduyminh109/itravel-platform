@@ -7,12 +7,13 @@ import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.category.CategoryName;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.CategoryJpaEntity;
 import com.itravel.platform.modules.tour.share.CategoryValueObjectMapper;
+import com.itravel.platform.modules.tour.share.CommonValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(
         componentModel = "spring",
-        uses = {CategoryValueObjectMapper.class},
+        uses = {CategoryValueObjectMapper.class, CommonValueObjectMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface CategoryMapper {

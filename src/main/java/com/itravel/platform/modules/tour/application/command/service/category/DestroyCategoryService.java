@@ -1,4 +1,4 @@
-package com.itravel.platform.modules.tour.application.command.service;
+package com.itravel.platform.modules.tour.application.command.service.category;
 
 import com.itravel.platform.modules.tour.application.command.model.category.DeleteCategoryCommand;
 import com.itravel.platform.modules.tour.application.port.in.category.DestroyCategoryUseCase;

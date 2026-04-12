@@ -30,6 +30,7 @@ public enum ErrorCode {
     PERMISSION_TYPE_INVALID("PERMISSION_TYPE_INVALID", "Permission type must be GRANT or DENY.", HttpStatus.BAD_REQUEST, "permissionType"),
     STATUS_CANNOT_BE_BLANK("STATUS_CANNOT_BE_BLANK", "Status cannot be left blank.", HttpStatus.BAD_REQUEST, "status"),
     STATUS_INVALID("STATUS_INVALID", "Status must be ACTIVE or INACTIVE.", HttpStatus.BAD_REQUEST, "status"),
+
     USERNAME_CANNOT_BE_BLANK("USERNAME_CANNOT_BE_BLANK", "Username cannot be left blank.", HttpStatus.BAD_REQUEST, "username"),
     FULL_NAME_CANNOT_BE_BLANK("FULL_NAME_CANNOT_BE_BLANK", "Full name cannot be left blank.", HttpStatus.BAD_REQUEST, "fullName"),
     PASSWORD_CANNOT_BE_BLANK("PASSWORD_CANNOT_BE_BLANK", "Password cannot be left blank.", HttpStatus.BAD_REQUEST, "password"),
@@ -73,6 +74,22 @@ public enum ErrorCode {
     // location validation
     TYPE_CANNOT_BE_BLANK("TYPE_CANNOT_BE_BLANK", "Type cannot be left blank.", HttpStatus.BAD_REQUEST, "type"),
 
+    // tour
+    TOUR_STATUS_CANNOT_BE_BLANK("TOUR_STATUS_CANNOT_BE_BLANK", "Tour status cannot be left blank.", HttpStatus.BAD_REQUEST, "status"),
+    TOUR_NAME_CANNOT_BE_BLANK("TOUR_NAME_CANNOT_BE_BLANK", "Tour name cannot be left blank.", HttpStatus.BAD_REQUEST, "name"),
+    TOUR_CATEGORY_ID_CANNOT_BE_NULL("TOUR_CATEGORY_ID_CANNOT_BE_NULL", "Tour category id cannot be null.", HttpStatus.BAD_REQUEST, "categoryId"),
+    TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL("TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL", "Departure location id cannot be null.", HttpStatus.BAD_REQUEST, "departureLocationId"),
+    TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL("TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL", "Destination location id cannot be null.", HttpStatus.BAD_REQUEST, "destinationLocationId"),
+    TOUR_ORIGINAL_PRICE_CANNOT_BE_NULL("TOUR_ORIGINAL_PRICE_CANNOT_BE_NULL", "Original price cannot be null.", HttpStatus.BAD_REQUEST, "originalPrice"),
+    TOUR_DURATION_DAYS_CANNOT_BE_NULL("TOUR_DURATION_DAYS_CANNOT_BE_NULL", "Duration days cannot be null.", HttpStatus.BAD_REQUEST, "days"),
+    TOUR_DURATION_NIGHTS_CANNOT_BE_NULL("TOUR_DURATION_NIGHTS_CANNOT_BE_NULL", "Duration nights cannot be null.", HttpStatus.BAD_REQUEST, "nights"),
+    TOUR_ITINERARY_DAY_NUMBER_CANNOT_BE_NULL("TOUR_ITINERARY_DAY_NUMBER_CANNOT_BE_NULL", "Itinerary day number cannot be null.", HttpStatus.BAD_REQUEST, "dayNumber"),
+    TOUR_ITINERARY_TITLE_CANNOT_BE_BLANK("TOUR_ITINERARY_TITLE_CANNOT_BE_BLANK", "Itinerary title cannot be left blank.", HttpStatus.BAD_REQUEST, "title"),
+    TOUR_ITINERARY_TITLE_TOO_LONG("TOUR_ITINERARY_TITLE_TOO_LONG", "Itinerary title must not exceed 200 characters.", HttpStatus.BAD_REQUEST, "title"),
+    TOUR_ITINERARY_ACTIVITIES_CANNOT_BE_NULL("TOUR_ITINERARY_ACTIVITIES_CANNOT_BE_NULL", "Itinerary activities cannot be null.", HttpStatus.BAD_REQUEST, "activities"),
+    TOUR_ITINERARY_ACTIVITIES_MIN("TOUR_ITINERARY_ACTIVITIES_MIN", "Itinerary activities must have at least one item.", HttpStatus.BAD_REQUEST, "activities"),
+    TOUR_IMAGE_FILE_CANNOT_BE_NULL("TOUR_IMAGE_FILE_CANNOT_BE_NULL", "Tour image file cannot be null.", HttpStatus.BAD_REQUEST, "image"),
+    TOUR_IMAGE_THUMBNAIL_CANNOT_BE_NULL("TOUR_IMAGE_THUMBNAIL_CANNOT_BE_NULL", "Tour image thumbnail flag cannot be null.", HttpStatus.BAD_REQUEST, "isThumbnail"),
     ;
 
     String code;

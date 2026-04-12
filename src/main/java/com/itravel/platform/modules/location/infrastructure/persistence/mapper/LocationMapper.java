@@ -6,6 +6,7 @@ import com.itravel.platform.modules.location.share.LocationValueObjectMapper;
 import com.itravel.platform.modules.location.domain.aggregate.Location;
 import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
 import com.itravel.platform.modules.location.infrastructure.persistence.entity.LocationJpaEntity;
+import com.itravel.platform.modules.tour.share.CommonValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 @Mapper(
         componentModel = "spring",
-        uses = {LocationValueObjectMapper.class},
+        uses = {LocationValueObjectMapper.class, CommonValueObjectMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface LocationMapper {

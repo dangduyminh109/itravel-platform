@@ -1,4 +1,4 @@
-package com.itravel.platform.modules.tour.application.command.service;
+package com.itravel.platform.modules.tour.application.command.service.category;
 
 import com.itravel.platform.modules.tour.application.command.model.category.UpdateStatusCategoryCommand;
 import com.itravel.platform.modules.tour.application.exception.CategoryNotFoundException;

@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.tour.application.port.in.category.facade;
 
 import com.itravel.platform.modules.tour.application.command.model.category.*;
+import com.itravel.platform.modules.tour.application.dto.CategoryDetailDTO;
 import com.itravel.platform.modules.tour.application.port.in.category.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,12 @@ public class CategoryCommandFacade {
     DestroyCategoryUseCase destroyUseCase;
     UpdateStatusCategoryUseCase statusUseCase;
 
-    public void create(CreateCategoryCommand command) {
-        createUseCase.execute(command);
+    public CategoryDetailDTO create(CreateCategoryCommand command) {
+        return createUseCase.execute(command);
     }
 
-    public void update(UpdateCategoryCommand command) {
-        updateUseCase.execute(command);
+    public CategoryDetailDTO update(UpdateCategoryCommand command) {
+        return updateUseCase.execute(command);
     }
 
     public void delete(DeleteCategoryCommand command) {

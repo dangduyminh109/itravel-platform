@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @SuperBuilder(toBuilder = true)
 @Table(name = "schedule")
 public class ScheduleJpaEntity extends SoftDeletableJpaBaseModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

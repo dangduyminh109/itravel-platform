@@ -25,4 +25,8 @@ public class TourImageJpaEntity extends JpaBaseModel {
 
     @Column(nullable = false)
     Boolean isThumbnail;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tour_id")
+    TourJpaEntity tour;
 }

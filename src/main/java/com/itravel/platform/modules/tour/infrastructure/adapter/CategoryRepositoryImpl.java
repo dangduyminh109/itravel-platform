@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.tour.infrastructure.adapter;
 
+import com.itravel.platform.modules.tour.application.dto.CategoryDetailDTO;
 import com.itravel.platform.modules.tour.application.port.out.category.CategoryRepository;
 import com.itravel.platform.modules.tour.domain.category.Category;
 import com.itravel.platform.modules.tour.domain.category.CategoryId;
@@ -19,9 +20,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     CategoryMapper mapper;
 
     @Override
-    public void save(Category category) {
+    public CategoryDetailDTO save(Category category) {
         CategoryJpaEntity entity = mapper.toCategoryJpaEntity(category);
         repository.save(entity);
+        return CategoryMapper.toCategoryDetailDTO(entity);
     }
 
     @Override

@@ -18,7 +18,6 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 @Table(name = "itinerary")
 public class ItineraryJpaEntity extends SoftDeletableJpaBaseModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -36,5 +35,10 @@ public class ItineraryJpaEntity extends SoftDeletableJpaBaseModel {
     @CollectionTable(name = "itinerary_activity", joinColumns = @JoinColumn(name = "itinerary_id"))
     @Column(name = "activity", nullable = false)
     @OrderColumn(name = "activity_order")
+    @Builder.Default
     List<String> activities = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tour_id")
+    TourJpaEntity tour;
 }

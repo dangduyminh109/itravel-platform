@@ -1,6 +1,5 @@
 package com.itravel.platform.modules.tour.share;
 
-import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
 import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.category.CategoryName;
 import org.mapstruct.Mapper;
@@ -25,13 +24,5 @@ public interface CategoryValueObjectMapper {
 
     default String fromCategoryName(CategoryName name) {
         return name != null ? name.value() : null;
-    }
-
-    default Slug toSlug(String slug) {
-        return slug != null ? new Slug(slug) : null;
-    }
-
-    default String fromSlug(Slug slug) {
-        return slug != null ? slug.value() : null;
     }
 }

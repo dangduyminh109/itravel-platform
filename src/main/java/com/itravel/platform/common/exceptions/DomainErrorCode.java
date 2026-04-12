@@ -66,7 +66,7 @@ public enum DomainErrorCode {
     INVALID_TOUR_NAME("INVALID_TOUR_NAME", "Invalid tour name", HttpStatus.BAD_REQUEST, "tourName"),
     TOUR_NAME_TOO_LONG("TOUR_NAME_TOO_LONG", "Tour name is too long", HttpStatus.BAD_REQUEST, "tourName"),
     INVALID_CURRENCY("INVALID_CURRENCY", "Invalid currency", HttpStatus.BAD_REQUEST, "currency"),
-    INVALID_ORIGIN_PRICE("INVALID_ORIGIN_PRICE", "Invalid origin price", HttpStatus.BAD_REQUEST, "originPrice"),
+    INVALID_ORIGIN_PRICE("INVALID_ORIGIN_PRICE", "Invalid origin price", HttpStatus.BAD_REQUEST, "originalPrice"),
     INVALID_DISCOUNT_PRICE("INVALID_DISCOUNT_PRICE", "Invalid discount price", HttpStatus.BAD_REQUEST, "discountPrice"),
 
     INVALID_DAYS("INVALID_DAYS", "Days must be greater than or equal to 1", HttpStatus.BAD_REQUEST, "days"),
@@ -75,6 +75,7 @@ public enum DomainErrorCode {
 
     INVALID_MIN_PARTICIPANTS("INVALID_MIN_PARTICIPANTS", "Minimum participants must not be negative", HttpStatus.BAD_REQUEST, "minParticipants"),
     INVALID_PARTICIPANTS_RANGE("INVALID_PARTICIPANTS_RANGE", "Minimum participants must not exceed maximum participants", HttpStatus.BAD_REQUEST, "minParticipants"),
+    SERVICES_OVERLAP("SERVICES_OVERLAP", "Services cannot be both included and excluded", HttpStatus.BAD_REQUEST, "services"),
     // ===== TOUR - CATEGORY =====
     INVALID_CATEGORY_ID("INVALID_CATEGORY_ID", "Invalid category id", HttpStatus.BAD_REQUEST, "categoryId"),
     INVALID_CATEGORY_NAME("INVALID_CATEGORY_NAME", "Invalid category name", HttpStatus.BAD_REQUEST, "categoryName"),
@@ -86,7 +87,8 @@ public enum DomainErrorCode {
     INVALID_ITINERARY_TITLE("INVALID_ITINERARY_TITLE", "Invalid itinerary title", HttpStatus.BAD_REQUEST, "title"),
     ITINERARY_TITLE_TOO_LONG("ITINERARY_TITLE_TOO_LONG", "Itinerary title is too long", HttpStatus.BAD_REQUEST, "title"),
     INVALID_ITINERARY_ACTIVITIES("INVALID_ITINERARY_ACTIVITIES", "Invalid itinerary activities", HttpStatus.BAD_REQUEST, "activities"),
-
+    ITINERARY_NOT_FOUND("ITINERARY_NOT_FOUND", "Invalid not found", HttpStatus.BAD_REQUEST, "itinerary id"),
+    DUPLICATE_ITINERARY_DAY("DUPLICATE_ITINERARY_DAY","Duplicate day numbers in itineraries", HttpStatus.BAD_REQUEST, "itineraries"),
     // ===== TOUR - SCHEDULE =====
     INVALID_SCHEDULE_ID("INVALID_SCHEDULE_ID", "Invalid schedule id", HttpStatus.BAD_REQUEST, "scheduleId"),
     INVALID_DEPARTURE_DATE("INVALID_DEPARTURE_DATE", "Invalid departure date", HttpStatus.BAD_REQUEST, "departureDate"),

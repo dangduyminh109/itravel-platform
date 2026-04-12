@@ -12,5 +12,6 @@ public interface CategoryQueryPort {
     Optional<CategoryDetailDTO> getById(Long id);
     Page<CategoryDetailDTO> getCategories(String keyword, Pageable pageable, Boolean isDeleted, String status);
     boolean existsByName(String name);
+    boolean existsById(Long id);
     boolean existsByNameAndIdNot(String name, Long id);
 }

@@ -1,9 +1,8 @@
-package com.itravel.platform.modules.tour.application.command.service;
+package com.itravel.platform.modules.tour.application.command.service.category;
 
 import com.itravel.platform.modules.tour.application.command.model.category.CreateCategoryCommand;
 import com.itravel.platform.modules.tour.application.dto.CategoryDetailDTO;
 import com.itravel.platform.modules.tour.application.exception.CategoryNameExistedException;
-import com.itravel.platform.modules.tour.application.mapper.CategoryMapper;
 import com.itravel.platform.modules.tour.application.port.in.category.CreateCategoryUseCase;
 import com.itravel.platform.modules.tour.application.port.out.category.CategoryQueryPort;
 import com.itravel.platform.modules.tour.application.port.out.category.CategoryRepository;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateCategoryService implements CreateCategoryUseCase {
     CategoryRepository repository;
     CategoryQueryPort queryPort;
-    CategoryMapper mapper;
 
     @Transactional
     public CategoryDetailDTO execute(CreateCategoryCommand command) {
@@ -33,8 +31,6 @@ public class CreateCategoryService implements CreateCategoryUseCase {
                 command.description(),
                 command.status()
         );
-        repository.save(category);
-
-        return mapper.toCategoryDetailDTO(category);
+        return repository.save(category);
     }
 }

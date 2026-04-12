@@ -52,6 +52,10 @@ public enum ApplicationErrorCode {
     // ===== TOUR - CATEGORY =====
     CATEGORY_NAME_EXISTED("CATEGORY_NAME_EXISTED", "category name already exists", HttpStatus.BAD_REQUEST, "name"),
     CATEGORY_NOT_EXIST("CATEGORY_NOT_EXIST", "category does not exist", HttpStatus.BAD_REQUEST, "name"),
+
+    // ===== TOUR =====
+    TOUR_NAME_EXISTED("TOUR_NAME_EXISTED", "tour name already exists", HttpStatus.BAD_REQUEST, "name"),
+    TOUR_NOT_EXIST("TOUR_NOT_EXIST", "tour does not exist", HttpStatus.BAD_REQUEST, "name"),
     ;
 
     String code;
