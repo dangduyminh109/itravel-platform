@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.security;
 
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.TokenHash;
+import com.itravel.platform.modules.identity.domain.auth.TokenHash;
 import com.itravel.platform.modules.identity.domain.service.RefreshTokenHasher;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

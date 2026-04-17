@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 
-import com.itravel.platform.common.infrastructure.JpaBaseModel;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
+import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
+import com.itravel.platform.modules.identity.domain.user.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SuperBuilder(toBuilder = true)
 @Table(name = "user")
-public class UserJpaEntity extends JpaBaseModel {
+public class UserJpaEntity extends SoftDeletableJpaBaseModel {
     @Id
     String id;
 
@@ -39,4 +39,3 @@ public class UserJpaEntity extends JpaBaseModel {
     @Column
     LocalDate dateOfBirth;
 }
-

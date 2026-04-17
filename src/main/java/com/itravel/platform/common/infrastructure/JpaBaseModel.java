@@ -17,7 +17,5 @@ import java.time.Instant;
 @MappedSuperclass
 public abstract class JpaBaseModel {
     Instant createdAt;
-    Instant deletedAt;
     Instant updatedAt;
 }
-

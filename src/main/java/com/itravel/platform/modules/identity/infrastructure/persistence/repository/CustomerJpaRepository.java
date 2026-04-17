@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
-import com.itravel.platform.modules.identity.application.query.CustomerGeneralInfo;
+import com.itravel.platform.modules.identity.application.dto.CustomerGeneralInfoDTO;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.CustomerJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerJpaEntity,S
             "LEFT JOIN account_link al ON al.target_id = c.id " +
             "LEFT JOIN account acc ON al.account_id = acc.id; ",
             nativeQuery = true)
-    CustomerGeneralInfo getCustomerGeneralInfo();
+    CustomerGeneralInfoDTO getCustomerGeneralInfoDTO();
 
     @Query(
             value = "SELECT c.* FROM customer c " +

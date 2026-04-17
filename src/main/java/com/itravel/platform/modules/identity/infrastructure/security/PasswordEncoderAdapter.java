@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.security;
 
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RawPassword;
+import com.itravel.platform.modules.identity.domain.account.PasswordHash;
+import com.itravel.platform.modules.identity.domain.account.RawPassword;
 import com.itravel.platform.modules.identity.domain.service.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

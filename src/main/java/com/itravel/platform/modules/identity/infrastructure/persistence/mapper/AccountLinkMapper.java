@@ -1,8 +1,9 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.identity.domain.aggregate.AccountLink;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkType;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
+import com.itravel.platform.modules.identity.domain.account.AccountLink;
+import com.itravel.platform.modules.identity.domain.account.AccountLinkType;
+import com.itravel.platform.modules.identity.application.dto.AccountLinkDTO;
+import com.itravel.platform.modules.identity.domain.account.AccountId;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountLinkJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
@@ -29,6 +30,15 @@ public interface AccountLinkMapper {
                 .accountId(new AccountId(entity.getAccountId()))
                 .targetId(entity.getTargetId())
                 .targetType(AccountLinkType.valueOf(entity.getTargetType()))
+                .build();
+    }
+
+    static AccountLinkDTO toAccountLinkDTO(AccountLinkJpaEntity entity) {
+        return AccountLinkDTO.builder()
+                .id(entity.getId())
+                .accountId(entity.getAccountId())
+                .targetType(entity.getTargetType())
+                .targetId(entity.getTargetId())
                 .build();
     }
 }

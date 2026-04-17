@@ -1,13 +1,26 @@
 package com.itravel.platform.modules.identity.api.controller;
+
 import com.itravel.platform.common.dto.ApiResponse;
-import com.itravel.platform.modules.identity.api.dto.request.*;
+import com.itravel.platform.modules.identity.api.dto.request.FirebaseLoginRequest;
+import com.itravel.platform.modules.identity.api.dto.request.LoginRequest;
+import com.itravel.platform.modules.identity.api.dto.request.LogoutRequest;
+import com.itravel.platform.modules.identity.api.dto.request.RefreshRequest;
+import com.itravel.platform.modules.identity.api.dto.request.RegisterCustomerByEmailRequest;
+import com.itravel.platform.modules.identity.api.dto.request.CustomerForgotPasswordRequest;
+import com.itravel.platform.modules.identity.api.dto.request.SendOtpRequest;
 import com.itravel.platform.modules.identity.api.dto.response.AuthTokenResponse;
 import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
 import com.itravel.platform.modules.identity.api.mapper.AuthRestMapper;
 import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
 import com.itravel.platform.modules.identity.api.mapper.OtpRestMapper;
-import com.itravel.platform.modules.identity.application.command.auth.*;
-import com.itravel.platform.modules.identity.application.handler.AuthCommandHandler;
+import com.itravel.platform.modules.identity.application.command.model.auth.FirebaseLoginCommand;
+import com.itravel.platform.modules.identity.application.command.model.auth.LoginCommand;
+import com.itravel.platform.modules.identity.application.command.model.auth.LogoutCommand;
+import com.itravel.platform.modules.identity.application.command.model.auth.RefreshCommand;
+import com.itravel.platform.modules.identity.application.command.model.auth.RegisterCustomerByEmailCommand;
+import com.itravel.platform.modules.identity.application.command.model.auth.CustomerForgotPasswordCommand;
+import com.itravel.platform.modules.identity.application.command.model.auth.SendOtpCommand;
+import com.itravel.platform.modules.identity.application.port.in.auth.facade.AuthCommandFacade;
 import com.nimbusds.jose.JOSEException;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -23,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     AuthRestMapper mapper;
-    AuthCommandHandler authCommandHandler;
+    AuthCommandFacade authCommandFacade;
     OtpRestMapper otpMapper;
     CustomerRestMapper customerMapper;
 
@@ -31,7 +44,7 @@ public class AuthController {
     ApiResponse<AuthTokenResponse> firebaseLogin(@RequestBody @Valid FirebaseLoginRequest request) {
         FirebaseLoginCommand command = mapper.toFirebaseLoginCommand(request);
         AuthTokenResponse authTokenResponse = mapper
-                .toAuthTokenResponse(authCommandHandler.authenticateWithFirebase(command));
+                .toAuthTokenResponse(authCommandFacade.authenticateWithFirebase(command));
 
         return ApiResponse.<AuthTokenResponse>builder()
                 .success(true)
@@ -45,7 +58,7 @@ public class AuthController {
         LoginCommand loginCommand = mapper.toLoginCommand(request);
 
         AuthTokenResponse authTokenResponse = mapper
-                .toAuthTokenResponse(authCommandHandler.login(loginCommand));
+                .toAuthTokenResponse(authCommandFacade.login(loginCommand));
 
         return ApiResponse.<AuthTokenResponse>builder()
                 .success(true)
@@ -56,8 +69,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody @Valid LogoutRequest request) {
-        LogoutCommand LogoutCommand = mapper.toLogoutCommand(request);
-        authCommandHandler.logout(LogoutCommand);
+        LogoutCommand logoutCommand = mapper.toLogoutCommand(request);
+        authCommandFacade.logout(logoutCommand);
         return ApiResponse.<Void>builder()
                 .success(true)
                 .message("logout successfully")
@@ -66,10 +79,10 @@ public class AuthController {
 
     @PostMapping("/refresh")
     ApiResponse<AuthTokenResponse> refresh(@RequestBody @Valid RefreshRequest request) throws JOSEException {
-        RefreshCommand RefreshCommand = mapper.toRefreshCommand(request);
+        RefreshCommand refreshCommand = mapper.toRefreshCommand(request);
 
         AuthTokenResponse authTokenResponse = mapper
-                .toAuthTokenResponse(authCommandHandler.refresh(RefreshCommand));
+                .toAuthTokenResponse(authCommandFacade.refresh(refreshCommand));
 
         return ApiResponse.<AuthTokenResponse>builder()
                 .response(authTokenResponse)
@@ -86,17 +99,16 @@ public class AuthController {
                 .message("Create customer successfully")
                 .success(true)
                 .response(customerMapper
-                        .toCustomerResponse(authCommandHandler
-                                .RegisterCustomerByEmail(command)))
+                        .toCustomerResponse(authCommandFacade.registerCustomerByEmail(command)))
                 .build();
     }
 
     @PostMapping("/forgot-password")
-    ApiResponse<String> forgotPassword(@RequestBody @Valid CustomerForgotPasswordRequest request) throws JOSEException {
+    ApiResponse<String> forgotPassword(@RequestBody @Valid CustomerForgotPasswordRequest request) {
         CustomerForgotPasswordCommand command =
                 mapper.toCustomerForgotPasswordCommand(request);
         return ApiResponse.<String>builder()
-                .message(authCommandHandler.forgotPassword(command))
+                .message(authCommandFacade.forgotPassword(command))
                 .success(true)
                 .response(null)
                 .build();
@@ -106,7 +118,7 @@ public class AuthController {
     ApiResponse<Void> sendOtp(@RequestBody @Valid SendOtpRequest request) throws MessagingException {
         SendOtpCommand command = otpMapper.toSendOtpCommand(request);
         return ApiResponse.<Void>builder()
-                .message(authCommandHandler.sendOtp(command))
+                .message(authCommandFacade.sendOtp(command))
                 .success(true)
                 .response(null)
                 .build();

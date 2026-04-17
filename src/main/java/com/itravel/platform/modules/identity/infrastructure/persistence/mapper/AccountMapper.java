@@ -1,8 +1,10 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.identity.domain.aggregate.Account;
-import com.itravel.platform.modules.identity.domain.aggregate.Role;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
+import com.itravel.platform.modules.identity.domain.account.Account;
+import com.itravel.platform.modules.identity.domain.role.Role;
+import com.itravel.platform.modules.identity.domain.user.*;
+import com.itravel.platform.modules.identity.application.dto.AccountDTO;
+import com.itravel.platform.modules.identity.domain.account.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.AccountJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionJpaEntity;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RoleJpaEntity;
@@ -53,6 +55,21 @@ public interface AccountMapper {
                 .permissionList(role.getPermissionList().stream()
                         .map(e -> new PermissionJpaEntity(e.code()))
                         .collect(Collectors.toSet()))
+                .build();
+    }
+
+    static AccountDTO toAccountDTO(AccountJpaEntity entity) {
+        return AccountDTO.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .email(entity.getEmail())
+                .status(entity.getStatus() != null ? entity.getStatus().name() : null)
+                .roleList(entity.getRoleList().stream()
+                        .map(RoleMapper::toRoleDTO)
+                        .collect(Collectors.toSet()))
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
                 .build();
     }
 }

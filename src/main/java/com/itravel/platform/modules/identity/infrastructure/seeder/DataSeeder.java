@@ -1,11 +1,11 @@
 package com.itravel.platform.modules.identity.infrastructure.seeder;
 
 import com.itravel.platform.modules.identity.application.exception.RoleNotExistException;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkType;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionCode;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RawPassword;
+import com.itravel.platform.modules.identity.domain.account.AccountLinkType;
+import com.itravel.platform.modules.identity.domain.account.AccountStatus;
+import com.itravel.platform.modules.identity.domain.account.AuthProvider;
+import com.itravel.platform.modules.identity.domain.role.PermissionCode;
+import com.itravel.platform.modules.identity.domain.account.RawPassword;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.*;
 import com.itravel.platform.modules.identity.infrastructure.persistence.repository.*;
 import com.itravel.platform.modules.identity.infrastructure.security.PasswordEncoderAdapter;

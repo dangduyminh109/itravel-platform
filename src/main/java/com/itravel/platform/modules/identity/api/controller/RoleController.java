@@ -5,13 +5,12 @@ import com.itravel.platform.modules.identity.api.dto.request.CreateRoleRequest;
 import com.itravel.platform.modules.identity.api.dto.request.UpdateRoleRequest;
 import com.itravel.platform.modules.identity.api.dto.response.RoleResponse;
 import com.itravel.platform.modules.identity.api.mapper.RoleRestMapper;
-import com.itravel.platform.modules.identity.application.command.role.CreateRoleCommand;
-import com.itravel.platform.modules.identity.application.command.role.UpdateRoleCommand;
-import com.itravel.platform.modules.identity.application.command.role.UpdatePermissionForRoleCommand;
+import com.itravel.platform.modules.identity.application.command.model.role.CreateRoleCommand;
+import com.itravel.platform.modules.identity.application.command.model.role.UpdateRoleCommand;
+import com.itravel.platform.modules.identity.application.command.model.role.UpdatePermissionForRoleCommand;
 import com.itravel.platform.modules.identity.api.dto.request.UpdatePermissionsForRoleRequest;
-import com.itravel.platform.modules.identity.application.handler.RoleCommandHandler;
-import com.itravel.platform.modules.identity.application.service.RoleQueryService;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.RoleStatus;
+import com.itravel.platform.modules.identity.application.port.in.role.facade.RoleCommandFacade;
+import com.itravel.platform.modules.identity.application.port.in.role.facade.RoleQueryFacade;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,19 +25,19 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/role")
 public class RoleController {
-    RoleCommandHandler roleCommandHandler;
-    RoleQueryService roleQueryService;
+    RoleCommandFacade roleCommandFacade;
+    RoleQueryFacade roleQueryFacade;
     RoleRestMapper mapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_VIEW')")
     public ApiResponse<List<RoleResponse>> getRoles(
-            @RequestParam(required = false) RoleStatus status,
+            @RequestParam(required = false) String status,
             @RequestParam (required = false) String keyword
     ) {
         return ApiResponse.<List<RoleResponse>>builder()
                 .success(true)
-                .response(roleQueryService.getRoles(status,keyword).stream().map(mapper::toRoleResponse).toList())
+                .response(mapper.toRoleResponseList(roleQueryFacade.getRoles(status, keyword)))
                 .build();
     }
 
@@ -50,18 +49,18 @@ public class RoleController {
         return ApiResponse.<RoleResponse>builder()
                 .message("Create role successfully")
                 .success(true)
-                .response(mapper.toRoleResponse(roleCommandHandler.create(createRoleCommand)))
+                .response(mapper.toRoleResponse(roleCommandFacade.create(createRoleCommand)))
                 .build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ApiResponse<RoleResponse> update(@PathVariable Long id, @RequestBody @Valid UpdateRoleRequest updateRoleRequest) {
-        UpdateRoleCommand updateRoleCommand = mapper.toUpdateRoleCommand(id,updateRoleRequest);
+        UpdateRoleCommand updateRoleCommand = mapper.toUpdateRoleCommand(id, updateRoleRequest);
         return ApiResponse.<RoleResponse>builder()
                 .message("Update role successfully")
                 .success(true)
-                .response(mapper.toRoleResponse(roleCommandHandler.update(updateRoleCommand)))
+                .response(mapper.toRoleResponse(roleCommandFacade.update(updateRoleCommand)))
                 .build();
     }
 
@@ -69,7 +68,7 @@ public class RoleController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable Long id) {
-        roleCommandHandler.destroy(mapper.toDeleteRoleCommand(id));
+        roleCommandFacade.destroy(mapper.toDeleteRoleCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Destroy role successfully")
                 .success(true)
@@ -81,7 +80,7 @@ public class RoleController {
     public ApiResponse<Void> updatePermissionForRole(@RequestBody @Valid List<UpdatePermissionsForRoleRequest> requests) {
         List<UpdatePermissionForRoleCommand> updatePermissionForRoleCommand =
                 mapper.toUpdatePermissionForRoleCommand(requests);
-        roleCommandHandler.updatePermissionForRole(updatePermissionForRoleCommand);
+        roleCommandFacade.updatePermissionForRole(updatePermissionForRoleCommand);
         return ApiResponse.<Void>builder()
                 .message("Update role successfully")
                 .success(true)

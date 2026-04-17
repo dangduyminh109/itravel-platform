@@ -1,9 +1,9 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.identity.domain.aggregate.RefreshToken;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.TokenHash;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.TokenId;
+import com.itravel.platform.modules.identity.domain.auth.RefreshToken;
+import com.itravel.platform.modules.identity.domain.account.AccountId;
+import com.itravel.platform.modules.identity.domain.auth.TokenHash;
+import com.itravel.platform.modules.identity.domain.auth.TokenId;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.RefreshTokenJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;

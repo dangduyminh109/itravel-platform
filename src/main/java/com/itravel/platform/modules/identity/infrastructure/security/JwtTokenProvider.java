@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.security;
 
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountLinkType;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
+import com.itravel.platform.modules.identity.domain.account.AccountLinkType;
+import com.itravel.platform.modules.identity.domain.account.AccountId;
 import com.itravel.platform.modules.identity.domain.service.TokenProvider;
 import com.itravel.platform.modules.identity.infrastructure.exception.InvalidVerificationTokenException;
 import com.nimbusds.jose.JOSEException;
