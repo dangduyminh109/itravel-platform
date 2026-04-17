@@ -1,11 +1,10 @@
 package com.itravel.platform.modules.tour.application.command.model.tour;
 
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
+import com.itravel.platform.modules.location.domain.location.LocationId;
 import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
 import com.itravel.platform.modules.tour.domain.tour.*;
-import com.itravel.platform.modules.tour.domain.tourImage.ImageUrl;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

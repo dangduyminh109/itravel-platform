@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.repository;
 
-import com.itravel.platform.modules.identity.application.query.UserGeneralInfo;
+import com.itravel.platform.modules.identity.application.dto.UserGeneralInfoDTO;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.UserJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity,String> {
             "LEFT JOIN account_link al ON al.target_id = u.id " +
             "LEFT JOIN account acc ON al.account_id = acc.id; ",
             nativeQuery = true)
-    UserGeneralInfo getUserGeneralInfo();
+    UserGeneralInfoDTO getUserGeneralInfoDTO();
 
     @Query(
             value = "SELECT u.* FROM user u " +

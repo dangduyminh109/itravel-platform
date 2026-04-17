@@ -2,7 +2,7 @@ package com.itravel.platform.modules.tour.domain.tour;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
+import com.itravel.platform.modules.location.domain.location.LocationId;
 import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.itinerary.Itinerary;
 import com.itravel.platform.modules.tour.domain.itinerary.exception.InvalidItineraryDayNumberException;

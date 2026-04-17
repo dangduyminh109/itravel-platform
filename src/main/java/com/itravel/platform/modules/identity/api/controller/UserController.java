@@ -7,12 +7,10 @@ import com.itravel.platform.modules.identity.api.dto.request.UpdateUserRequest;
 import com.itravel.platform.modules.identity.api.dto.response.UserGeneralInfoResponse;
 import com.itravel.platform.modules.identity.api.dto.response.UserResponse;
 import com.itravel.platform.modules.identity.api.mapper.UserRestMapper;
-import com.itravel.platform.modules.identity.application.command.user.CreateUserCommand;
-import com.itravel.platform.modules.identity.application.command.user.UpdateUserCommand;
-import com.itravel.platform.modules.identity.application.handler.AccountCommandHandler;
-import com.itravel.platform.modules.identity.application.handler.UserCommandHandler;
-import com.itravel.platform.modules.identity.application.service.UserQueryService;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.UserId;
+import com.itravel.platform.modules.identity.application.port.in.user.facade.UserCommandFacade;
+import com.itravel.platform.modules.identity.application.port.in.user.facade.UserQueryFacade;
+import com.itravel.platform.modules.identity.application.command.model.user.CreateUserCommand;
+import com.itravel.platform.modules.identity.application.command.model.user.UpdateUserCommand;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,8 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/user")
 public class UserController {
-    UserCommandHandler userCommandHandler;
-    UserQueryService userQueryService;
+    UserCommandFacade userCommandFacade;
+    UserQueryFacade userQueryFacade;
     UserRestMapper mapper;
 
     @GetMapping("/general-info")
@@ -37,7 +35,7 @@ public class UserController {
     public ApiResponse<UserGeneralInfoResponse> getUserGeneralInfo() {
         return ApiResponse.<UserGeneralInfoResponse>builder()
                 .success(true)
-                .response(mapper.toUserGeneralInfoResponse(userQueryService.getUserGeneralInfo()))
+                .response(mapper.toUserGeneralInfoResponse(userQueryFacade.getUserGeneralInfo()))
                 .build();
     }
 
@@ -50,7 +48,7 @@ public class UserController {
     ) {
         return ApiResponse.<PageResponse<UserResponse>>builder()
                 .success(true)
-                .response(userQueryService.getUsers(keyword, pageable, isDeleted))
+                .response(mapper.toUserPageResponse(userQueryFacade.getUsers(keyword, pageable, isDeleted)))
                 .build();
     }
 
@@ -61,7 +59,7 @@ public class UserController {
     ) {
         return ApiResponse.<UserResponse>builder()
                 .success(true)
-                .response(userQueryService.getUser(new UserId(id)))
+                .response(mapper.toUserResponse(userQueryFacade.getUser(id)))
                 .build();
     }
 
@@ -69,7 +67,7 @@ public class UserController {
     public ApiResponse<UserResponse> getMe() {
         return ApiResponse.<UserResponse>builder()
                 .success(true)
-                .response(mapper.toUserResponse(userQueryService.getMe()))
+                .response(mapper.toUserResponse(userQueryFacade.getMe()))
                 .build();
     }
 
@@ -81,7 +79,7 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .message("Create user successfully")
                 .success(true)
-                .response(mapper.toUserResponse(userCommandHandler.CreateSystemUser(createUserCommand)))
+                .response(mapper.toUserResponse(userCommandFacade.create(createUserCommand)))
                 .build();
     }
 
@@ -92,7 +90,7 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .message("Update user successfully")
                 .success(true)
-                .response(mapper.toUserResponse(userCommandHandler.update(updateUserCommand)))
+                .response(mapper.toUserResponse(userCommandFacade.update(updateUserCommand)))
                 .build();
     }
 
@@ -100,7 +98,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
-        userCommandHandler.delete(mapper.toDeleteUserCommand(id));
+        userCommandFacade.delete(mapper.toDeleteUserCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Delete user successfully")
                 .success(true)
@@ -110,7 +108,7 @@ public class UserController {
     @PatchMapping("/{id}/restore")
     @PreAuthorize("hasAuthority('USER_UPDATE')")
     public ApiResponse<Void> restore(@PathVariable String id) {
-        userCommandHandler.restore(mapper.toRestoreUserCommand(id));
+        userCommandFacade.restore(mapper.toRestoreUserCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Restore user successfully")
                 .success(true)
@@ -121,7 +119,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('USER_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
-        userCommandHandler.destroy(mapper.toDeleteUserCommand(id));
+        userCommandFacade.destroy(mapper.toDeleteUserCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Destroy user successfully")
                 .success(true)

@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.domain.service;
 
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.PasswordHash;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.RawPassword;
+import com.itravel.platform.modules.identity.domain.account.PasswordHash;
+import com.itravel.platform.modules.identity.domain.account.RawPassword;
 
 public interface PasswordEncoder {
     PasswordHash encode(RawPassword rawPassword);

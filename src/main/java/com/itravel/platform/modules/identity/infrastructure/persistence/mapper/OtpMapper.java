@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.identity.domain.aggregate.Otp;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Email;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.OtpCode;
+import com.itravel.platform.modules.identity.domain.otp.Otp;
+import com.itravel.platform.modules.identity.domain.user.Email;
+import com.itravel.platform.modules.identity.domain.otp.OtpCode;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.OtpJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;

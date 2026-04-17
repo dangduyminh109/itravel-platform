@@ -35,6 +35,7 @@ public enum ApplicationErrorCode {
     ACCOUNT_NOT_EXIST("ACCOUNT_NOT_EXIST", "Account does not exist", HttpStatus.BAD_REQUEST, null),
     ACCOUNT_INACTIVE("ACCOUNT_INACTIVE", "Account is inactive", HttpStatus.BAD_REQUEST, "status"),
     ACCOUNT_DELETED("ACCOUNT_DELETED", "Account has been deleted", HttpStatus.UNAUTHORIZED, "deletedAt"),
+    ACCOUNT_LINK_NOT_EXIST("ACCOUNT_LINK_NOT_EXIST", "Account link does not exist", HttpStatus.BAD_REQUEST, null),
 
     // ===== IDENTITY - AUTHENTICATION =====
     INVALID_LOGIN_METHOD("INVALID_LOGIN_METHOD", "Invalid login method for this account", HttpStatus.BAD_REQUEST, "authProvider"),

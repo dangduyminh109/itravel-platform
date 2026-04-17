@@ -1,5 +1,5 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
+import com.itravel.platform.modules.identity.domain.role.PermissionType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

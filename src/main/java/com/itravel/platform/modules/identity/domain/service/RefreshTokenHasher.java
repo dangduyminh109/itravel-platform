@@ -1,5 +1,5 @@
 package com.itravel.platform.modules.identity.domain.service;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.TokenHash;
+import com.itravel.platform.modules.identity.domain.auth.TokenHash;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AuthProvider;
+import com.itravel.platform.modules.identity.domain.account.AccountStatus;
+import com.itravel.platform.modules.identity.domain.account.AuthProvider;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -37,11 +37,7 @@ public class AccountJpaEntity extends SoftDeletableJpaBaseModel {
     String providerId;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "account_role",
-            joinColumns = @JoinColumn(name = "accountId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId")
-    )
+    @JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "accountId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
     Set<RoleJpaEntity> roleList;
 
     @OneToMany(mappedBy = "accountId", cascade = CascadeType.ALL, orphanRemoval = true)

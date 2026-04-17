@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.mapper;
 
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
+import com.itravel.platform.modules.location.domain.location.LocationId;
 import com.itravel.platform.modules.location.infrastructure.persistence.entity.LocationJpaEntity;
 import com.itravel.platform.modules.location.infrastructure.persistence.mapper.LocationMapper;
 import com.itravel.platform.modules.tour.application.dto.ItineraryDTO;

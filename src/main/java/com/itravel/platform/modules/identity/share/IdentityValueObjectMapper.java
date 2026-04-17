@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.share;
 
-import com.itravel.platform.modules.identity.application.command.account.PermissionOverrideCommand;
+import com.itravel.platform.modules.identity.application.command.model.account.PermissionOverrideCommand;
 import com.itravel.platform.modules.identity.api.dto.request.AddressRequest;
 import com.itravel.platform.modules.identity.api.dto.request.IdentityCardRequest;
 import com.itravel.platform.modules.identity.api.dto.request.PassportRequest;
@@ -8,10 +8,30 @@ import com.itravel.platform.modules.identity.api.dto.request.PermissionOverrideR
 import com.itravel.platform.modules.identity.api.dto.response.AddressResponse;
 import com.itravel.platform.modules.identity.api.dto.response.IdentityCardResponse;
 import com.itravel.platform.modules.identity.api.dto.response.PassportResponse;
-import com.itravel.platform.modules.identity.domain.aggregate.Role;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.Gender;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.PermissionType;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.*;
+import com.itravel.platform.modules.identity.domain.role.Role;
+import com.itravel.platform.modules.identity.domain.user.Gender;
+import com.itravel.platform.modules.identity.domain.role.PermissionType;
+import com.itravel.platform.modules.identity.domain.user.UserId;
+import com.itravel.platform.modules.identity.domain.user.Email;
+import com.itravel.platform.modules.identity.domain.user.FullName;
+import com.itravel.platform.modules.identity.domain.user.PhoneNumber;
+import com.itravel.platform.modules.identity.domain.user.Avatar;
+import com.itravel.platform.modules.identity.domain.role.RoleId;
+import com.itravel.platform.modules.identity.domain.role.RoleName;
+import com.itravel.platform.modules.identity.domain.role.Permission;
+import com.itravel.platform.modules.identity.domain.account.AccountId;
+import com.itravel.platform.modules.identity.domain.account.PasswordHash;
+import com.itravel.platform.modules.identity.domain.account.ProviderId;
+import com.itravel.platform.modules.identity.domain.account.RawPassword;
+import com.itravel.platform.modules.identity.domain.account.Username;
+import com.itravel.platform.modules.identity.domain.customer.Address;
+import com.itravel.platform.modules.identity.domain.customer.IdentityCard;
+import com.itravel.platform.modules.identity.domain.customer.Passport;
+import com.itravel.platform.modules.identity.domain.customer.CustomerId;
+import com.itravel.platform.modules.identity.domain.otp.OtpCode;
+import com.itravel.platform.modules.identity.domain.auth.TokenId;
+import com.itravel.platform.modules.identity.domain.auth.TokenHash;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 

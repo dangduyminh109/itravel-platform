@@ -1,11 +1,11 @@
 package com.itravel.platform.common.config;
 
 import com.itravel.platform.common.exceptions.UnAuthenticatedException;
-import com.itravel.platform.modules.identity.domain.aggregate.Account;
-import com.itravel.platform.modules.identity.domain.aggregate.enums.AccountStatus;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
-import com.itravel.platform.modules.identity.domain.exception.InvalidTokenException;
-import com.itravel.platform.modules.identity.domain.repository.AccountRepository;
+import com.itravel.platform.modules.identity.domain.account.Account;
+import com.itravel.platform.modules.identity.domain.account.AccountStatus;
+import com.itravel.platform.modules.identity.domain.account.AccountId;
+import com.itravel.platform.modules.identity.domain.auth.exception.InvalidTokenException;
+import com.itravel.platform.modules.identity.application.port.out.account.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

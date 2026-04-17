@@ -7,12 +7,10 @@ import com.itravel.platform.modules.identity.api.dto.request.UpdateCustomerReque
 import com.itravel.platform.modules.identity.api.dto.response.CustomerGeneralInfoResponse;
 import com.itravel.platform.modules.identity.api.dto.response.CustomerResponse;
 import com.itravel.platform.modules.identity.api.mapper.CustomerRestMapper;
-import com.itravel.platform.modules.identity.application.command.customer.CustomerCreateCommand;
-import com.itravel.platform.modules.identity.application.command.customer.UpdateCustomerCommand;
-import com.itravel.platform.modules.identity.application.handler.AccountCommandHandler;
-import com.itravel.platform.modules.identity.application.handler.CustomerCommandHandler;
-import com.itravel.platform.modules.identity.application.service.CustomerQueryService;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.CustomerId;
+import com.itravel.platform.modules.identity.application.command.model.customer.CustomerCreateCommand;
+import com.itravel.platform.modules.identity.application.command.model.customer.UpdateCustomerCommand;
+import com.itravel.platform.modules.identity.application.port.in.customer.facade.CustomerCommandFacade;
+import com.itravel.platform.modules.identity.application.port.in.customer.facade.CustomerQueryFacade;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,16 +26,16 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/customer")
 public class CustomerController {
-    CustomerCommandHandler customerCommandHandler;
-    CustomerQueryService customerQueryService;
+    CustomerCommandFacade customerCommandFacade;
+    CustomerQueryFacade customerQueryFacade;
     CustomerRestMapper mapper;
 
     @GetMapping("/general-info")
     @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")
-    public ApiResponse<CustomerGeneralInfoResponse> getCustomerGeneralInfo() {
+    public ApiResponse<CustomerGeneralInfoResponse> getCustomerGeneralInfoDTO() {
         return ApiResponse.<CustomerGeneralInfoResponse>builder()
                 .success(true)
-                .response(mapper.toCustomerGeneralInfoResponse(customerQueryService.getCustomerGeneralInfo()))
+                .response(mapper.toCustomerGeneralInfoResponse(customerQueryFacade.getCustomerGeneralInfo()))
                 .build();
     }
 
@@ -48,7 +46,7 @@ public class CustomerController {
     ) {
         return ApiResponse.<CustomerResponse>builder()
                 .success(true)
-                .response(customerQueryService.getCustomer(new CustomerId(id)))
+                .response(mapper.toCustomerResponse(customerQueryFacade.getCustomer(id)))
                 .build();
     }
 
@@ -59,10 +57,10 @@ public class CustomerController {
             @RequestParam (required = false, defaultValue = "false") boolean isDeleted,
             @PageableDefault(size = 5, page = 0) Pageable pageable
     ) {
-        var response = customerQueryService.getCustomers(keyword,pageable,isDeleted);
+        var response = customerQueryFacade.getCustomers(keyword, pageable, isDeleted);
         return ApiResponse.<PageResponse<CustomerResponse>>builder()
                 .success(true)
-                .response(response)
+                .response(mapper.toCustomerPageResponse(response))
                 .build();
     }
 
@@ -70,7 +68,7 @@ public class CustomerController {
     public ApiResponse<CustomerResponse> getMe() {
         return ApiResponse.<CustomerResponse>builder()
                 .success(true)
-                .response(mapper.toCustomerResponse(customerQueryService.getMe()))
+                .response(mapper.toCustomerResponse(customerQueryFacade.getMe()))
                 .build();
     }
 
@@ -82,20 +80,18 @@ public class CustomerController {
         return ApiResponse.<CustomerResponse>builder()
                 .message("Create customer successfully")
                 .success(true)
-                .response(mapper
-                        .toCustomerResponse(customerCommandHandler
-                                .create(command)))
+                .response(mapper.toCustomerResponse(customerCommandFacade.create(command)))
                 .build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('CUSTOMER_UPDATE')")
     public ApiResponse<CustomerResponse> update(@PathVariable String id, @ModelAttribute @Valid UpdateCustomerRequest request) {
-        UpdateCustomerCommand command = mapper.toUpdateCustomerCommand(id,request);
+        UpdateCustomerCommand command = mapper.toUpdateCustomerCommand(id, request);
         return ApiResponse.<CustomerResponse>builder()
                 .message("Update customer successfully")
                 .success(true)
-                .response(mapper.toCustomerResponse(customerCommandHandler.update(command)))
+                .response(mapper.toCustomerResponse(customerCommandFacade.update(command)))
                 .build();
     }
 
@@ -103,7 +99,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
-        customerCommandHandler.delete(mapper.toDeleteCustomerCommand(id));
+        customerCommandFacade.delete(mapper.toDeleteCustomerCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Delete customer successfully")
                 .success(true)
@@ -113,7 +109,7 @@ public class CustomerController {
     @PatchMapping("/{id}/restore")
     @PreAuthorize("hasAuthority('CUSTOMER_UPDATE')")
     public ApiResponse<Void> restore(@PathVariable String id) {
-        customerCommandHandler.restore(mapper.toRestoreCustomerCommand(id));
+        customerCommandFacade.restore(mapper.toRestoreCustomerCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Restore customer successfully")
                 .success(true)
@@ -124,7 +120,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
-        customerCommandHandler.destroy(mapper.toDeleteCustomerCommand(id));
+        customerCommandFacade.destroy(mapper.toDeleteCustomerCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Destroy customer successfully")
                 .success(true)

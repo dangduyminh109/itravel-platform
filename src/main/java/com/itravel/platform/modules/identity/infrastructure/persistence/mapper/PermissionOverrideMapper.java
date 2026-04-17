@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.mapper;
 
-import com.itravel.platform.modules.identity.domain.aggregate.PermissionOverride;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.AccountId;
-import com.itravel.platform.modules.identity.domain.aggregate.valueobject.Permission;
+import com.itravel.platform.modules.identity.domain.role.PermissionOverride;
+import com.itravel.platform.modules.identity.domain.account.AccountId;
+import com.itravel.platform.modules.identity.domain.role.Permission;
 import com.itravel.platform.modules.identity.infrastructure.persistence.entity.PermissionOverrideJpaEntity;
 import com.itravel.platform.modules.identity.share.IdentityValueObjectMapper;
 import org.mapstruct.Mapper;
