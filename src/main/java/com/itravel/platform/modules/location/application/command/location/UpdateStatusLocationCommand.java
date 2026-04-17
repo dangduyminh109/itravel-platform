@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.location.application.command.location;
 
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
+import com.itravel.platform.modules.location.domain.location.LocationStatus;
+import com.itravel.platform.modules.location.domain.location.LocationId;
 
 public record UpdateStatusLocationCommand(
         LocationId id,

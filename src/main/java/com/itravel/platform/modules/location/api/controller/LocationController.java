@@ -9,10 +9,11 @@ import com.itravel.platform.modules.location.api.dto.response.LocationResponse;
 import com.itravel.platform.modules.location.api.mapper.LocationRestMapper;
 import com.itravel.platform.modules.location.application.command.location.CreateLocationCommand;
 import com.itravel.platform.modules.location.application.command.location.UpdateLocationCommand;
-import com.itravel.platform.modules.location.application.handler.LocationCommandHandler;
-import com.itravel.platform.modules.location.application.service.LocationQueryService;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
+import com.itravel.platform.modules.location.application.dto.LocationListItemDTO;
+import com.itravel.platform.modules.location.application.port.in.location.facade.LocationCommandFacade;
+import com.itravel.platform.modules.location.application.port.in.location.facade.LocationQueryFacade;
+import com.itravel.platform.modules.location.domain.location.LocationStatus;
+import com.itravel.platform.modules.location.domain.location.LocationId;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,21 +30,22 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/location")
 public class LocationController {
-    LocationCommandHandler locationCommandHandler;
-    LocationQueryService locationQueryService;
+    LocationCommandFacade locationCommandFacade;
+    LocationQueryFacade locationQueryFacade;
     LocationRestMapper mapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('LOCATION_VIEW')")
-    public ApiResponse<PageResponse<LocationResponse>> getLocations(
+    public ApiResponse<PageResponse<LocationListItemDTO>> getLocations(
             @RequestParam (required = false) String keyword,
             @RequestParam (required = false) Boolean isDeleted,
             @RequestParam (required = false) LocationStatus status,
             @PageableDefault(size = 5, page = 0) Pageable pageable
     ) {
-        return ApiResponse.<PageResponse<LocationResponse>>builder()
+        var pageDTO = locationQueryFacade.getLocations(keyword, pageable, isDeleted, status);
+        return ApiResponse.<PageResponse<LocationListItemDTO>>builder()
                 .success(true)
-                .response(locationQueryService.getLocations(keyword, pageable, isDeleted,status))
+                .response(mapper.toPageResponse(pageDTO))
                 .build();
     }
 
@@ -55,7 +57,8 @@ public class LocationController {
     ) {
         return ApiResponse.<List<LocationResponse>>builder()
                 .success(true)
-                .response(locationQueryService.getTree(isDeleted,status))
+                .response(locationQueryFacade.getTree(isDeleted,status).stream()
+                        .map(mapper::toLocationResponse).toList())
                 .build();
     }
 
@@ -66,7 +69,7 @@ public class LocationController {
     ) {
         return ApiResponse.<LocationResponse>builder()
                 .success(true)
-                .response(locationQueryService.getLocation(new LocationId(id)))
+                .response(mapper.toLocationResponse(locationQueryFacade.getLocation(id)))
                 .build();
     }
 
@@ -78,7 +81,7 @@ public class LocationController {
         return ApiResponse.<LocationResponse>builder()
                 .message("Create location successfully")
                 .success(true)
-                .response(mapper.toLocationResponse(locationCommandHandler.create(createLocationCommand)))
+                .response(mapper.toLocationResponse(locationCommandFacade.create(createLocationCommand)))
                 .build();
     }
 
@@ -89,7 +92,7 @@ public class LocationController {
         return ApiResponse.<LocationResponse>builder()
                 .message("Update location successfully")
                 .success(true)
-                .response(mapper.toLocationResponse(locationCommandHandler.update(updateLocationCommand)))
+                .response(mapper.toLocationResponse(locationCommandFacade.update(updateLocationCommand)))
                 .build();
     }
 
@@ -98,7 +101,7 @@ public class LocationController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('LOCATION_DELETE')")
     public ApiResponse<Void> delete(@PathVariable String id) {
-        locationCommandHandler.delete(mapper.toDeleteLocationCommand(id));
+        locationCommandFacade.delete(mapper.toDeleteLocationCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Delete location successfully")
                 .success(true)
@@ -108,7 +111,7 @@ public class LocationController {
     @PatchMapping("/{id}/restore")
     @PreAuthorize("hasAuthority('LOCATION_UPDATE')")
     public ApiResponse<Void> restore(@PathVariable String id) {
-        locationCommandHandler.restore(mapper.toRestoreLocationCommand(id));
+        locationCommandFacade.restore(mapper.toRestoreLocationCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Restore location successfully")
                 .success(true)
@@ -120,7 +123,7 @@ public class LocationController {
     public ApiResponse<Void> status(
             @PathVariable String id,
             @RequestBody @Valid UpdateStatusLocationRequest request) {
-        locationCommandHandler.status(mapper.toUpdateStatusLocationCommand(id,request));
+        locationCommandFacade.status(mapper.toUpdateStatusLocationCommand(id,request));
         return ApiResponse.<Void>builder()
                 .message("Update status location successfully")
                 .success(true)
@@ -131,7 +134,7 @@ public class LocationController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('LOCATION_DELETE')")
     public ApiResponse<Void> destroy(@PathVariable String id) {
-        locationCommandHandler.destroy(mapper.toDeleteLocationCommand(id));
+        locationCommandFacade.destroy(mapper.toDeleteLocationCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Destroy location successfully")
                 .success(true)

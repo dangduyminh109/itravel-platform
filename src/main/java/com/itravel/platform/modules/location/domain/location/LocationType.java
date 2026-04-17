@@ -1,4 +1,4 @@
-package com.itravel.platform.modules.location.domain.aggregate.enums;
+package com.itravel.platform.modules.location.domain.location;
 
 public enum LocationType {
     AREA,

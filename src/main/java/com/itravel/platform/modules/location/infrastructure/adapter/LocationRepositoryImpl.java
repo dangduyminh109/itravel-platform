@@ -1,33 +1,32 @@
-package com.itravel.platform.modules.location.infrastructure.persistence.repository;
+package com.itravel.platform.modules.location.infrastructure.adapter;
 
-import com.itravel.platform.modules.location.domain.aggregate.Location;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationName;
-import com.itravel.platform.modules.location.domain.repository.LocationRepository;
+import com.itravel.platform.modules.location.application.port.out.location.LocationRepository;
+import com.itravel.platform.modules.location.domain.location.Location;
+import com.itravel.platform.modules.location.domain.location.LocationId;
+import com.itravel.platform.modules.location.domain.location.LocationName;
 import com.itravel.platform.modules.location.infrastructure.persistence.entity.LocationJpaEntity;
 import com.itravel.platform.modules.location.infrastructure.persistence.mapper.LocationMapper;
+import com.itravel.platform.modules.location.infrastructure.persistence.repository.LocationJpaRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LocationRepositoryImpl implements LocationRepository {
     LocationJpaRepository locationJpaRepository;
     LocationMapper mapper;
 
     @Override
-    public Optional<Location> findById(LocationId id,boolean withChildren,boolean withParent, Integer level) {
+    public Optional<Location> findById(LocationId id, boolean withChildren, boolean withParent, Integer level) {
         LocationJpaEntity entity = locationJpaRepository.findById(id.value())
                 .orElse(null);
-        if(entity == null){
+        if (entity == null) {
             return Optional.empty();
         }
         return Optional.ofNullable(LocationMapper.toLocationDomain(entity, withChildren, withParent, level));
@@ -35,73 +34,12 @@ public class LocationRepositoryImpl implements LocationRepository {
 
     @Override
     public boolean existsByName(LocationName name) {
-        return locationJpaRepository
-                .existsByName(name.value());
+        return locationJpaRepository.existsByName(name.value());
     }
 
     @Override
     public boolean existsByNameAndIdNot(LocationName name, LocationId id) {
-        return locationJpaRepository
-                .existsByNameAndIdNot(name.value(),id.value());
-    }
-
-    @Override
-    public List<Location> getTree(Boolean isDeleted, LocationStatus status) {
-        List<LocationJpaEntity> locationTree= locationJpaRepository
-                .getTree(isDeleted,status);
-        Map<Long, Location> map = new HashMap<>();
-        List<Location> roots = new ArrayList<>();
-        for(LocationJpaEntity entity:locationTree){
-            Location location = LocationMapper.toLocationDomain(entity, false, false, 0);
-            map.put(entity.getId(),location);
-        }
-
-        for(LocationJpaEntity entity:locationTree){
-            if(entity.getParent() == null){
-                Location root = map.get(entity.getId());
-                if(root != null){
-                    roots.add(root);
-                }
-            }else {
-                Location parent = map.get(entity.getParent().getId());
-                if(parent != null){
-                    Location child = map.get(entity.getId());
-                    if(child != null){
-                        child.setParentForRead(parent);
-                        parent.getChildren().add(child);
-                    }
-                }
-            }
-        }
-        return roots;
-    }
-
-    @Override
-    public Page<Location> getLocations(String keyword, Pageable pageable, Boolean isDeleted, LocationStatus status) {
-        Page<LocationJpaEntity> locationJpaList = locationJpaRepository
-                .getLocations(keyword, pageable,isDeleted,status);
-        Map<Long, Location> mapOriginal = new HashMap<>();
-        Map<Long, Location> mapLocation = new HashMap<>();
-
-        for(LocationJpaEntity entity:locationJpaList){
-            Location origin = LocationMapper.toLocationDomain(entity, false, false, 0);
-            Location location = LocationMapper.toLocationDomain(entity, false, false, 0);
-            mapOriginal.put(entity.getId(),origin);
-            mapLocation.put(entity.getId(),location);
-        }
-
-        for(LocationJpaEntity entity:locationJpaList){
-            Location location = mapLocation.get(entity.getId());
-            if(entity.getParent() != null){
-                Location parent = mapLocation.get(entity.getParent().getId());
-                if(parent != null){
-                    location.setParentForRead(mapOriginal.get(entity.getParent().getId()));
-                }
-            }
-        }
-
-        return locationJpaList
-                .map((entity) ->  mapLocation.get(entity.getId()));
+        return locationJpaRepository.existsByNameAndIdNot(name.value(), id.value());
     }
 
     @Override
