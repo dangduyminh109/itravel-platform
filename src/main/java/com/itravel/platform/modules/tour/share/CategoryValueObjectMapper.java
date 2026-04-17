@@ -1,0 +1,28 @@
+package com.itravel.platform.modules.tour.share;
+
+import com.itravel.platform.modules.tour.domain.category.CategoryId;
+import com.itravel.platform.modules.tour.domain.category.CategoryName;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(
+        componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
+public interface CategoryValueObjectMapper {
+    default CategoryId toCategoryId(Long id) {
+        return id != null ? new CategoryId(id) : null;
+    }
+
+    default Long fromCategoryId(CategoryId id) {
+        return id != null ? id.value() : null;
+    }
+
+    default CategoryName toCategoryName(String name) {
+        return name != null ? new CategoryName(name) : null;
+    }
+
+    default String fromCategoryName(CategoryName name) {
+        return name != null ? name.value() : null;
+    }
+}

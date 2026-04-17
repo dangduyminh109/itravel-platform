@@ -1,6 +1,5 @@
 package com.itravel.platform.modules.location.share;
 
-import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
 import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
 import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationName;
 import org.mapstruct.Mapper;
@@ -23,12 +22,5 @@ public interface LocationValueObjectMapper {
     }
     default String fromLocationName(LocationName name) {
         return name != null ? name.value() : null;
-    }
-
-    default Slug toSlug(String slug) {
-        return slug != null ? new Slug(slug) : null;
-    }
-    default String fromSlug(Slug slug) {
-        return slug != null ? slug.value() : null;
     }
 }
