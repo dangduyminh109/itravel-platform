@@ -1,12 +1,8 @@
-package com.itravel.platform.modules.location.domain.aggregate;
+package com.itravel.platform.modules.location.domain.location;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationType;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationName;
-import com.itravel.platform.modules.location.domain.exception.InvalidTypeOrParentException;
+import com.itravel.platform.modules.location.domain.location.exception.InvalidTypeOrParentException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -126,7 +122,7 @@ public class Location extends SoftDeletableAggregate<LocationId> {
         touch();
     }
 
-    public void updatePrent(Location newParent) {
+    public void updateParent(Location newParent) {
         checkType(newParent, this.type);
         this.parent = newParent;
         touch();

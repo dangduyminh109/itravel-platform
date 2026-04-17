@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.location.share;
 
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationId;
-import com.itravel.platform.modules.location.domain.aggregate.valueobject.LocationName;
+import com.itravel.platform.modules.location.domain.location.LocationId;
+import com.itravel.platform.modules.location.domain.location.LocationName;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 

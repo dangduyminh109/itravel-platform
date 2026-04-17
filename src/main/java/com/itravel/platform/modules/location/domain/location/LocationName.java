@@ -1,7 +1,7 @@
-package com.itravel.platform.modules.location.domain.aggregate.valueobject;
+package com.itravel.platform.modules.location.domain.location;
 
-import com.itravel.platform.modules.location.domain.exception.InvalidLocationNameException;
-import com.itravel.platform.modules.location.domain.exception.LocationNameTooLongException;
+import com.itravel.platform.modules.location.domain.location.exception.InvalidLocationNameException;
+import com.itravel.platform.modules.location.domain.location.exception.LocationNameTooLongException;
 
 import java.util.Objects;
 

@@ -1,6 +1,6 @@
-package com.itravel.platform.modules.location.domain.aggregate.valueobject;
+package com.itravel.platform.modules.location.domain.location;
 
-import com.itravel.platform.modules.location.domain.exception.InvalidLocationIdException;
+import com.itravel.platform.modules.location.domain.location.exception.InvalidLocationIdException;
 import java.util.Objects;
 
 public record LocationId(Long value) {

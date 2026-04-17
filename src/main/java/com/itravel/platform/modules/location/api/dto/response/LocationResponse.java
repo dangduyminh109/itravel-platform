@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.location.api.dto.response;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationType;
+
+import com.itravel.platform.modules.location.domain.location.LocationStatus;
+import com.itravel.platform.modules.location.domain.location.LocationType;
 
 import java.time.Instant;
 import java.util.List;

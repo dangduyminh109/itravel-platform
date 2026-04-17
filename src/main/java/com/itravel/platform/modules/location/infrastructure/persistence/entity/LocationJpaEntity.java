@@ -1,8 +1,8 @@
 package com.itravel.platform.modules.location.infrastructure.persistence.entity;
 
 import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationStatus;
-import com.itravel.platform.modules.location.domain.aggregate.enums.LocationType;
+import com.itravel.platform.modules.location.domain.location.LocationStatus;
+import com.itravel.platform.modules.location.domain.location.LocationType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
