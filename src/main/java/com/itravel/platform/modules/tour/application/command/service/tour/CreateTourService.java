@@ -1,7 +1,9 @@
 package com.itravel.platform.modules.tour.application.command.service.tour;
 
 import com.itravel.platform.modules.identity.application.port.out.MediaUploadPort;
+import com.itravel.platform.modules.tour.application.command.model.schedule.CreateScheduleCommand;
 import com.itravel.platform.modules.tour.application.command.model.tour.CreateTourCommand;
+import com.itravel.platform.modules.tour.application.command.service.schedule.CreateScheduleService;
 import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import com.itravel.platform.modules.tour.application.exception.CategoryNotFoundException;
 import com.itravel.platform.modules.tour.application.exception.TourNameExistedException;
@@ -30,6 +32,7 @@ public class CreateTourService implements CreateTourUseCase {
     TourQueryPort queryPort;
     MediaUploadPort mediaUploadPort;
     CategoryQueryPort categoryQueryPort;
+    CreateScheduleService createScheduleService;
 
     @Transactional
     public TourDetailDTO execute(CreateTourCommand command) {
@@ -45,6 +48,8 @@ public class CreateTourService implements CreateTourUseCase {
                 .map(item -> Itinerary.create(item.dayNumber(), item.title(), item.description(), item.activities()))
                 .toList();
 
+        TourStatus status = command.status() != null ? command.status() : TourStatus.DRAFT;
+
         List<TourImage> images = command.tourImages().stream()
                 .map(item -> {
                     String imageUrl = mediaUploadPort.uploadAvatar(item.image());
@@ -52,7 +57,6 @@ public class CreateTourService implements CreateTourUseCase {
                 })
                 .toList();
 
-        TourStatus status = command.status() != null ? command.status() : TourStatus.DRAFT;
         Tour tour = Tour.create(
                 command.name(),
                 command.summary(),
@@ -69,6 +73,19 @@ public class CreateTourService implements CreateTourUseCase {
                 images
         );
 
-        return repository.save(tour);
+        TourDetailDTO tourDetailDTO = repository.save(tour);
+
+        command.schedules().forEach(item -> {
+            CreateScheduleCommand scheduleCommand = new CreateScheduleCommand(
+                item.departureDate(),
+                item.availableSeats(),
+                item.surcharge(),
+                item.status(),
+                tour.getId()
+                );
+            createScheduleService.execute(scheduleCommand);
+        });
+
+        return tourDetailDTO;
     }
 }

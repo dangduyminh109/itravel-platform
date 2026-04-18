@@ -37,7 +37,12 @@ public enum PermissionCode {
     TOUR_VIEW("TOUR_VIEW", "View tour", "TOUR"),
     TOUR_CREATE("TOUR_CREATE", "Create tour", "TOUR"),
     TOUR_UPDATE("TOUR_UPDATE", "Update tour", "TOUR"),
-    TOUR_DELETE("TOUR_DELETE", "Delete tour", "TOUR")
+    TOUR_DELETE("TOUR_DELETE", "Delete tour", "TOUR"),
+
+    SCHEDULE_VIEW("SCHEDULE_VIEW", "View tour", "SCHEDULE"),
+    SCHEDULE_CREATE("SCHEDULE_CREATE", "Create tour", "SCHEDULE"),
+    SCHEDULE_UPDATE("SCHEDULE_UPDATE", "Update tour", "SCHEDULE"),
+    SCHEDULE_DELETE("SCHEDULE_DELETE", "Delete tour", "SCHEDULE")
     ;
 
     String code;

@@ -90,6 +90,11 @@ public enum ErrorCode {
     TOUR_ITINERARY_ACTIVITIES_MIN("TOUR_ITINERARY_ACTIVITIES_MIN", "Itinerary activities must have at least one item.", HttpStatus.BAD_REQUEST, "activities"),
     TOUR_IMAGE_FILE_CANNOT_BE_NULL("TOUR_IMAGE_FILE_CANNOT_BE_NULL", "Tour image file cannot be null.", HttpStatus.BAD_REQUEST, "image"),
     TOUR_IMAGE_THUMBNAIL_CANNOT_BE_NULL("TOUR_IMAGE_THUMBNAIL_CANNOT_BE_NULL", "Tour image thumbnail flag cannot be null.", HttpStatus.BAD_REQUEST, "isThumbnail"),
+    TOUR_STATUS_INVALID("TOUR_STATUS_INVALID", "Status must be ACTIVE, INACTIVE or DRAFT.", HttpStatus.BAD_REQUEST, "status"),
+    // schedule
+    SCHEDULE_STATUS_INVALID("SCHEDULE_STATUS_INVALID", "Status must be OPEN, FULL, CANCELLED or COMPLETED.", HttpStatus.BAD_REQUEST, "status"),
+    TOUR_ID_CANNOT_BE_BLANK("TOUR_ID_CANNOT_BE_BLANK", "Tour id cannot be blank", HttpStatus.BAD_REQUEST, null),
+    AVAILABLE_SEATS_INVALID("AVAILABLE_SEATS_INVALID", "Available seats must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null)
     ;
 
     String code;

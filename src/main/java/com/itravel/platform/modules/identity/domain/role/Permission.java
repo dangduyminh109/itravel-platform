@@ -8,11 +8,11 @@ public record Permission(String code) {
         if(Objects.isNull(code) || code.isBlank()){
             throw new InvalidPermissionCodeException();
         }
-//        try {
-//            PermissionCode.valueOf(code);
-//        } catch (IllegalArgumentException e) {
-//            throw new InvalidPermissionCodeException();
-//        }
+        try {
+            PermissionCode.valueOf(code);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidPermissionCodeException();
+        }
         code = code.trim().toUpperCase();
     }
 }

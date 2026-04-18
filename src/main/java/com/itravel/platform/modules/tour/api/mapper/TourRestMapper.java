@@ -6,10 +6,7 @@ import com.itravel.platform.modules.tour.api.dto.response.*;
 import com.itravel.platform.modules.tour.application.command.model.tour.*;
 import com.itravel.platform.modules.tour.application.dto.*;
 import com.itravel.platform.modules.tour.domain.tour.*;
-import com.itravel.platform.modules.tour.share.CategoryValueObjectMapper;
-import com.itravel.platform.modules.tour.share.ItineraryValueObjectMapper;
-import com.itravel.platform.modules.tour.share.TourImageValueObjectMapper;
-import com.itravel.platform.modules.tour.share.TourValueObjectMapper;
+import com.itravel.platform.modules.tour.share.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -20,7 +17,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
                 ItineraryValueObjectMapper.class,
                 TourImageValueObjectMapper.class,
                 CategoryValueObjectMapper.class,
-                LocationValueObjectMapper.class
+                LocationValueObjectMapper.class,
+                ScheduleValueObjectMapper.class
         },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )

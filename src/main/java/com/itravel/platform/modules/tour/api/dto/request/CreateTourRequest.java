@@ -1,9 +1,9 @@
 package com.itravel.platform.modules.tour.api.dto.request;
 
-import com.itravel.platform.modules.tour.domain.tour.TourStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
@@ -14,7 +14,8 @@ public record CreateTourRequest(
         String description,
 
         @NotNull(message = "TOUR_STATUS_CANNOT_BE_BLANK")
-        TourStatus status,
+        @Pattern(regexp = "^$|^(ACTIVE|INACTIVE|DRAFT)$", message = "TOUR_STATUS_INVALID")
+        String status,
 
         @Valid
         PricingRequest pricing,
@@ -34,6 +35,8 @@ public record CreateTourRequest(
 
         @Valid
         List<ItineraryRequest> itineraries,
+        @Valid
+        List<ScheduleRequest> schedules,
         @Valid
         List<TourImageRequest> tourImages
 ) {

@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.tour.infrastructure.adapter;
 
-import com.itravel.platform.modules.tour.domain.repository.ScheduleRepository;
+import com.itravel.platform.modules.tour.application.dto.ScheduleDetailDTO;
+import com.itravel.platform.modules.tour.application.port.out.schedule.ScheduleRepository;
 import com.itravel.platform.modules.tour.domain.schedule.Schedule;
 import com.itravel.platform.modules.tour.domain.schedule.ScheduleId;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.ScheduleJpaEntity;
@@ -27,9 +28,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public void save(Schedule schedule) {
+    public ScheduleDetailDTO save(Schedule schedule) {
         ScheduleJpaEntity entity = mapper.toScheduleJpaEntity(schedule);
-        scheduleJpaRepository.save(entity);
+        return ScheduleMapper.toScheduleDetailDTO(scheduleJpaRepository.save(entity));
     }
 
     @Override

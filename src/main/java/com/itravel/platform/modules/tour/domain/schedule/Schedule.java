@@ -2,6 +2,7 @@ package com.itravel.platform.modules.tour.domain.schedule;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.tour.domain.schedule.exception.InvalidScheduleStatusException;
+import com.itravel.platform.modules.tour.domain.tour.TourId;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,19 +18,22 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
     AvailableSeats availableSeats;
     BigDecimal surcharge;
     ScheduleStatus status;
+    TourId tourId;
 
     private Schedule(
             ScheduleId id,
             DepartureDate departureDate,
             AvailableSeats availableSeats,
             BigDecimal surcharge,
-            ScheduleStatus status
+            ScheduleStatus status,
+            TourId tourId
     ) {
         super(id);
         this.departureDate = departureDate;
         this.availableSeats = availableSeats;
         this.surcharge = surcharge;
         this.status = requireStatus(status);
+        this.tourId = tourId;
     }
 
     private Schedule(
@@ -38,6 +42,7 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
             AvailableSeats availableSeats,
             BigDecimal surcharge,
             ScheduleStatus status,
+            TourId tourId,
             Instant createdAt,
             Instant updatedAt,
             Instant deletedAt
@@ -46,6 +51,7 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
         this.departureDate = departureDate;
         this.availableSeats = availableSeats;
         this.surcharge = surcharge;
+        this.tourId = tourId;
         this.status = requireStatus(status);
     }
 
@@ -53,14 +59,16 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
             DepartureDate departureDate,
             AvailableSeats availableSeats,
             BigDecimal surcharge,
-            ScheduleStatus status
+            ScheduleStatus status,
+            TourId tourId
     ) {
         return new Schedule(
                 null,
                 departureDate,
                 availableSeats,
                 surcharge,
-                status
+                status,
+                tourId
         );
     }
 
@@ -71,6 +79,7 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
             AvailableSeats availableSeats,
             BigDecimal surcharge,
             ScheduleStatus status,
+            TourId tourId,
             Instant createdAt,
             Instant updatedAt,
             Instant deletedAt
@@ -81,6 +90,7 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
                 availableSeats,
                 surcharge,
                 status,
+                tourId,
                 createdAt,
                 updatedAt,
                 deletedAt

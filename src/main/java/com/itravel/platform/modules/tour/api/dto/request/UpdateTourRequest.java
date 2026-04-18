@@ -31,6 +31,9 @@ public record UpdateTourRequest(
         List<ItineraryRequest> itineraries,
 
         @Valid
+        List<ScheduleRequest> schedules,
+
+        @Valid
         List<TourImageRequest> tourImages,
 
         @Valid

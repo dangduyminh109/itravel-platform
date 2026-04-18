@@ -4,9 +4,13 @@ import com.itravel.platform.modules.location.domain.location.LocationId;
 import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
+import com.itravel.platform.modules.tour.domain.schedule.AvailableSeats;
+import com.itravel.platform.modules.tour.domain.schedule.DepartureDate;
+import com.itravel.platform.modules.tour.domain.schedule.ScheduleStatus;
 import com.itravel.platform.modules.tour.domain.tour.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record CreateTourCommand(
@@ -22,6 +26,7 @@ public record CreateTourCommand(
         LocationId departureLocationId,
         LocationId destinationLocationId,
         List<ItineraryCommand> itineraries,
+        List<ScheduleCommand> schedules,
         List<TourImageCommand> tourImages
 ) {
     public CreateTourCommand {
@@ -34,6 +39,13 @@ public record CreateTourCommand(
             ItineraryTitle title,
             String description,
             List<String> activities
+    ) {}
+
+    public record ScheduleCommand(
+            DepartureDate departureDate,
+            AvailableSeats availableSeats,
+            BigDecimal surcharge,
+            ScheduleStatus status
     ) {}
 
     public record TourImageCommand(

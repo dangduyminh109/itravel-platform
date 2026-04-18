@@ -94,6 +94,15 @@ public enum DomainErrorCode {
     INVALID_DEPARTURE_DATE("INVALID_DEPARTURE_DATE", "Invalid departure date", HttpStatus.BAD_REQUEST, "departureDate"),
     INVALID_AVAILABLE_SEATS("INVALID_AVAILABLE_SEATS", "Invalid available seats", HttpStatus.BAD_REQUEST, "availableSeats"),
     INVALID_SCHEDULE_STATUS("INVALID_SCHEDULE_STATUS", "Invalid schedule status", HttpStatus.BAD_REQUEST, "status"),
+    DEPARTURE_DATE_CANNOT_BE_NULL("DEPARTURE_DATE_CANNOT_BE_NULL", "Departure date cannot be null", HttpStatus.BAD_REQUEST, "departureDate"),
+    AVAILABLE_SEATS_CANNOT_BE_NULL("AVAILABLE_SEATS_CANNOT_BE_NULLE", "Available seats date cannot be null", HttpStatus.BAD_REQUEST, "availableSeats"),
+    SURCHARGE_CANNOT_BE_NULL("SURCHARGE_CANNOT_BE_NULL", "Surcharge cannot be null", HttpStatus.BAD_REQUEST, "surcharge"),
+    STATUS_CANNOT_BE_NULL("STATUS_CANNOT_BE_NULL", "Status cannot be null", HttpStatus.BAD_REQUEST, "status"),
+    SURCHARGE_MUST_BE_NON_NEGATIVE("SURCHARGE_MUST_BE_NON_NEGATIVE", "Surcharge must be greater than or equal to 0", HttpStatus.BAD_REQUEST, "surcharge"),
+    AVAILABLE_SEATS_INVALID("AVAILABLE_SEATS_INVALID", "Available seats must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null),
+    SURCHARGE_INVALID("SURCHARGE_INVALID", "Surcharge must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null),
+    SCHEDULE_STATUS_CANNOT_BE_BLANK("SCHEDULE_STATUS_CANNOT_BE_BLANK", "Schedule status cannot be blank", HttpStatus.BAD_REQUEST, null),
+    SCHEDULE_STATUS_INVALID("SCHEDULE_STATUS_INVALID", "Schedule status must be one of OPEN, FULL, CANCELLED, COMPLETED", HttpStatus.BAD_REQUEST, null),
 
     // ===== TOUR - IMAGE =====
     INVALID_TOUR_IMAGE_ID("INVALID_TOUR_IMAGE_ID", "Invalid tour image id", HttpStatus.BAD_REQUEST, "tourImageId"),

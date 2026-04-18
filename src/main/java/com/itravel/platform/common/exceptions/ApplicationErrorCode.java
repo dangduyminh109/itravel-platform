@@ -57,6 +57,10 @@ public enum ApplicationErrorCode {
     // ===== TOUR =====
     TOUR_NAME_EXISTED("TOUR_NAME_EXISTED", "tour name already exists", HttpStatus.BAD_REQUEST, "name"),
     TOUR_NOT_EXIST("TOUR_NOT_EXIST", "tour does not exist", HttpStatus.BAD_REQUEST, "name"),
+
+    // ===== TOUR =====
+    SCHEDULE_NOT_EXIST("SCHEDULE_NOT_EXIST", "schedule does not exist", HttpStatus.BAD_REQUEST, "scheduleId"),
+
     ;
 
     String code;

@@ -1,6 +1,5 @@
 package com.itravel.platform.modules.tour.application.dto;
 
-import com.itravel.platform.modules.tour.domain.tour.TourStatus;
 import lombok.Builder;
 import java.math.BigDecimal;
 

@@ -35,5 +35,7 @@ public class ScheduleJpaEntity extends SoftDeletableJpaBaseModel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     ScheduleStatus status;
+
+    String tourId;
 }
 
