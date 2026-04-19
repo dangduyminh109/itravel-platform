@@ -1,13 +1,22 @@
 package com.itravel.platform.modules.tour.api.dto.request;
 
-import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
-import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
+import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
 
 public record PricingRequest(
-        @NotNull(message = "TOUR_ORIGINAL_PRICE_CANNOT_BE_NULL")
-        BigDecimal originalPrice,
-        BigDecimal discountPrice,
+        @Valid
+        TicketPriceRequest adultPrice,
+
+        @Valid
+        TicketPriceRequest childPrice,
+
+        @Valid
+        TicketPriceRequest infantPrice,
+
+        @DecimalMin(value = "0.0", inclusive = true, message = "SINGLE_SUPPLEMENT_MUST_BE_NON_NEGATIVE")
+        BigDecimal singleSupplement,
+
         CurrencyCode currency
 ) {}

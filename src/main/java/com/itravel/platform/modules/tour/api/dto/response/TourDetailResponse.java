@@ -1,6 +1,5 @@
 package com.itravel.platform.modules.tour.api.dto.response;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -11,9 +10,7 @@ public record TourDetailResponse(
         String summary,
         String description,
         String status,
-        BigDecimal originalPrice,
-        BigDecimal discountPrice,
-        String currency,
+        PricingResponse pricing,
         Integer durationDays,
         Integer durationNights,
         Integer minParticipants,

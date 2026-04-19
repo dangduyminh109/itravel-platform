@@ -4,7 +4,6 @@ import com.itravel.platform.modules.location.domain.location.LocationId;
 import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
-import com.itravel.platform.modules.tour.domain.schedule.AvailableSeats;
 import com.itravel.platform.modules.tour.domain.schedule.DepartureDate;
 import com.itravel.platform.modules.tour.domain.schedule.ScheduleStatus;
 import com.itravel.platform.modules.tour.domain.tour.*;
@@ -43,8 +42,9 @@ public record CreateTourCommand(
 
     public record ScheduleCommand(
             DepartureDate departureDate,
-            AvailableSeats availableSeats,
+            Integer totalSeats,
             BigDecimal surcharge,
+            Pricing pricing,
             ScheduleStatus status
     ) {}
 
@@ -53,4 +53,3 @@ public record CreateTourCommand(
             Boolean isThumbnail
     ) {}
 }
-

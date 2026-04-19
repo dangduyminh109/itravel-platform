@@ -2,6 +2,9 @@ package com.itravel.platform.modules.tour.domain.schedule;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.tour.domain.schedule.exception.InvalidScheduleStatusException;
+import com.itravel.platform.modules.tour.domain.schedule.exception.TotalSeatsLowerThanMinParticipantsException;
+import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
+import com.itravel.platform.modules.tour.domain.tour.Pricing;
 import com.itravel.platform.modules.tour.domain.tour.TourId;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,22 +18,27 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Schedule extends SoftDeletableAggregate<ScheduleId> {
     DepartureDate departureDate;
-    AvailableSeats availableSeats;
+    ScheduleSeats seats;
+    Pricing pricing;
     BigDecimal surcharge;
     ScheduleStatus status;
     TourId tourId;
+    Long version;
+
 
     private Schedule(
             ScheduleId id,
             DepartureDate departureDate,
-            AvailableSeats availableSeats,
+            ScheduleSeats seats,
+            Pricing pricing,
             BigDecimal surcharge,
             ScheduleStatus status,
             TourId tourId
     ) {
         super(id);
         this.departureDate = departureDate;
-        this.availableSeats = availableSeats;
+        this.seats = seats;
+        this.pricing = pricing;
         this.surcharge = surcharge;
         this.status = requireStatus(status);
         this.tourId = tourId;
@@ -39,33 +47,43 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
     private Schedule(
             ScheduleId id,
             DepartureDate departureDate,
-            AvailableSeats availableSeats,
+            ScheduleSeats seats,
+            Pricing pricing,
             BigDecimal surcharge,
             ScheduleStatus status,
             TourId tourId,
+            Long version,
             Instant createdAt,
             Instant updatedAt,
             Instant deletedAt
     ) {
         super(id, createdAt, updatedAt, deletedAt);
         this.departureDate = departureDate;
-        this.availableSeats = availableSeats;
+        this.seats = seats;
+        this.pricing = pricing;
         this.surcharge = surcharge;
         this.tourId = tourId;
         this.status = requireStatus(status);
+        this.version = version;
     }
 
     public static Schedule create(
             DepartureDate departureDate,
-            AvailableSeats availableSeats,
+            ScheduleSeats seats,
+            Pricing pricing,
             BigDecimal surcharge,
             ScheduleStatus status,
-            TourId tourId
+            TourId tourId,
+            Integer minParticipants
     ) {
+        if(minParticipants != null && seats.total() < minParticipants) {
+            throw new TotalSeatsLowerThanMinParticipantsException();
+        }
         return new Schedule(
                 null,
                 departureDate,
-                availableSeats,
+                seats,
+                pricing,
                 surcharge,
                 status,
                 tourId
@@ -76,10 +94,12 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
     public static Schedule fromExisting(
             ScheduleId id,
             DepartureDate departureDate,
-            AvailableSeats availableSeats,
+            ScheduleSeats seats,
+            Pricing pricing,
             BigDecimal surcharge,
             ScheduleStatus status,
             TourId tourId,
+            Long version,
             Instant createdAt,
             Instant updatedAt,
             Instant deletedAt
@@ -87,10 +107,12 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
         return new Schedule(
                 id,
                 departureDate,
-                availableSeats,
+                seats,
+                pricing,
                 surcharge,
                 status,
                 tourId,
+                version,
                 createdAt,
                 updatedAt,
                 deletedAt
@@ -102,8 +124,8 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
         touch();
     }
 
-    public void updateAvailableSeats(AvailableSeats availableSeats) {
-        this.availableSeats = availableSeats;
+    public void updatePricing(Pricing pricing) {
+        this.pricing = pricing;
         touch();
     }
 
@@ -115,6 +137,23 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
     public void updateStatus(ScheduleStatus status) {
         this.status = requireStatus(status);
         touch();
+    }
+
+    public void updateSeats(ScheduleSeats seats, Integer minParticipants) {
+        this.seats = seats;
+        checkValidSeats(minParticipants);
+        touch();
+    }
+
+    public void updateVersion(Long version) {
+        this.version = version;
+        touch();
+    }
+
+    private void checkValidSeats(Integer minParticipants) {
+        if (minParticipants != null && this.seats.total() < minParticipants) {
+            throw new TotalSeatsLowerThanMinParticipantsException();
+        }
     }
 
     private static ScheduleStatus requireStatus(ScheduleStatus status) {

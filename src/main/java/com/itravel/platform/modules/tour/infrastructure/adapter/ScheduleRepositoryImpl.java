@@ -4,6 +4,7 @@ import com.itravel.platform.modules.tour.application.dto.ScheduleDetailDTO;
 import com.itravel.platform.modules.tour.application.port.out.schedule.ScheduleRepository;
 import com.itravel.platform.modules.tour.domain.schedule.Schedule;
 import com.itravel.platform.modules.tour.domain.schedule.ScheduleId;
+import com.itravel.platform.modules.tour.domain.tour.TourId;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.ScheduleJpaEntity;
 import com.itravel.platform.modules.tour.infrastructure.persistence.mapper.ScheduleMapper;
 import com.itravel.platform.modules.tour.infrastructure.persistence.repository.ScheduleJpaRepository;
@@ -37,6 +38,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     public void destroy(ScheduleId id) {
         scheduleJpaRepository.findById(id.value())
                 .ifPresent(scheduleJpaRepository::delete);
+    }
+
+    @Override
+    public void deleteByTourId(TourId tourId) {
+        scheduleJpaRepository.deleteByTourId(tourId.value());
     }
 }
 

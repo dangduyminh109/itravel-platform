@@ -1,8 +1,9 @@
 package com.itravel.platform.modules.tour.share;
 
-import com.itravel.platform.modules.tour.domain.schedule.AvailableSeats;
 import com.itravel.platform.modules.tour.domain.schedule.DepartureDate;
 import com.itravel.platform.modules.tour.domain.schedule.ScheduleId;
+import com.itravel.platform.modules.tour.domain.schedule.ScheduleSeats;
+import com.itravel.platform.modules.tour.domain.schedule.ScheduleStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -29,12 +30,12 @@ public interface ScheduleValueObjectMapper {
         return date != null ? date.value() : null;
     }
 
-    default AvailableSeats toAvailableSeats(Integer value) {
-        return value != null ? new AvailableSeats(value) : null;
+    default ScheduleSeats toScheduleSeats(Integer total, Integer booked, Integer locked) {
+        return new ScheduleSeats(total, booked, locked);
     }
 
-    default Integer fromAvailableSeats(AvailableSeats seats) {
-        return seats != null ? seats.value() : null;
+    default ScheduleStatus toScheduleStatus(String status) {
+        return status != null ? ScheduleStatus.valueOf(status) : null;
     }
 }
 

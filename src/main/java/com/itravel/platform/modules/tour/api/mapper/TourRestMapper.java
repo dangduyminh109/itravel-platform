@@ -5,7 +5,6 @@ import com.itravel.platform.modules.tour.api.dto.request.*;
 import com.itravel.platform.modules.tour.api.dto.response.*;
 import com.itravel.platform.modules.tour.application.command.model.tour.*;
 import com.itravel.platform.modules.tour.application.dto.*;
-import com.itravel.platform.modules.tour.domain.tour.*;
 import com.itravel.platform.modules.tour.share.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -18,7 +17,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
                 TourImageValueObjectMapper.class,
                 CategoryValueObjectMapper.class,
                 LocationValueObjectMapper.class,
-                ScheduleValueObjectMapper.class
+                ScheduleValueObjectMapper.class,
         },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
@@ -49,11 +48,7 @@ public interface TourRestMapper {
 
     TourImageResponse toTourImageResponse(TourImageDTO dto);
 
-    Pricing toPricing(PricingRequest request);
+    CreateTourCommand.ScheduleCommand toCreateScheduleCommand(ScheduleRequest request);
 
-    TourDuration toTourDuration(TourDurationRequest request);
-
-    ParticipantLimit toParticipantLimit(ParticipantLimitRequest request);
-
-    Services toServices(ServicesRequest request);
+    UpdateTourCommand.ScheduleCommand toUpdateScheduleCommand(ScheduleRequest request);
 }

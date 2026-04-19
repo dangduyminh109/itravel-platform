@@ -7,8 +7,7 @@ public record TourListItemResponse(
         String name,
         String slug,
         String thumbnailUrl,
-        BigDecimal originalPrice,
-        BigDecimal discountPrice,
+        PricingResponse pricing,
         String categoryName,
         String status
 ) {}

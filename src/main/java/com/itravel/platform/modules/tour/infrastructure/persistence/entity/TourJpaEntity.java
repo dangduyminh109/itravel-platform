@@ -2,7 +2,6 @@ package com.itravel.platform.modules.tour.infrastructure.persistence.entity;
 
 import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
 import com.itravel.platform.modules.location.infrastructure.persistence.entity.LocationJpaEntity;
-import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
 import com.itravel.platform.modules.tour.domain.tour.TourStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,15 +42,32 @@ public class TourJpaEntity extends SoftDeletableJpaBaseModel {
     @Enumerated(EnumType.STRING)
     TourStatus status;
 
-    @Column(name = "price_original", precision = 19, scale = 2)
-    BigDecimal originalPrice;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "originalPrice", column = @Column(name = "adult_original_price")),
+        @AttributeOverride(name = "discountPrice", column = @Column(name = "adult_discount_price"))
+    })
+    TicketPriceJpaEntity adultPrice;
 
-    @Column(name = "price_discount", precision = 19, scale = 2)
-    BigDecimal discountPrice;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "originalPrice", column = @Column(name = "child_original_price")),
+        @AttributeOverride(name = "discountPrice", column = @Column(name = "child_discount_price"))
+    })
+    TicketPriceJpaEntity childPrice;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    CurrencyCode currency;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "originalPrice", column = @Column(name = "infant_original_price")),
+        @AttributeOverride(name = "discountPrice", column = @Column(name = "infant_discount_price"))
+    })
+    TicketPriceJpaEntity infantPrice;
+
+    @Column(name = "single_supplement_price")
+    BigDecimal singleSupplement;
+
+    @Column(name = "currency_code")
+    String currency;
 
     @Column(name = "duration_days")
     Integer durationDays;

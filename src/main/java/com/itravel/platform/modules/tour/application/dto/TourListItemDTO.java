@@ -1,7 +1,6 @@
 package com.itravel.platform.modules.tour.application.dto;
 
 import lombok.Builder;
-import java.math.BigDecimal;
 
 @Builder
 public record TourListItemDTO(
@@ -9,8 +8,7 @@ public record TourListItemDTO(
         String name,
         String slug,
         String thumbnailUrl,
-        BigDecimal originalPrice,
-        BigDecimal discountPrice,
+        PricingDTO pricing,
         String categoryName,
         String status
 ) {}

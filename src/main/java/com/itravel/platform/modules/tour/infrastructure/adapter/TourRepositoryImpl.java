@@ -4,11 +4,8 @@ import com.itravel.platform.modules.location.infrastructure.persistence.entity.L
 import com.itravel.platform.modules.location.infrastructure.persistence.repository.LocationJpaRepository;
 import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import com.itravel.platform.modules.tour.application.port.out.tour.TourRepository;
-import com.itravel.platform.modules.tour.domain.category.Category;
-import com.itravel.platform.modules.tour.domain.itinerary.Itinerary;
 import com.itravel.platform.modules.tour.domain.tour.Tour;
 import com.itravel.platform.modules.tour.domain.tour.TourId;
-import com.itravel.platform.modules.tour.domain.tourImage.TourImage;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.CategoryJpaEntity;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.ItineraryJpaEntity;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.TourImageJpaEntity;
@@ -21,7 +18,6 @@ import com.itravel.platform.modules.tour.infrastructure.persistence.repository.T
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -47,7 +43,7 @@ public class TourRepositoryImpl implements TourRepository {
     @Override
     public TourDetailDTO save(Tour tour) {
         CategoryJpaEntity category = null;
-        LocationJpaEntity departureLocation= null;
+        LocationJpaEntity departureLocation = null;
         LocationJpaEntity destinationLocation = null;
         List<TourImageJpaEntity> images = new ArrayList<>();
         List<ItineraryJpaEntity> itineraries = new ArrayList<>();
@@ -70,12 +66,12 @@ public class TourRepositoryImpl implements TourRepository {
         TourJpaEntity entity = tourJpaRepository.findById(tour.getId().value())
                 .orElse(new TourJpaEntity());
 
-        TourJpaEntity finalTour = TourMapper.toTourJpaEntity(entity,tour,category, departureLocation, destinationLocation, images, itineraries);
+        TourJpaEntity finalTour = TourMapper.toTourJpaEntity(entity, tour, category, departureLocation,
+                destinationLocation, images, itineraries);
 
         tourJpaRepository.save(finalTour);
         return TourMapper.toTourDetailDTO(finalTour);
     }
-
 
     @Override
     public void destroy(TourId id) {

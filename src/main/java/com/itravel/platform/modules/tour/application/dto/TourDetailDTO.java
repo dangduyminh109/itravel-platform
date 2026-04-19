@@ -2,7 +2,6 @@ package com.itravel.platform.modules.tour.application.dto;
 
 import lombok.Builder;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -14,9 +13,7 @@ public record TourDetailDTO(
         String summary,
         String description,
         String status,
-        BigDecimal originalPrice,
-        BigDecimal discountPrice,
-        String currency,
+        PricingDTO pricing,
         Integer durationDays,
         Integer durationNights,
         Integer minParticipants,

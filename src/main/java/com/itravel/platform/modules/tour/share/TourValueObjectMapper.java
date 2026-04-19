@@ -9,9 +9,15 @@ import com.itravel.platform.modules.tour.domain.tour.TourId;
 import com.itravel.platform.modules.tour.domain.tour.TourName;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-
-import java.math.BigDecimal;
 import java.util.List;
+import com.itravel.platform.modules.tour.api.dto.request.PricingRequest;
+import com.itravel.platform.modules.tour.api.dto.request.TicketPriceRequest;
+import com.itravel.platform.modules.tour.api.dto.response.PricingResponse;
+import com.itravel.platform.modules.tour.api.dto.response.TicketPriceResponse;
+import com.itravel.platform.modules.tour.application.dto.PricingDTO;
+import com.itravel.platform.modules.tour.application.dto.TicketPriceDTO;
+import com.itravel.platform.modules.tour.domain.tour.TicketPrice;
+import com.itravel.platform.modules.tour.infrastructure.persistence.entity.TicketPriceJpaEntity;
 
 @Mapper(
         componentModel = "spring",
@@ -34,24 +40,46 @@ public interface TourValueObjectMapper {
         return name != null ? name.value() : null;
     }
 
-    default Pricing toPricing(BigDecimal originalPrice, BigDecimal discountPrice, String currency) {
-        if (originalPrice == null && discountPrice == null && currency == null) {
-            return null;
-        }
-        CurrencyCode code = currency != null ? CurrencyCode.valueOf(currency) : null;
-        return new Pricing(originalPrice, discountPrice, code);
+    default TicketPrice toTicketPrice(TicketPriceRequest request) {
+        if (request == null) return null;
+        return new TicketPrice(request.originalPrice(), request.discountPrice());
     }
 
-    default BigDecimal fromOriginPrice(Pricing pricing) {
-        return pricing != null ? pricing.originalPrice() : null;
+    default Pricing toPricing(PricingRequest request) {
+        if (request == null) return null;
+        return new Pricing(
+                toTicketPrice(request.adultPrice()),
+                toTicketPrice(request.childPrice()),
+                toTicketPrice(request.infantPrice()),
+                request.singleSupplement(),
+                request.currency()
+        );
     }
 
-    default BigDecimal fromDiscountPrice(Pricing pricing) {
-        return pricing != null ? pricing.discountPrice() : null;
+    TicketPriceDTO toTicketPriceDTO(TicketPrice price);
+
+    PricingDTO toPricingDTO(Pricing pricing);
+
+    TicketPriceResponse toTicketPriceResponse(TicketPriceDTO dto);
+
+    PricingResponse toPricingResponse(PricingDTO dto);
+
+    TicketPriceJpaEntity toTicketPriceJpaEntity(TicketPrice pricing);
+
+    default TicketPrice toTicketPrice(TicketPriceDTO dto) {
+        if (dto == null) return null;
+        return new TicketPrice(dto.originalPrice(), dto.discountPrice());
     }
 
-    default String fromCurrency(Pricing pricing) {
-        return pricing != null && pricing.currency() != null ? pricing.currency().name() : null;
+    default Pricing toPricing(PricingDTO dto) {
+        if (dto == null) return null;
+        return new Pricing(
+                toTicketPrice(dto.adultPrice()),
+                toTicketPrice(dto.childPrice()),
+                toTicketPrice(dto.infantPrice()),
+                dto.singleSupplement(),
+                dto.currency()
+        );
     }
 
     default CurrencyCode toCurrencyCode(String currency) {

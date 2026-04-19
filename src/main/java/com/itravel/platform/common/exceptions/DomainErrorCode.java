@@ -76,10 +76,19 @@ public enum DomainErrorCode {
     INVALID_MIN_PARTICIPANTS("INVALID_MIN_PARTICIPANTS", "Minimum participants must not be negative", HttpStatus.BAD_REQUEST, "minParticipants"),
     INVALID_PARTICIPANTS_RANGE("INVALID_PARTICIPANTS_RANGE", "Minimum participants must not exceed maximum participants", HttpStatus.BAD_REQUEST, "minParticipants"),
     SERVICES_OVERLAP("SERVICES_OVERLAP", "Services cannot be both included and excluded", HttpStatus.BAD_REQUEST, "services"),
+    TOUR_NAME_CANNOT_BE_BLANK("TOUR_NAME_CANNOT_BE_BLANK", "Tour name cannot be blank", HttpStatus.BAD_REQUEST, "name"),
+    TOUR_STATUS_CANNOT_BE_BLANK("TOUR_STATUS_CANNOT_BE_BLANK", "Tour status cannot be blank", HttpStatus.BAD_REQUEST, "status"),
+    TOUR_STATUS_INVALID("TOUR_STATUS_INVALID", "Tour status is invalid", HttpStatus.BAD_REQUEST, "status"),
+    TOUR_CATEGORY_ID_CANNOT_BE_NULL("TOUR_CATEGORY_ID_CANNOT_BE_NULL", "Category ID cannot be null", HttpStatus.BAD_REQUEST, "categoryId"),
+    TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL("TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL", "Departure location ID cannot be null", HttpStatus.BAD_REQUEST, "departureLocationId"),
+    TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL("TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL", "Destination location ID cannot be null", HttpStatus.BAD_REQUEST, "destinationLocationId"),
     // ===== TOUR - CATEGORY =====
     INVALID_CATEGORY_ID("INVALID_CATEGORY_ID", "Invalid category id", HttpStatus.BAD_REQUEST, "categoryId"),
     INVALID_CATEGORY_NAME("INVALID_CATEGORY_NAME", "Invalid category name", HttpStatus.BAD_REQUEST, "categoryName"),
     CATEGORY_NAME_TOO_LONG("CATEGORY_NAME_TOO_LONG", "Category name is too long", HttpStatus.BAD_REQUEST, "categoryName"),
+    NAME_CANNOT_BE_BLANK("NAME_CANNOT_BE_BLANK", "Category name cannot be blank", HttpStatus.BAD_REQUEST, "name"),
+    STATUS_CANNOT_BE_BLANK("STATUS_CANNOT_BE_BLANK", "Status cannot be blank", HttpStatus.BAD_REQUEST, "status"),
+    STATUS_INVALID("STATUS_INVALID", "Status is invalid", HttpStatus.BAD_REQUEST, "status"),
 
     // ===== TOUR - ITINERARY =====
     INVALID_ITINERARY_ID("INVALID_ITINERARY_ID", "Invalid itinerary id", HttpStatus.BAD_REQUEST, "itineraryId"),
@@ -89,6 +98,11 @@ public enum DomainErrorCode {
     INVALID_ITINERARY_ACTIVITIES("INVALID_ITINERARY_ACTIVITIES", "Invalid itinerary activities", HttpStatus.BAD_REQUEST, "activities"),
     ITINERARY_NOT_FOUND("ITINERARY_NOT_FOUND", "Invalid not found", HttpStatus.BAD_REQUEST, "itinerary id"),
     DUPLICATE_ITINERARY_DAY("DUPLICATE_ITINERARY_DAY","Duplicate day numbers in itineraries", HttpStatus.BAD_REQUEST, "itineraries"),
+    TOUR_ITINERARY_DAY_NUMBER_CANNOT_BE_NULL("TOUR_ITINERARY_DAY_NUMBER_CANNOT_BE_NULL", "Day number cannot be null", HttpStatus.BAD_REQUEST, "dayNumber"),
+    TOUR_ITINERARY_TITLE_CANNOT_BE_BLANK("TOUR_ITINERARY_TITLE_CANNOT_BE_BLANK", "Itinerary title cannot be blank", HttpStatus.BAD_REQUEST, "title"),
+    TOUR_ITINERARY_TITLE_TOO_LONG("TOUR_ITINERARY_TITLE_TOO_LONG", "Itinerary title is too long", HttpStatus.BAD_REQUEST, "title"),
+    TOUR_ITINERARY_ACTIVITIES_CANNOT_BE_NULL("TOUR_ITINERARY_ACTIVITIES_CANNOT_BE_NULL", "Itinerary activities cannot be null", HttpStatus.BAD_REQUEST, "activities"),
+    TOUR_ITINERARY_ACTIVITIES_MIN("TOUR_ITINERARY_ACTIVITIES_MIN", "Must have at least one activity", HttpStatus.BAD_REQUEST, "activities"),
     // ===== TOUR - SCHEDULE =====
     INVALID_SCHEDULE_ID("INVALID_SCHEDULE_ID", "Invalid schedule id", HttpStatus.BAD_REQUEST, "scheduleId"),
     INVALID_DEPARTURE_DATE("INVALID_DEPARTURE_DATE", "Invalid departure date", HttpStatus.BAD_REQUEST, "departureDate"),
@@ -103,7 +117,15 @@ public enum DomainErrorCode {
     SURCHARGE_INVALID("SURCHARGE_INVALID", "Surcharge must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null),
     SCHEDULE_STATUS_CANNOT_BE_BLANK("SCHEDULE_STATUS_CANNOT_BE_BLANK", "Schedule status cannot be blank", HttpStatus.BAD_REQUEST, null),
     SCHEDULE_STATUS_INVALID("SCHEDULE_STATUS_INVALID", "Schedule status must be one of OPEN, FULL, CANCELLED, COMPLETED", HttpStatus.BAD_REQUEST, null),
-
+    TOTAL_SEATS_LOWER_THAN_MIN_PARTICIPANTS("TOTAL_SEATS_LOWER_THAN_MIN_PARTICIPANTS","Total seats is lower than minimum participants",HttpStatus.BAD_REQUEST,"totalSeats"),
+    MISSING_ADULT_PRICE("MISSING_ADULT_PRICE", "Adult price is missing", HttpStatus.BAD_REQUEST, "adultPrice"),
+    NEGATIVE_SINGLE_SUPPLEMENT("NEGATIVE_SINGLE_SUPPLEMENT", "Single supplement cannot be negative",HttpStatus.BAD_REQUEST, "singleSupplement"),
+    ORIGINAL_PRICE_MUST_BE_POSITIVE("ORIGINAL_PRICE_MUST_BE_POSITIVE", "Original price must be positive", HttpStatus.BAD_REQUEST, "originalPrice"),
+    DISCOUNT_PRICE_MUST_BE_POSITIVE("DISCOUNT_PRICE_MUST_BE_POSITIVE", "Discount price must be positive", HttpStatus.BAD_REQUEST, "discountPrice"),
+    DEPARTURE_DATE_MUST_BE_FUTURE("DEPARTURE_DATE_MUST_BE_FUTURE", "Departure date must be in the future", HttpStatus.BAD_REQUEST, "departureDate"),
+    TOTAL_SEATS_CANNOT_BE_NULL("TOTAL_SEATS_CANNOT_BE_NULL", "Total seats cannot be null", HttpStatus.BAD_REQUEST, "totalSeats"),
+    TOTAL_SEATS_INVALID("TOTAL_SEATS_INVALID", "Total seats must be non-negative", HttpStatus.BAD_REQUEST, "totalSeats"),
+    TOUR_ID_CANNOT_BE_BLANK("TOUR_ID_CANNOT_BE_BLANK", "Tour ID cannot be blank", HttpStatus.BAD_REQUEST, "tourId"),
     // ===== TOUR - IMAGE =====
     INVALID_TOUR_IMAGE_ID("INVALID_TOUR_IMAGE_ID", "Invalid tour image id", HttpStatus.BAD_REQUEST, "tourImageId"),
     INVALID_TOUR_IMAGE_URL("INVALID_TOUR_IMAGE_URL", "Invalid tour image url", HttpStatus.BAD_REQUEST, "imageUrl"),

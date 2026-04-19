@@ -30,5 +30,7 @@ public interface ScheduleJpaRepository extends JpaRepository<ScheduleJpaEntity, 
             @Param("tourId") String tourId,
             Pageable pageable
     );
+
+    void deleteByTourId(String tourId);
 }
 

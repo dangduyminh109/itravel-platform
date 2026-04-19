@@ -5,7 +5,6 @@ import com.itravel.platform.modules.tour.domain.category.CategoryId;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryDayNumber;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryId;
 import com.itravel.platform.modules.tour.domain.itinerary.ItineraryTitle;
-import com.itravel.platform.modules.tour.domain.schedule.AvailableSeats;
 import com.itravel.platform.modules.tour.domain.schedule.DepartureDate;
 import com.itravel.platform.modules.tour.domain.schedule.ScheduleId;
 import com.itravel.platform.modules.tour.domain.schedule.ScheduleStatus;
@@ -50,8 +49,9 @@ public record UpdateTourCommand(
     public record ScheduleCommand(
             ScheduleId id,
             DepartureDate departureDate,
-            AvailableSeats availableSeats,
+            Integer totalSeats,
             BigDecimal surcharge,
+            Pricing pricing,
             ScheduleStatus status
     ) {}
 

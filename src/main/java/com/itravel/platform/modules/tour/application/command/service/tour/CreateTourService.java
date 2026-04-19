@@ -78,8 +78,9 @@ public class CreateTourService implements CreateTourUseCase {
         command.schedules().forEach(item -> {
             CreateScheduleCommand scheduleCommand = new CreateScheduleCommand(
                 item.departureDate(),
-                item.availableSeats(),
+                item.totalSeats() != null ? item.totalSeats() : tour.getParticipantLimit().maxParticipants(),
                 item.surcharge(),
+                item.pricing(),        
                 item.status(),
                 tour.getId()
                 );
