@@ -19,6 +19,8 @@ public record Slug(String value) {
 
         String slug = Normalizer.normalize(input, Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .replace("đ", "d")
+                .replace("Đ", "d")
                 .toLowerCase()
                 .trim()
                 .replaceAll("[^a-z0-9\\s-]", "")

@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.tour.infrastructure.adapter;
 
 import com.itravel.platform.modules.tour.application.dto.CategoryDetailDTO;
+import com.itravel.platform.modules.tour.application.dto.CategoryGeneralInfoDTO;
 import com.itravel.platform.modules.tour.application.port.out.category.CategoryQueryPort;
 import com.itravel.platform.modules.tour.domain.category.Category;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.CategoryJpaEntity;
@@ -46,6 +47,11 @@ public class CategoryQueryAdapter implements CategoryQueryPort {
     @Override
     public boolean existsByNameAndIdNot(String name, Long id) {
         return repository.existsByNameAndIdNot(name, id);
+    }
+
+    @Override
+    public CategoryGeneralInfoDTO getCategoryGeneralInfoDTO() {
+        return repository.getCategoryGeneralInfoDTO();
     }
 
     @Override

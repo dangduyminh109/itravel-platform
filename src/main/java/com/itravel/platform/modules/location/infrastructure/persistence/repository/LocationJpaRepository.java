@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.location.infrastructure.persistence.repository;
 
+import com.itravel.platform.modules.location.application.dto.LocationGeneralInfoDTO;
 import com.itravel.platform.modules.location.domain.location.LocationStatus;
 import com.itravel.platform.modules.location.infrastructure.persistence.entity.LocationJpaEntity;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,20 @@ import java.util.List;
 
 @Repository
 public interface LocationJpaRepository extends JpaRepository<LocationJpaEntity, Long> {
+
+    @Query(value = "SELECT " +
+            "    COUNT(*) AS totalLocations, " +
+            "    COUNT(CASE WHEN u.status = 1 THEN 1 END) AS totalActiveLocations, " +
+            "    COUNT(CASE WHEN u.status = 0 THEN 1 END) AS totalInactiveLocations, " +
+            "    COUNT(" +
+            "       CASE " +
+            "           WHEN u.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+            "           THEN 1 " +
+            "       END" +
+            "    ) AS newLocations " +
+            "FROM location u ",
+            nativeQuery = true)
+    LocationGeneralInfoDTO getLocationGeneralInfoDTO();
 
     @Query(value = "SELECT u.* FROM location u " +
             "WHERE (:keyword IS NULL OR :keyword = '' OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +

@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.tour.infrastructure.persistence.repository;
 
+import com.itravel.platform.modules.tour.application.dto.CategoryGeneralInfoDTO;
 import com.itravel.platform.modules.tour.infrastructure.persistence.entity.CategoryJpaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,20 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryJpaRepository extends JpaRepository<CategoryJpaEntity, Long> {
+
+    @Query(value = "SELECT " +
+            "    COUNT(*) AS totalCategories, " +
+            "    COUNT(CASE WHEN c.status = 1 THEN 1 END) AS totalActiveCategories, " +
+            "    COUNT(CASE WHEN c.status = 0 THEN 1 END) AS totalInactiveCategories, " +
+            "    COUNT(" +
+            "       CASE " +
+            "           WHEN c.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+            "           THEN 1 " +
+            "       END" +
+            "    ) AS newCategories " +
+            "FROM category c ",
+            nativeQuery = true)
+    CategoryGeneralInfoDTO getCategoryGeneralInfoDTO();
 
     @Query(
             value = "SELECT c.* FROM category c " +

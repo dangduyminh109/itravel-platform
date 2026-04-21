@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.location.infrastructure.adapter;
 
 import com.itravel.platform.modules.location.application.dto.LocationDetailDTO;
+import com.itravel.platform.modules.location.application.dto.LocationGeneralInfoDTO;
 import com.itravel.platform.modules.location.application.dto.LocationListItemDTO;
 import com.itravel.platform.modules.location.application.port.out.location.LocationQueryPort;
 import com.itravel.platform.modules.location.domain.location.LocationStatus;
@@ -31,7 +32,7 @@ public class LocationQueryAdapter implements LocationQueryPort {
         List<LocationJpaEntity> locationTree = locationJpaRepository.getTree(isDeleted, status);
         Map<Long, LocationDetailDTO> map = new HashMap<>();
         List<LocationDetailDTO> roots = new ArrayList<>();
-        
+
         for (LocationJpaEntity entity : locationTree) {
             LocationDetailDTO location = LocationMapper.toDetailDTO(entity, false, false, 0);
             map.put(entity.getId(), location);
@@ -54,11 +55,13 @@ public class LocationQueryAdapter implements LocationQueryPort {
     }
 
     @Override
-    public Page<LocationListItemDTO> getLocations(String keyword, Pageable pageable, Boolean isDeleted, LocationStatus status) {
-        Page<LocationJpaEntity> locationJpaList = locationJpaRepository.getLocations(pageable, keyword, isDeleted, status);
-        Map<Long, LocationListItemDTO> mapOriginal = new HashMap<>(); 
-        Map<Long, LocationListItemDTO> mapLocation = new HashMap<>(); 
-        
+    public Page<LocationListItemDTO> getLocations(String keyword, Pageable pageable, Boolean isDeleted,
+            LocationStatus status) {
+        Page<LocationJpaEntity> locationJpaList = locationJpaRepository.getLocations(pageable, keyword, isDeleted,
+                status);
+        Map<Long, LocationListItemDTO> mapOriginal = new HashMap<>();
+        Map<Long, LocationListItemDTO> mapLocation = new HashMap<>();
+
         for (LocationJpaEntity entity : locationJpaList) {
             LocationListItemDTO origin = LocationMapper.toListItemDTO(entity, false, 0);
             LocationListItemDTO location = LocationMapper.toListItemDTO(entity, false, 0);
@@ -83,5 +86,10 @@ public class LocationQueryAdapter implements LocationQueryPort {
     public Optional<LocationDetailDTO> findById(Long id, boolean withChildren, boolean withParent, Integer level) {
         return locationJpaRepository.findById(id)
                 .map(entity -> LocationMapper.toDetailDTO(entity, withChildren, withParent, level));
+    }
+
+    @Override
+    public LocationGeneralInfoDTO getLocationGeneralInfoDTO() {
+        return locationJpaRepository.getLocationGeneralInfoDTO();
     }
 }

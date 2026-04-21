@@ -2,6 +2,7 @@ package com.itravel.platform.modules.location.application.port.in.location.facad
 
 import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.location.application.dto.LocationDetailDTO;
+import com.itravel.platform.modules.location.application.dto.LocationGeneralInfoDTO;
 import com.itravel.platform.modules.location.application.dto.LocationListItemDTO;
 import com.itravel.platform.modules.location.application.query.location.*;
 import com.itravel.platform.modules.location.domain.location.LocationStatus;
@@ -20,6 +21,7 @@ public class LocationQueryFacade {
     GetLocationsHandler getLocationsHandler;
     GetLocationHandler getLocationHandler;
     GetLocationTreeHandler getLocationTreeHandler;
+    GetLocationGeneralInfoHandler getLocationGeneralInfoHandler;
 
     public PageResponse<LocationListItemDTO> getLocations(String keyword, Pageable pageable, Boolean isDeleted, LocationStatus status) {
         return getLocationsHandler.execute(keyword, pageable, isDeleted, status);
@@ -31,5 +33,9 @@ public class LocationQueryFacade {
 
     public LocationDetailDTO getLocation(Long id) {
         return getLocationHandler.execute(id);
+    }
+
+    public LocationGeneralInfoDTO getLocationGeneralInfo() {
+        return getLocationGeneralInfoHandler.execute();
     }
 }

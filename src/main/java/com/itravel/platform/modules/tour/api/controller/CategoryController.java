@@ -5,6 +5,7 @@ import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.tour.api.dto.request.CreateCategoryRequest;
 import com.itravel.platform.modules.tour.api.dto.request.UpdateCategoryRequest;
 import com.itravel.platform.modules.tour.api.dto.request.UpdateStatusCategoryRequest;
+import com.itravel.platform.modules.tour.api.dto.response.CategoryGeneralInfoResponse;
 import com.itravel.platform.modules.tour.api.dto.response.CategoryResponse;
 import com.itravel.platform.modules.tour.api.mapper.CategoryRestMapper;
 import com.itravel.platform.modules.tour.application.command.model.category.CreateCategoryCommand;
@@ -31,6 +32,15 @@ public class CategoryController {
     CategoryRestMapper mapper;
     CategoryQueryFacade queryFacade;
     CategoryCommandFacade commandFacade;
+
+    @GetMapping("/general-info")
+    @PreAuthorize("hasAuthority('CATEGORY_VIEW')")
+    public ApiResponse<CategoryGeneralInfoResponse> getCategoryGeneralInfo() {
+        return ApiResponse.<CategoryGeneralInfoResponse>builder()
+                .success(true)
+                .response(mapper.toCategoryGeneralInfoResponse(queryFacade.getCategoryGeneralInfo()))
+                .build();
+    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('CATEGORY_VIEW')")

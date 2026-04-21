@@ -4,9 +4,11 @@ import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.location.api.dto.request.CreateLocationRequest;
 import com.itravel.platform.modules.location.api.dto.request.UpdateLocationRequest;
 import com.itravel.platform.modules.location.api.dto.request.UpdateStatusLocationRequest;
+import com.itravel.platform.modules.location.api.dto.response.LocationGeneralInfoResponse;
 import com.itravel.platform.modules.location.api.dto.response.LocationResponse;
 import com.itravel.platform.modules.location.application.command.location.*;
 import com.itravel.platform.modules.location.application.dto.LocationDetailDTO;
+import com.itravel.platform.modules.location.application.dto.LocationGeneralInfoDTO;
 import com.itravel.platform.modules.location.application.dto.LocationListItemDTO;
 import com.itravel.platform.modules.location.domain.location.Location;
 import com.itravel.platform.modules.location.share.LocationValueObjectMapper;
@@ -23,6 +25,8 @@ public interface LocationRestMapper {
         LocationResponse toLocationResponse(Location location);
 
         LocationResponse toLocationResponse(LocationDetailDTO dto);
+
+        LocationGeneralInfoResponse toLocationGeneralInfoResponse(LocationGeneralInfoDTO dto);
 
         LocationListItemDTO toLocationResponse(LocationListItemDTO dto);
 

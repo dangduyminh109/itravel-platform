@@ -5,6 +5,7 @@ import com.itravel.platform.common.dto.PageResponse;
 import com.itravel.platform.modules.location.api.dto.request.CreateLocationRequest;
 import com.itravel.platform.modules.location.api.dto.request.UpdateLocationRequest;
 import com.itravel.platform.modules.location.api.dto.request.UpdateStatusLocationRequest;
+import com.itravel.platform.modules.location.api.dto.response.LocationGeneralInfoResponse;
 import com.itravel.platform.modules.location.api.dto.response.LocationResponse;
 import com.itravel.platform.modules.location.api.mapper.LocationRestMapper;
 import com.itravel.platform.modules.location.application.command.location.CreateLocationCommand;
@@ -13,7 +14,6 @@ import com.itravel.platform.modules.location.application.dto.LocationListItemDTO
 import com.itravel.platform.modules.location.application.port.in.location.facade.LocationCommandFacade;
 import com.itravel.platform.modules.location.application.port.in.location.facade.LocationQueryFacade;
 import com.itravel.platform.modules.location.domain.location.LocationStatus;
-import com.itravel.platform.modules.location.domain.location.LocationId;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,6 +33,15 @@ public class LocationController {
     LocationCommandFacade locationCommandFacade;
     LocationQueryFacade locationQueryFacade;
     LocationRestMapper mapper;
+
+    @GetMapping("/general-info")
+    @PreAuthorize("hasAuthority('LOCATION_VIEW')")
+    public ApiResponse<LocationGeneralInfoResponse> getGeneralInfo() {
+        return ApiResponse.<LocationGeneralInfoResponse>builder()
+                .success(true)
+                .response(mapper.toLocationGeneralInfoResponse(locationQueryFacade.getLocationGeneralInfo()))
+                .build();
+    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('LOCATION_VIEW')")
