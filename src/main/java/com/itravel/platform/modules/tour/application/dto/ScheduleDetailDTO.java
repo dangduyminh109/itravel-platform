@@ -3,12 +3,12 @@ package com.itravel.platform.modules.tour.application.dto;
 import lombok.Builder;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 public record ScheduleDetailDTO(
     Long id,
-    LocalDate departureDate,
+    LocalDateTime departureDate,
     BigDecimal surcharge,
     Integer availableSeats,
     Integer totalSeats,

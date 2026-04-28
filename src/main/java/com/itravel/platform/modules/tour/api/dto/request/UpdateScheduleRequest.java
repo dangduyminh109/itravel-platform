@@ -6,26 +6,35 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public record UpdateScheduleRequest(
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UpdateScheduleRequest {
+
         @NotNull(message = "DEPARTURE_DATE_CANNOT_BE_NULL")
         @FutureDate(message = "DEPARTURE_DATE_MUST_BE_FUTURE")
-        LocalDate departureDate,
+        LocalDateTime departureDate;
 
         @Min(value = 0, message = "TOTAL_SEATS_INVALID")
-        Integer totalSeats,
+        Integer totalSeats;
 
         @DecimalMin(value = "0.0", inclusive = true, message = "SURCHARGE_MUST_BE_NON_NEGATIVE")
-        BigDecimal surcharge,
+        BigDecimal surcharge;
 
         @Valid
-        PricingRequest pricing,
+        PricingRequest pricing;
 
         @NotNull(message = "STATUS_CANNOT_BE_NULL")
-        @Pattern(regexp = "^$|^(OPEN|FULL|CANCELLED|COMPLETED)$", message = "SCHEDULE_STATUS_INVALID")
-        String status
-) {
+        @Pattern(
+                regexp = "^$|^(OPEN|FULL|CANCELLED|COMPLETED)$",
+                message = "SCHEDULE_STATUS_INVALID"
+        )
+        String status;
 }

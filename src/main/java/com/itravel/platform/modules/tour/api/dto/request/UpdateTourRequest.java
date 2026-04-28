@@ -2,47 +2,50 @@ package com.itravel.platform.modules.tour.api.dto.request;
 
 import com.itravel.platform.modules.tour.domain.tour.TourStatus;
 import jakarta.validation.Valid;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public record UpdateTourRequest(
-        String name,
-        String summary,
-        String description,
-        TourStatus status,
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UpdateTourRequest {
+
+        String name;
+        String summary;
+        String description;
+
+        TourStatus status;
 
         @Valid
-        PricingRequest pricing,
+        PricingRequest pricing;
 
         @Valid
-        TourDurationRequest duration,
+        TourDurationRequest duration;
 
         @Valid
-        ParticipantLimitRequest participantLimit,
+        ParticipantLimitRequest participantLimit;
 
         @Valid
-        ServicesRequest services,
+        ServicesRequest services;
 
-        Long categoryId,
-        Long departureLocationId,
-        Long destinationLocationId,
-
-        @Valid
-        List<ItineraryRequest> itineraries,
+        Long categoryId;
+        Long departureLocationId;
+        Long destinationLocationId;
 
         @Valid
-        List<ScheduleRequest> schedules,
+        List<ItineraryRequest> itineraries = new ArrayList<>();
 
         @Valid
-        List<TourImageRequest> tourImages,
+        List<ScheduleRequest> schedules = new ArrayList<>();
 
         @Valid
-        List<String> removedImageUrls
-) {
-        public UpdateTourRequest {
-                itineraries = itineraries == null ? List.of() : itineraries;
-                tourImages = tourImages == null ? List.of() : tourImages;
-                removedImageUrls = removedImageUrls == null ? List.of() : removedImageUrls;
-        }
+        List<TourImageRequest> tourImages = new ArrayList<>();
+
+        @Valid
+        List<String> removedImageUrls = new ArrayList<>();
 }
-

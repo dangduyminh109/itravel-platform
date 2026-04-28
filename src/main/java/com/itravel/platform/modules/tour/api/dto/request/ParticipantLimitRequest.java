@@ -1,6 +1,14 @@
 package com.itravel.platform.modules.tour.api.dto.request;
 
-public record ParticipantLimitRequest(
-        Integer minParticipants,
-        Integer maxParticipants
-) {}
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ParticipantLimitRequest{
+    Integer minParticipants;
+    Integer maxParticipants;
+}

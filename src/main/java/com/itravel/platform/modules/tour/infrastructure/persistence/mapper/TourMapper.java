@@ -185,6 +185,8 @@ public interface TourMapper {
                                                                 entity.getInfantPrice().getDiscountPrice()) : null,
                                                 entity.getSingleSupplement(),
                                                 entity.getCurrency() != null ? CurrencyCode.valueOf(entity.getCurrency()) : null))
+                                .departureLocation(entity.getDepartureLocation() != null ? entity.getDepartureLocation().getName() : null)
+                                .destinationLocation(entity.getDestinationLocation() != null ? entity.getDestinationLocation().getName() : null)
                                 .categoryName(entity.getCategory() != null ? entity.getCategory().getName() : null)
                                 .build();
         }

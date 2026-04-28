@@ -4,19 +4,21 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-public record PricingRequest(
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class PricingRequest {
         @Valid
-        TicketPriceRequest adultPrice,
-
+        TicketPriceRequest adultPrice;
         @Valid
-        TicketPriceRequest childPrice,
-
+        TicketPriceRequest childPrice;
         @Valid
-        TicketPriceRequest infantPrice,
-
-        @DecimalMin(value = "0.0", inclusive = true, message = "SINGLE_SUPPLEMENT_MUST_BE_NON_NEGATIVE")
-        BigDecimal singleSupplement,
-
-        CurrencyCode currency
-) {}
+        TicketPriceRequest infantPrice;
+        @DecimalMin(value = "0.0", inclusive = true, message = "SINGLE_SUPPLEMENT_MUST_BE_NON_NEGATIVE") BigDecimal singleSupplement;
+        CurrencyCode currency;
+}

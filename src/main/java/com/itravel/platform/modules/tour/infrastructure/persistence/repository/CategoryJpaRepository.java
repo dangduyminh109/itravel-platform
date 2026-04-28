@@ -51,7 +51,6 @@ public interface CategoryJpaRepository extends JpaRepository<CategoryJpaEntity, 
             @Param("isDeleted") Boolean isDeleted,
             @Param("status") String status
     );
-
     boolean existsByName(String name);
     boolean existsByNameAndIdNot(String name, Long id);
 }

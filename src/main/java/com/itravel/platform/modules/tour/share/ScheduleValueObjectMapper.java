@@ -7,7 +7,7 @@ import com.itravel.platform.modules.tour.domain.schedule.ScheduleStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Mapper(
         componentModel = "spring",
@@ -22,11 +22,11 @@ public interface ScheduleValueObjectMapper {
         return id != null ? id.value() : null;
     }
 
-    default DepartureDate toDepartureDate(LocalDate value) {
+    default DepartureDate toDepartureDate(LocalDateTime value) {
         return value != null ? new DepartureDate(value) : null;
     }
 
-    default LocalDate fromDepartureDate(DepartureDate date) {
+    default LocalDateTime fromDepartureDate(DepartureDate date) {
         return date != null ? date.value() : null;
     }
 

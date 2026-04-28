@@ -9,6 +9,8 @@ public record TourListItemDTO(
         String slug,
         String thumbnailUrl,
         PricingDTO pricing,
+        String departureLocation,
+        String destinationLocation,
         String categoryName,
         String status
 ) {}

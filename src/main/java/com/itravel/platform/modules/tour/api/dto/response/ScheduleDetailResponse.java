@@ -2,11 +2,11 @@ package com.itravel.platform.modules.tour.api.dto.response;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record ScheduleDetailResponse(
         Long id,
-        LocalDate departureDate,
+        LocalDateTime departureDate,
         BigDecimal surcharge,
         Integer availableSeats,
         Integer totalSeats,

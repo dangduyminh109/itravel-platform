@@ -12,8 +12,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Repository
@@ -23,8 +21,8 @@ public class TourQueryAdapter implements TourQueryPort {
     TourJpaRepository repository;
 
     @Override
-    public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, BigDecimal maxPrice, Pageable pageable) {
-        return repository.getTours(keyword, isDeleted, status, categoryId, departureId, maxPrice, pageable)
+    public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, Pageable pageable) {
+        return repository.getTours(keyword, isDeleted, status, categoryId, departureId, pageable)
                 .map(TourMapper::toTourListItemDTO);
     }
 

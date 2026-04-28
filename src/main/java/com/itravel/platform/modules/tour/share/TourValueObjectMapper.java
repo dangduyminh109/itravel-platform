@@ -42,17 +42,17 @@ public interface TourValueObjectMapper {
 
     default TicketPrice toTicketPrice(TicketPriceRequest request) {
         if (request == null) return null;
-        return new TicketPrice(request.originalPrice(), request.discountPrice());
+        return new TicketPrice(request.getOriginalPrice(), request.getDiscountPrice());
     }
 
     default Pricing toPricing(PricingRequest request) {
         if (request == null) return null;
         return new Pricing(
-                toTicketPrice(request.adultPrice()),
-                toTicketPrice(request.childPrice()),
-                toTicketPrice(request.infantPrice()),
-                request.singleSupplement(),
-                request.currency()
+                toTicketPrice(request.getAdultPrice()),
+                toTicketPrice(request.getChildPrice()),
+                toTicketPrice(request.getInfantPrice()),
+                request.getSingleSupplement(),
+                request.getCurrency()
         );
     }
 

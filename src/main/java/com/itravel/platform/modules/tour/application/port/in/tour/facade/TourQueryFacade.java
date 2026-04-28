@@ -4,7 +4,6 @@ import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import com.itravel.platform.modules.tour.application.dto.TourListItemDTO;
 import com.itravel.platform.modules.tour.application.query.tour.GetTourDetailHandler;
 import com.itravel.platform.modules.tour.application.query.tour.GetToursHandler;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,8 +18,8 @@ public class TourQueryFacade {
     GetToursHandler getToursHandler;
     GetTourDetailHandler getDetailHandler;
 
-    public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, BigDecimal maxPrice, Pageable pageable) {
-        return getToursHandler.getTours(keyword, isDeleted, status, categoryId, departureId, maxPrice, pageable);
+    public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, Pageable pageable) {
+        return getToursHandler.getTours(keyword, isDeleted, status, categoryId, departureId, pageable);
     }
 
     public TourDetailDTO getDetail(String slugOrId) {

@@ -43,10 +43,9 @@ public class TourController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long departureId,
-            @RequestParam(required = false) BigDecimal maxPrice,
             @PageableDefault(size = 10, page = 0) Pageable pageable
     ) {
-        Page<TourListItemDTO> tourPage = queryFacade.getTours(keyword, isDeleted, status, categoryId, departureId, maxPrice, pageable);
+        Page<TourListItemDTO> tourPage = queryFacade.getTours(keyword, isDeleted, status, categoryId, departureId, pageable);
         PageResponse<TourListItemResponse> response = PageResponse.<TourListItemResponse>builder()
                 .currentPage(tourPage.getNumber())
                 .pageSize(tourPage.getSize())

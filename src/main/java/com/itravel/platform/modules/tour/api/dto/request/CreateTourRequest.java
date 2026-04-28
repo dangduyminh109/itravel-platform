@@ -4,44 +4,59 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-
 import java.util.List;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-public record CreateTourRequest(
+import java.util.ArrayList;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class CreateTourRequest {
         @NotBlank(message = "TOUR_NAME_CANNOT_BE_BLANK")
-        String name,
-        String summary,
-        String description,
+        String name;
+
+        String summary;
+        String description;
 
         @NotNull(message = "TOUR_STATUS_CANNOT_BE_BLANK")
         @Pattern(regexp = "^$|^(ACTIVE|INACTIVE|DRAFT)$", message = "TOUR_STATUS_INVALID")
-        String status,
+        String status;
 
         @Valid
-        PricingRequest pricing,
+        PricingRequest pricing;
+
         @Valid
-        TourDurationRequest duration,
+        TourDurationRequest duration;
+
         @Valid
-        ParticipantLimitRequest participantLimit,
+        ParticipantLimitRequest participantLimit;
+
         @Valid
-        ServicesRequest services,
+        ServicesRequest services;
 
         @NotNull(message = "TOUR_CATEGORY_ID_CANNOT_BE_NULL")
-        Long categoryId,
+        Long categoryId;
+
         @NotNull(message = "TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL")
-        Long departureLocationId,
+        Long departureLocationId;
+
         @NotNull(message = "TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL")
-        Long destinationLocationId,
+        Long destinationLocationId;
 
         @Valid
-        List<ItineraryRequest> itineraries,
+        @Builder.Default
+        List<ItineraryRequest> itineraries = new ArrayList<>();
+
         @Valid
-        List<ScheduleRequest> schedules,
+        @Builder.Default
+        List<ScheduleRequest> schedules = new ArrayList<>();
+
         @Valid
-        List<TourImageRequest> tourImages
-) {
-        public CreateTourRequest {
-                itineraries = itineraries == null ? List.of() : itineraries;
-                tourImages = tourImages == null ? List.of() : tourImages;
-        }
+        @Builder.Default
+        List<TourImageRequest> tourImages = new ArrayList<>();
 }

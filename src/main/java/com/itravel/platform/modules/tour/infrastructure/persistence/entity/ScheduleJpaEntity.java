@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,7 +24,7 @@ public class ScheduleJpaEntity extends SoftDeletableJpaBaseModel {
     Long id;
 
     @Column(nullable = false)
-    LocalDate departureDate;
+    LocalDateTime departureDate;
 
     @Column
     Integer totalSeats;
