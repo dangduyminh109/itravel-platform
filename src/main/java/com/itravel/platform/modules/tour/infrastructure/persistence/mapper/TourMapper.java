@@ -248,4 +248,60 @@ public interface TourMapper {
                                 .updatedAt(entity.getUpdatedAt())
                                 .build();
         }
+
+        static TourDTO toTourDTO (TourJpaEntity entity) {
+                List<ItineraryDTO> itineraries = entity.getItineraries().stream()
+                        .map(item -> ItineraryDTO.builder()
+                                .id(item.getId())
+                                .dayNumber(item.getDayNumber())
+                                .title(item.getTitle())
+                                .description(item.getDescription())
+                                .activities(item.getActivities())
+                                .build())
+                        .collect(Collectors.toList());
+
+                List<TourImageDTO> tourImages = entity.getTourImages().stream()
+                        .map(item -> TourImageDTO.builder()
+                                .id(item.getId())
+                                .imageUrl(item.getImageUrl())
+                                .isThumbnail(item.getIsThumbnail())
+                                .build())
+                        .collect(Collectors.toList());
+
+                return TourDTO.builder()
+                        .id(entity.getId())
+                        .name(entity.getName())
+                        .slug(entity.getSlug())
+                        .summary(entity.getSummary())
+                        .description(entity.getDescription())
+                        .status(entity.getStatus() != null ? entity.getStatus().name() : null)
+                        .pricing(new PricingDTO(
+                                entity.getAdultPrice() != null ? new TicketPriceDTO(
+                                        entity.getAdultPrice().getOriginalPrice(),
+                                        entity.getAdultPrice().getDiscountPrice()) : null,
+                                entity.getChildPrice() != null ? new TicketPriceDTO(
+                                        entity.getChildPrice().getOriginalPrice(),
+                                        entity.getChildPrice().getDiscountPrice()) : null,
+                                entity.getInfantPrice() != null ? new TicketPriceDTO(
+                                        entity.getInfantPrice().getOriginalPrice(),
+                                        entity.getInfantPrice().getDiscountPrice()) : null,
+                                entity.getSingleSupplement(),
+                                entity.getCurrency() != null ? CurrencyCode.valueOf(entity.getCurrency()) : null))
+                        .duration(new DurationDTO(entity.getDurationDays(),entity.getDurationNights()))
+                        .participantLimit(new ParticipantLimitDTO(entity.getMinParticipants(), entity.getMaxParticipants()))
+                        .services(new ServicesDTO(entity.getIncludedServices(), entity.getExcludedServices()))
+                        .categoryId(entity.getCategory() != null ? entity.getCategory().getId() : null)
+                        .departureLocationId(entity.getDepartureLocation() != null
+                                ? entity.getDepartureLocation().getId()
+                                : null)
+                        .destinationLocationId(entity.getDestinationLocation() != null
+                                ? entity.getDestinationLocation().getId()
+                                : null)
+                        .itineraries(itineraries)
+                        .tourImages(tourImages)
+                        .createdAt(entity.getCreatedAt())
+                        .updatedAt(entity.getUpdatedAt())
+                        .deletedAt(entity.getDeletedAt())
+                        .build();
+        }
 }

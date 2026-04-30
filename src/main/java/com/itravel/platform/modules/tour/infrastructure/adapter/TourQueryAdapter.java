@@ -1,5 +1,6 @@
 package com.itravel.platform.modules.tour.infrastructure.adapter;
 
+import com.itravel.platform.modules.tour.application.dto.TourDTO;
 import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import com.itravel.platform.modules.tour.application.dto.TourListItemDTO;
 import com.itravel.platform.modules.tour.application.port.out.tour.TourQueryPort;
@@ -24,6 +25,12 @@ public class TourQueryAdapter implements TourQueryPort {
     public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, Pageable pageable) {
         return repository.getTours(keyword, isDeleted, status, categoryId, departureId, pageable)
                 .map(TourMapper::toTourListItemDTO);
+    }
+
+    @Override
+    public Optional<TourDTO> getTour(String id) {
+        return repository.findById(id)
+                .map(TourMapper::toTourDTO);
     }
 
     @Override

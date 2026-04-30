@@ -3,7 +3,7 @@ package com.itravel.platform.modules.tour.api.dto.response;
 import java.time.Instant;
 import java.util.List;
 
-public record TourDetailResponse(
+public record TourResponse(
         String id,
         String name,
         String slug,
@@ -11,17 +11,15 @@ public record TourDetailResponse(
         String description,
         String status,
         PricingResponse pricing,
-        Integer durationDays,
-        Integer durationNights,
-        Integer minParticipants,
-        Integer maxParticipants,
-        List<String> includedServices,
-        List<String> excludedServices,
-        String categoryName,
-        String departureLocationName,
-        String destinationLocationName,
+        DurationResponse duration,
+        ParticipantLimitResponse participantLimit,
+        ServicesResponse services,
+        Long categoryId,
+        Long departureLocationId,
+        Long destinationLocationId,
         List<ItineraryResponse> itineraries,
         List<TourImageResponse> tourImages,
         Instant createdAt,
-        Instant updatedAt
+        Instant updatedAt,
+        Instant deletedAt
 ) {}

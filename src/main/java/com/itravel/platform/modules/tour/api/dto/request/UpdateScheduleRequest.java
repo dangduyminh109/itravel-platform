@@ -33,7 +33,7 @@ public class UpdateScheduleRequest {
 
         @NotNull(message = "STATUS_CANNOT_BE_NULL")
         @Pattern(
-                regexp = "^$|^(OPEN|FULL|CANCELLED|COMPLETED)$",
+                regexp = "^$|^(UPCOMING|OPEN|FULL|CANCELLED|COMPLETED)$",
                 message = "SCHEDULE_STATUS_INVALID"
         )
         String status;

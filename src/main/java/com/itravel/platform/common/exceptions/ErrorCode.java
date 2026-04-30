@@ -94,7 +94,8 @@ public enum ErrorCode {
     // schedule
     SCHEDULE_STATUS_INVALID("SCHEDULE_STATUS_INVALID", "Status must be OPEN, FULL, CANCELLED or COMPLETED.", HttpStatus.BAD_REQUEST, "status"),
     TOUR_ID_CANNOT_BE_BLANK("TOUR_ID_CANNOT_BE_BLANK", "Tour id cannot be blank", HttpStatus.BAD_REQUEST, null),
-    AVAILABLE_SEATS_INVALID("AVAILABLE_SEATS_INVALID", "Available seats must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null)
+    AVAILABLE_SEATS_INVALID("AVAILABLE_SEATS_INVALID", "Available seats must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null),
+    DISCOUNT_PRICE_MUST_BE_POSITIVE("DISCOUNT_PRICE_MUST_BE_POSITIVE","Discount price must be greater than 0.",HttpStatus.BAD_REQUEST,"discountPrice")
     ;
 
     String code;

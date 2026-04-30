@@ -36,6 +36,8 @@ public interface TourRestMapper {
 
     TourDetailResponse toTourDetailResponse(TourDetailDTO dto);
 
+    TourResponse toTourResponse(TourDTO dto);
+
     CreateTourCommand.ItineraryCommand toCreateItineraryCommand(ItineraryRequest request);
 
     UpdateTourCommand.ItineraryCommand toUpdateItineraryCommand(ItineraryRequest request);

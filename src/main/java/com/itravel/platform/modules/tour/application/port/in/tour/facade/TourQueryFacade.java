@@ -1,8 +1,10 @@
 package com.itravel.platform.modules.tour.application.port.in.tour.facade;
 
+import com.itravel.platform.modules.tour.application.dto.TourDTO;
 import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import com.itravel.platform.modules.tour.application.dto.TourListItemDTO;
 import com.itravel.platform.modules.tour.application.query.tour.GetTourDetailHandler;
+import com.itravel.platform.modules.tour.application.query.tour.GetTourHandler;
 import com.itravel.platform.modules.tour.application.query.tour.GetToursHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +19,14 @@ import org.springframework.stereotype.Service;
 public class TourQueryFacade {
     GetToursHandler getToursHandler;
     GetTourDetailHandler getDetailHandler;
+    GetTourHandler getTourHandler;
 
     public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, Pageable pageable) {
         return getToursHandler.getTours(keyword, isDeleted, status, categoryId, departureId, pageable);
+    }
+
+    public TourDTO getTour(String id) {
+        return getTourHandler.getTours(id);
     }
 
     public TourDetailDTO getDetail(String slugOrId) {

@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleRequest {
-
         Long id;
 
         @NotNull(message = "DEPARTURE_DATE_CANNOT_BE_NULL")

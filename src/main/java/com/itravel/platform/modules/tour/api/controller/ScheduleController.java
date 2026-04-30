@@ -31,7 +31,7 @@ public class ScheduleController {
 
     @GetMapping("/{tourId}")
     @PreAuthorize("hasAuthority('SCHEDULE_VIEW')")
-    public ApiResponse<PageResponse<ScheduleDetailResponse>> getTours(
+    public ApiResponse<PageResponse<ScheduleDetailResponse>> getSchedules(
             @PathVariable String tourId,
             @RequestParam(required = false) Boolean isDeleted,
             @PageableDefault(size = 10, page = 0) Pageable pageable

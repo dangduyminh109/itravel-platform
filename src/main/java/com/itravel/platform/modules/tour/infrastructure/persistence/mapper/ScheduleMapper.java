@@ -13,7 +13,6 @@ import com.itravel.platform.modules.tour.share.ScheduleValueObjectMapper;
 import com.itravel.platform.modules.tour.share.TourValueObjectMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(
@@ -72,12 +71,17 @@ public interface ScheduleMapper {
                 .bookedSeats(entity.getBookedSeats())
                 .lockedSeats(entity.getLockedSeats())
                 .pricing(new PricingDTO(
-                        entity.getAdultPrice() != null ? new TicketPriceDTO(entity.getAdultPrice().getOriginalPrice(), entity.getAdultPrice().getDiscountPrice()) : null,
-                        entity.getChildPrice() != null ? new TicketPriceDTO(entity.getChildPrice().getOriginalPrice(), entity.getChildPrice().getDiscountPrice()) : null,
-                        entity.getInfantPrice() != null ? new TicketPriceDTO(entity.getInfantPrice().getOriginalPrice(), entity.getInfantPrice().getDiscountPrice()) : null,
+                        entity.getAdultPrice() != null ? new TicketPriceDTO(
+                                entity.getAdultPrice().getOriginalPrice(),
+                                entity.getAdultPrice().getDiscountPrice()) : null,
+                        entity.getChildPrice() != null ? new TicketPriceDTO(
+                                entity.getChildPrice().getOriginalPrice(),
+                                entity.getChildPrice().getDiscountPrice()) : null,
+                        entity.getInfantPrice() != null ? new TicketPriceDTO(
+                                entity.getInfantPrice().getOriginalPrice(),
+                                entity.getInfantPrice().getDiscountPrice()) : null,
                         entity.getSingleSupplement(),
-                        entity.getCurrency() != null ? CurrencyCode.valueOf(entity.getCurrency()) : null
-                ))
+                        entity.getCurrency() != null ? CurrencyCode.valueOf(entity.getCurrency()) : null))
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())

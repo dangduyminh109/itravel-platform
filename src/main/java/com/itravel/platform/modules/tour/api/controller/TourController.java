@@ -7,8 +7,10 @@ import com.itravel.platform.modules.tour.api.dto.request.UpdateTourRequest;
 import com.itravel.platform.modules.tour.api.dto.request.UpdateTourStatusRequest;
 import com.itravel.platform.modules.tour.api.dto.response.TourDetailResponse;
 import com.itravel.platform.modules.tour.api.dto.response.TourListItemResponse;
+import com.itravel.platform.modules.tour.api.dto.response.TourResponse;
 import com.itravel.platform.modules.tour.api.mapper.TourRestMapper;
 import com.itravel.platform.modules.tour.application.command.model.tour.UpdateTourCommand;
+import com.itravel.platform.modules.tour.application.dto.TourDTO;
 import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import com.itravel.platform.modules.tour.application.dto.TourListItemDTO;
 import com.itravel.platform.modules.tour.application.port.in.tour.facade.TourCommandFacade;
@@ -23,8 +25,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 @RestController
 @AllArgsConstructor
@@ -60,7 +60,17 @@ public class TourController {
                 .build();
     }
 
-    @GetMapping("/{slugOrId}")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('TOUR_VIEW')")
+    public ApiResponse<TourResponse> getTour(@PathVariable String id) {
+        TourDTO dto = queryFacade.getTour(id);
+        return ApiResponse.<TourResponse>builder()
+                .success(true)
+                .response(mapper.toTourResponse(dto))
+                .build();
+    }
+
+    @GetMapping("/{slugOrId}/detail")
     @PreAuthorize("hasAuthority('TOUR_VIEW')")
     public ApiResponse<TourDetailResponse> getTourDetail(@PathVariable String slugOrId) {
         TourDetailDTO dto = queryFacade.getDetail(slugOrId);
