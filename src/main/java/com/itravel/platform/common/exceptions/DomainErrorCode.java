@@ -130,6 +130,28 @@ public enum DomainErrorCode {
     INVALID_TOUR_IMAGE_ID("INVALID_TOUR_IMAGE_ID", "Invalid tour image id", HttpStatus.BAD_REQUEST, "tourImageId"),
     INVALID_TOUR_IMAGE_URL("INVALID_TOUR_IMAGE_URL", "Invalid tour image url", HttpStatus.BAD_REQUEST, "imageUrl"),
 
+    // ===== BOOKING =====
+    INVALID_BOOKING_ID("INVALID_BOOKING_ID", "Invalid booking id", HttpStatus.BAD_REQUEST, "bookingId"),
+    INVALID_BOOKING_CODE("INVALID_BOOKING_CODE", "Invalid booking code", HttpStatus.BAD_REQUEST, "bookingCode"),
+    INVALID_BOOKING_CODE_FORMAT("INVALID_BOOKING_CODE_FORMAT", "Booking code format is invalid", HttpStatus.BAD_REQUEST, "bookingCode"),
+    BOOKING_CONTACT_FULLNAME_REQUIRED("BOOKING_CONTACT_FULLNAME_REQUIRED", "Contact full name is required", HttpStatus.BAD_REQUEST, "fullName"),
+    BOOKING_CONTACT_EMAIL_INVALID("BOOKING_CONTACT_EMAIL_INVALID", "Contact email is invalid", HttpStatus.BAD_REQUEST, "email"),
+    BOOKING_CONTACT_PHONE_INVALID("BOOKING_CONTACT_PHONE_INVALID", "Contact phone is invalid", HttpStatus.BAD_REQUEST, "phone"),
+    BOOKING_INVALID_STATE_TRANSITION("BOOKING_INVALID_STATE_TRANSITION", "Invalid booking state transition", HttpStatus.CONFLICT, "status"),
+    BOOKING_CANNOT_CANCEL_COMPLETED("BOOKING_CANNOT_CANCEL_COMPLETED", "Cannot cancel a completed or already cancelled booking", HttpStatus.CONFLICT, "status"),
+    BOOKING_EXPIRED("BOOKING_EXPIRED", "Booking has expired", HttpStatus.CONFLICT, "status"),
+    INVALID_PRICE_LINE_NAME("INVALID_PRICE_LINE_NAME", "Price line name cannot be blank", HttpStatus.BAD_REQUEST, "name"),
+    INVALID_UNIT_PRICE("INVALID_UNIT_PRICE", "Unit price must be non-negative", HttpStatus.BAD_REQUEST, "unitPrice"),
+    INVALID_PRICE_LINE_QUANTITY("INVALID_PRICE_LINE_QUANTITY", "Quantity must be greater than 0", HttpStatus.BAD_REQUEST, "quantity"),
+    INVALID_PASSENGER_NAME("INVALID_PASSENGER_NAME", "Passenger name cannot be blank", HttpStatus.BAD_REQUEST, "fullName"),
+    INVALID_DATE_OF_BIRTH("INVALID_DATE_OF_BIRTH", "Date of birth is invalid", HttpStatus.BAD_REQUEST, "dateOfBirth"),
+    GENDER_INVALID("GENDER_INVALID", "Gender must be MALE, FEMALE or OTHER", HttpStatus.BAD_REQUEST, "gender"),
+    INVALID_BOOKING_ITEM_REFERENCE("INVALID_BOOKING_ITEM_REFERENCE", "Booking item reference ID cannot be blank", HttpStatus.BAD_REQUEST, "referenceId"),
+    INVALID_SERVICE_TYPE("INVALID_SERVICE_TYPE", "Service type is invalid", HttpStatus.BAD_REQUEST, "serviceType"),
+    SNAPSHOT_DATA_REQUIRED("SNAPSHOT_DATA_REQUIRED", "Snapshot data is required for booking item", HttpStatus.BAD_REQUEST, "snapshotData"),
+    PRICE_BREAKDOWN_REQUIRED("PRICE_BREAKDOWN_REQUIRED", "Price breakdown cannot be empty", HttpStatus.BAD_REQUEST, "priceBreakdown"),
+    BOOKING_CANNOT_MODIFY("BOOKING_CANNOT_MODIFY", "Cannot modify booking in current status", HttpStatus.CONFLICT, "status"),
+
     ;
     String code;
     String message;

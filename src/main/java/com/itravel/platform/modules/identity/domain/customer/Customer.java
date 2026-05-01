@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.identity.domain.customer;
 
-import com.itravel.platform.modules.identity.domain.user.Gender;
+import com.itravel.platform.common.domain.enums.Gender;
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.identity.domain.user.Avatar;
 import com.itravel.platform.modules.identity.domain.user.FullName;

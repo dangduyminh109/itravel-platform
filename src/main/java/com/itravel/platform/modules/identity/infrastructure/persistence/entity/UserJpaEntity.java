@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.infrastructure.persistence.entity;
 
 import com.itravel.platform.common.infrastructure.SoftDeletableJpaBaseModel;
-import com.itravel.platform.modules.identity.domain.user.Gender;
+import com.itravel.platform.common.domain.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

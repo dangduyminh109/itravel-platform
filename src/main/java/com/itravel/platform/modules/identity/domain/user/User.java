@@ -1,6 +1,7 @@
 package com.itravel.platform.modules.identity.domain.user;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
+import com.itravel.platform.common.domain.enums.Gender;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

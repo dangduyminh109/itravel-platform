@@ -1,7 +1,7 @@
 package com.itravel.platform.modules.identity.application.command.model.customer;
 
 import com.itravel.platform.modules.identity.domain.account.AccountStatus;
-import com.itravel.platform.modules.identity.domain.user.Gender;
+import com.itravel.platform.common.domain.enums.Gender;
 import com.itravel.platform.modules.identity.domain.user.*;
 import com.itravel.platform.modules.identity.domain.account.*;
 import com.itravel.platform.modules.identity.domain.customer.*;

@@ -9,7 +9,7 @@ import com.itravel.platform.modules.identity.api.dto.response.AddressResponse;
 import com.itravel.platform.modules.identity.api.dto.response.IdentityCardResponse;
 import com.itravel.platform.modules.identity.api.dto.response.PassportResponse;
 import com.itravel.platform.modules.identity.domain.role.Role;
-import com.itravel.platform.modules.identity.domain.user.Gender;
+import com.itravel.platform.common.domain.enums.Gender;
 import com.itravel.platform.modules.identity.domain.role.PermissionType;
 import com.itravel.platform.modules.identity.domain.user.UserId;
 import com.itravel.platform.modules.identity.domain.user.Email;
