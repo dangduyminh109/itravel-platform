@@ -94,6 +94,7 @@ public interface ScheduleMapper {
                                         entity.getCurrency() != null
                                                         ? CurrencyCode.valueOf(entity.getCurrency())
                                                         : null))
+                        .tourId(entity.getTourId())
                         .createdAt(entity.getCreatedAt())
                         .updatedAt(entity.getUpdatedAt())
                         .deletedAt(entity.getDeletedAt())

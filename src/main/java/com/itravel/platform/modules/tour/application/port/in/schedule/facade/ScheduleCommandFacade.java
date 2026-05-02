@@ -3,12 +3,12 @@ package com.itravel.platform.modules.tour.application.port.in.schedule.facade;
 import com.itravel.platform.modules.tour.application.command.model.schedule.CreateScheduleCommand;
 import com.itravel.platform.modules.tour.application.command.model.schedule.DeleteScheduleCommand;
 import com.itravel.platform.modules.tour.application.command.model.schedule.UpdateScheduleCommand;
-import com.itravel.platform.modules.tour.application.command.model.tour.*;
 import com.itravel.platform.modules.tour.application.dto.ScheduleDetailDTO;
 import com.itravel.platform.modules.tour.application.port.in.schedule.CreateScheduleUseCase;
 import com.itravel.platform.modules.tour.application.port.in.schedule.DestroyScheduleUseCase;
+import com.itravel.platform.modules.tour.application.port.in.schedule.LockScheduleInventoryUseCase;
+import com.itravel.platform.modules.tour.application.port.in.schedule.UnlockScheduleInventoryUseCase;
 import com.itravel.platform.modules.tour.application.port.in.schedule.UpdateScheduleUseCase;
-import com.itravel.platform.modules.tour.application.port.in.tour.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +21,8 @@ public class ScheduleCommandFacade {
     CreateScheduleUseCase createUseCase;
     UpdateScheduleUseCase updateUseCase;
     DestroyScheduleUseCase destroyUseCase;
+    LockScheduleInventoryUseCase lockInventoryUseCase;
+    UnlockScheduleInventoryUseCase unlockInventoryUseCase;
 
     public ScheduleDetailDTO create(CreateScheduleCommand command) {
         return createUseCase.execute(command);
@@ -32,5 +34,13 @@ public class ScheduleCommandFacade {
 
     public void destroy(DeleteScheduleCommand command) {
         destroyUseCase.execute(command);
+    }
+
+    public boolean lockInventory(String scheduleId, int quantity) {
+        return lockInventoryUseCase.execute(scheduleId, quantity);
+    }
+
+    public void unlockInventory(String scheduleId, int quantity) {
+        unlockInventoryUseCase.execute(scheduleId, quantity);
     }
 }

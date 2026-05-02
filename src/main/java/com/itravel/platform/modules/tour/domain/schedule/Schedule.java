@@ -2,6 +2,7 @@ package com.itravel.platform.modules.tour.domain.schedule;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.tour.domain.schedule.exception.InvalidScheduleStatusException;
+import com.itravel.platform.modules.tour.domain.schedule.exception.NotEnoughAvailableSeatsException;
 import com.itravel.platform.modules.tour.domain.schedule.exception.TotalSeatsLowerThanMinParticipantsException;
 import com.itravel.platform.modules.tour.domain.tour.Pricing;
 import com.itravel.platform.modules.tour.domain.tour.TourId;
@@ -141,6 +142,22 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
     public void updateSeats(ScheduleSeats seats, Integer minParticipants) {
         this.seats = seats;
         checkValidSeats(minParticipants);
+        touch();
+    }
+
+    public void lockSeats(int quantity) {
+        if (quantity <= 0) return;
+        if (this.seats.available() < quantity) {
+            throw new NotEnoughAvailableSeatsException();
+        }
+        this.seats = new ScheduleSeats(this.seats.total(), this.seats.booked(), this.seats.locked() + quantity);
+        touch();
+    }
+
+    public void unlockSeats(int quantity) {
+        if (quantity <= 0) return;
+        int newLocked = Math.max(0, this.seats.locked() - quantity);
+        this.seats = new ScheduleSeats(this.seats.total(), this.seats.booked(), newLocked);
         touch();
     }
 

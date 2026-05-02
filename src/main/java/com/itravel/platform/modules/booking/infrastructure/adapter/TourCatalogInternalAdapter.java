@@ -7,6 +7,8 @@ import com.itravel.platform.modules.booking.domain.bookingItem.TourSnapshot;
 import com.itravel.platform.modules.booking.domain.passenger.PassengerType;
 import com.itravel.platform.modules.tour.application.port.in.schedule.facade.ScheduleCommandFacade;
 import com.itravel.platform.modules.tour.application.port.in.schedule.facade.ScheduleQueryFacade;
+import com.itravel.platform.modules.tour.application.port.in.tour.facade.TourQueryFacade;
+import com.itravel.platform.modules.tour.application.dto.TourDetailDTO;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,26 +25,30 @@ import com.itravel.platform.modules.tour.application.dto.PricingDTO;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TourCatalogInternalAdapter implements TourCatalogPort {
-
     ScheduleQueryFacade scheduleQueryFacade;
     ScheduleCommandFacade scheduleCommandFacade;
+    TourQueryFacade tourQueryFacade;
 
     @Override
     public boolean verifyAndLockInventory(String scheduleId, int requiredQuantity) {
-        return true;
+        return scheduleCommandFacade.lockInventory(scheduleId, requiredQuantity);
     }
 
     @Override
     public void unlockInventory(String scheduleId, int quantityToUnlock) {
+        scheduleCommandFacade.unlockInventory(scheduleId, quantityToUnlock);
     }
 
     @Override
     public TourSnapshot getTourSnapshot(String scheduleId) {
+        ScheduleDetailDTO scheduleDetail = scheduleQueryFacade.getDetail(scheduleId);
+        TourDetailDTO tourDetail = tourQueryFacade.getDetail(scheduleDetail.tourId());
+
         return new TourSnapshot(
-                "Tour Name Placeholder",
-                null,
-                "Departure",
-                "Destination");
+                tourDetail.name(),
+                scheduleDetail.departureDate(),
+                tourDetail.departureLocationName(),
+                tourDetail.destinationLocationName());
     }
 
     @Override

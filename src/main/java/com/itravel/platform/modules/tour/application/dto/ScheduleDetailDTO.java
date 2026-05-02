@@ -16,6 +16,7 @@ public record ScheduleDetailDTO(
     Integer lockedSeats,
     PricingDTO pricing,
     String status,
+    String tourId,
     Instant createdAt,
     Instant updatedAt,
     Instant deletedAt
