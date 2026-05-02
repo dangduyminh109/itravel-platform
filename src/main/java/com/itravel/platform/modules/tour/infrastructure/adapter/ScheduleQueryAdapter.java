@@ -25,7 +25,7 @@ public class ScheduleQueryAdapter implements ScheduleQueryPort {
     }
 
     @Override
-    public Optional<ScheduleDetailDTO> getById(Long id) {
+    public Optional<ScheduleDetailDTO> getById(String id) {
         return repository.findById(id)
                 .map(ScheduleMapper::toScheduleDetailDTO);
     }

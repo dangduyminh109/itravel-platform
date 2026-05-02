@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ScheduleQueryPort {
     Page<ScheduleDetailDTO> getScheduleListFromTour(Boolean isDeleted, String tourId, Pageable pageable);
-    Optional<ScheduleDetailDTO> getById(Long id);
+    Optional<ScheduleDetailDTO> getById(String id);
 }

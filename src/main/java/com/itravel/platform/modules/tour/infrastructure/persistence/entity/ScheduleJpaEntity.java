@@ -20,8 +20,7 @@ import java.time.LocalDate;
 @Table(name = "schedule")
 public class ScheduleJpaEntity extends SoftDeletableJpaBaseModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    String id;
 
     @Column(nullable = false)
     LocalDate departureDate;

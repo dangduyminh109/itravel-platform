@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Builder
 public record ScheduleDetailDTO(
-    Long id,
+    String id,
     LocalDate departureDate,
     BigDecimal surcharge,
     Integer availableSeats,

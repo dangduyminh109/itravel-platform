@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ScheduleJpaRepository extends JpaRepository<ScheduleJpaEntity, Long> {
+public interface ScheduleJpaRepository extends JpaRepository<ScheduleJpaEntity, String> {
     @Query(
             value = "SELECT s.*  FROM schedule s " +
                     "WHERE (:isDeleted IS NULL " +

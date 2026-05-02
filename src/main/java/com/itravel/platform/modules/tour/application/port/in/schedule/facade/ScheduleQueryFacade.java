@@ -21,7 +21,7 @@ public class ScheduleQueryFacade {
         return getScheduleListFormTourHandler.getScheduleList(isDeleted, tourId, pageable);
     }
 
-    public ScheduleDetailDTO getDetail(Long tourId) {
-        return getScheduleDetailHandler.getDetail(tourId);
+    public ScheduleDetailDTO getDetail(String id) {
+        return getScheduleDetailHandler.getDetail(id);
     }
 }

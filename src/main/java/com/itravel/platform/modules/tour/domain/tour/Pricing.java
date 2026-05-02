@@ -2,7 +2,7 @@ package com.itravel.platform.modules.tour.domain.tour;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
+import com.itravel.platform.common.domain.enums.CurrencyCode;
 import com.itravel.platform.modules.tour.domain.tour.exception.MissingAdultPriceException;
 import com.itravel.platform.modules.tour.domain.tour.exception.NegativeSingleSupplementException;
 

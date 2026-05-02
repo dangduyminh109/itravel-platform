@@ -78,4 +78,8 @@ public class Passenger {
             return PassengerType.INFANT;
         }
     }
+
+    public boolean matchesType(PassengerType expectedType) {
+        return this.passengerType == expectedType;
+    }
 }

@@ -14,11 +14,11 @@ import java.time.LocalDate;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface ScheduleValueObjectMapper {
-    default ScheduleId toScheduleId(Long id) {
+    default ScheduleId toScheduleId(String id) {
         return id != null ? new ScheduleId(id) : null;
     }
 
-    default Long fromScheduleId(ScheduleId id) {
+    default String fromScheduleId(ScheduleId id) {
         return id != null ? id.value() : null;
     }
 

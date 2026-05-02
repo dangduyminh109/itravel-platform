@@ -3,7 +3,6 @@ package com.itravel.platform.modules.tour.domain.schedule;
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
 import com.itravel.platform.modules.tour.domain.schedule.exception.InvalidScheduleStatusException;
 import com.itravel.platform.modules.tour.domain.schedule.exception.TotalSeatsLowerThanMinParticipantsException;
-import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
 import com.itravel.platform.modules.tour.domain.tour.Pricing;
 import com.itravel.platform.modules.tour.domain.tour.TourId;
 import lombok.AccessLevel;
@@ -80,7 +79,7 @@ public class Schedule extends SoftDeletableAggregate<ScheduleId> {
             throw new TotalSeatsLowerThanMinParticipantsException();
         }
         return new Schedule(
-                null,
+                ScheduleId.generate(),
                 departureDate,
                 seats,
                 pricing,

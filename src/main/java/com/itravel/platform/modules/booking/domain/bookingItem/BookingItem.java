@@ -7,8 +7,7 @@ import com.itravel.platform.modules.booking.domain.exception.SnapshotDataRequire
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
+import com.itravel.platform.common.domain.aggregate.valueobject.Money;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,9 +63,12 @@ public class BookingItem {
         return new BookingItem(id, serviceType, referenceId, snapshotData, priceBreakdown);
     }
 
-    public BigDecimal getSubtotal() {
+    public Money getSubtotal() {
+        if (priceBreakdown.isEmpty()) return null;
+        Money first = priceBreakdown.get(0).total();
         return priceBreakdown.stream()
                 .map(PriceLine::total)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .skip(1)
+                .reduce(first, Money::add);
     }
 }

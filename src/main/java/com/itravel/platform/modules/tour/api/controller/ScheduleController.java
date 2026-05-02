@@ -65,7 +65,7 @@ public class ScheduleController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCHEDULE_UPDATE')")
-    public ApiResponse<ScheduleDetailResponse> update(@PathVariable Long id, @RequestBody @Valid UpdateScheduleRequest request) {
+    public ApiResponse<ScheduleDetailResponse> update(@PathVariable String id, @RequestBody @Valid UpdateScheduleRequest request) {
         var cmd =  mapper.toUpdateScheduleCommand(id, request);
         ScheduleDetailDTO dto = commandFacade.update(cmd);
         return ApiResponse.<ScheduleDetailResponse>builder()
@@ -79,7 +79,7 @@ public class ScheduleController {
     @DeleteMapping("/{id}/destroy")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('SCHEDULE_DELETE')")
-    public ApiResponse<Void> destroy(@PathVariable Long id) {
+    public ApiResponse<Void> destroy(@PathVariable String id) {
         commandFacade.destroy(mapper.toDeleteScheduleCommand(id));
         return ApiResponse.<Void>builder()
                 .message("Destroy schedule successfully")

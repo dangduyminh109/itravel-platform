@@ -1,11 +1,12 @@
 package com.itravel.platform.modules.booking.domain.booking;
 
 import com.itravel.platform.common.domain.SoftDeletableAggregate;
-import com.itravel.platform.common.exceptions.DomainErrorCode;
+import com.itravel.platform.common.domain.enums.CurrencyCode;
 import com.itravel.platform.modules.booking.domain.bookingItem.BookingItem;
 import com.itravel.platform.modules.booking.domain.bookingItem.ServiceType;
 import com.itravel.platform.modules.booking.domain.event.BookingCancelledEvent;
 import com.itravel.platform.modules.booking.domain.event.BookingCreatedEvent;
+import com.itravel.platform.modules.booking.domain.event.BookingExpiredEvent;
 import com.itravel.platform.modules.booking.domain.event.BookingPaidEvent;
 import com.itravel.platform.modules.booking.domain.exception.BookingCannotCancelCompletedException;
 import com.itravel.platform.modules.booking.domain.exception.BookingCannotModifyException;
@@ -15,13 +16,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-
-import java.math.BigDecimal;
+import com.itravel.platform.common.domain.aggregate.valueobject.Money;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -31,7 +30,7 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
     ContactInfo contactInfo;
     String note;
     BookingStatus status;
-    BigDecimal totalAmount;
+    Money totalAmount;
     Instant expiredAt;
     final List<BookingItem> bookingItems = new ArrayList<>();
     final List<Passenger> passengers = new ArrayList<>();
@@ -48,7 +47,7 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
         this.contactInfo = contactInfo;
         this.note = note;
         this.status = BookingStatus.PENDING;
-        this.totalAmount = BigDecimal.ZERO;
+        this.totalAmount = Money.zero(CurrencyCode.VND);
         this.expiredAt = null;
     }
 
@@ -59,7 +58,7 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
             ContactInfo contactInfo,
             String note,
             BookingStatus status,
-            BigDecimal totalAmount,
+            Money totalAmount,
             Instant expiredAt,
             Instant createdAt,
             Instant updatedAt,
@@ -79,10 +78,22 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
             ContactInfo contactInfo,
             ServiceType serviceType,
             String customerId,
-            String note
+            String note,
+            List<BookingItem> bookingItems,
+            List<Passenger> passengers
     ) {
         BookingCode code = BookingCode.generate(serviceType);
         Booking booking = new Booking(code, customerId, contactInfo, note);
+
+        if (bookingItems != null) {
+            booking.bookingItems.addAll(bookingItems);
+        }
+        if (passengers != null) {
+            booking.passengers.addAll(passengers);
+        }
+
+        booking.calculateTotalAmount();
+
         booking.registerEvent(new BookingCreatedEvent(
                 booking.getId().value(),
                 code.value(),
@@ -99,7 +110,7 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
             ContactInfo contactInfo,
             String note,
             BookingStatus status,
-            BigDecimal totalAmount,
+            Money totalAmount,
             Instant expiredAt,
             Instant createdAt,
             Instant updatedAt,
@@ -134,14 +145,17 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
     }
 
     public void calculateTotalAmount() {
+        if (bookingItems.isEmpty()) return;
+        Money first = bookingItems.get(0).getSubtotal();
         this.totalAmount = bookingItems.stream()
                 .map(BookingItem::getSubtotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .skip(1)
+                .reduce(first, Money::add);
         touch();
     }
 
     public void markAsReserved(int expirationMinutes) {
-        assertStatus(BookingStatus.PENDING, "markAsReserved");
+        assertStatus(BookingStatus.PENDING);
         this.status = BookingStatus.RESERVED;
         this.expiredAt = Instant.now().plusSeconds((long) expirationMinutes * 60);
         touch();
@@ -157,7 +171,7 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
         registerEvent(new BookingPaidEvent(
                 getId().value(),
                 bookingCode.value(),
-                totalAmount,
+                totalAmount.getAmount(), 
                 getUpdatedAt()
         ));
     }
@@ -177,16 +191,21 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
     }
 
     public void complete() {
-        assertStatus(BookingStatus.PAID, "complete");
+        assertStatus(BookingStatus.PAID);
         this.status = BookingStatus.COMPLETED;
         touch();
     }
 
     public void expire() {
-        assertStatus(BookingStatus.RESERVED, "expire");
+        assertStatus(BookingStatus.RESERVED);
         this.status = BookingStatus.EXPIRED;
         this.expiredAt = null;
         touch();
+        registerEvent(new BookingExpiredEvent(
+                getId().value(),
+                bookingCode.value(),
+                getUpdatedAt()
+        ));
     }
 
     public List<BookingItem> getBookingItems() {
@@ -203,7 +222,7 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
         }
     }
 
-    private void assertStatus(BookingStatus expected, String operation) {
+    private void assertStatus(BookingStatus expected) {
         if (status != expected) {
             throw new InvalidBookingStateTransitionException();
         }

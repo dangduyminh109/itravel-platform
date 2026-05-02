@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class GetScheduleDetailHandler {
     ScheduleQueryPort queryPort;
 
-    public ScheduleDetailDTO getDetail(Long id) {
+    public ScheduleDetailDTO getDetail(String id) {
         return queryPort.getById(id)
                 .orElseThrow(ScheduleNotFoundException::new);
     }

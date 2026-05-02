@@ -21,9 +21,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface ScheduleRestMapper {
     CreateScheduleCommand toCreateScheduleCommand(CreateScheduleRequest request);
 
-    UpdateScheduleCommand toUpdateScheduleCommand(Long id,UpdateScheduleRequest request);
+    UpdateScheduleCommand toUpdateScheduleCommand(String id,UpdateScheduleRequest request);
 
-    DeleteScheduleCommand toDeleteScheduleCommand(Long id);
+    DeleteScheduleCommand toDeleteScheduleCommand(String id);
 
     ScheduleDetailResponse toScheduleDetailResponse(ScheduleDetailDTO dto);
 }

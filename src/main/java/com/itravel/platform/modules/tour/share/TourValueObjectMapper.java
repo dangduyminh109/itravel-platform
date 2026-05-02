@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.tour.share;
 
-import com.itravel.platform.modules.tour.domain.tour.CurrencyCode;
+import com.itravel.platform.common.domain.enums.CurrencyCode;
 import com.itravel.platform.modules.tour.domain.tour.ParticipantLimit;
 import com.itravel.platform.modules.tour.domain.tour.Pricing;
 import com.itravel.platform.modules.tour.domain.tour.Services;
@@ -41,19 +41,20 @@ public interface TourValueObjectMapper {
     }
 
     default TicketPrice toTicketPrice(TicketPriceRequest request) {
-        if (request == null) return null;
+        if (request == null)
+            return null;
         return new TicketPrice(request.originalPrice(), request.discountPrice());
     }
 
     default Pricing toPricing(PricingRequest request) {
-        if (request == null) return null;
+        if (request == null)
+            return null;
         return new Pricing(
                 toTicketPrice(request.adultPrice()),
                 toTicketPrice(request.childPrice()),
                 toTicketPrice(request.infantPrice()),
                 request.singleSupplement(),
-                request.currency()
-        );
+                request.currency());
     }
 
     TicketPriceDTO toTicketPriceDTO(TicketPrice price);
@@ -67,19 +68,20 @@ public interface TourValueObjectMapper {
     TicketPriceJpaEntity toTicketPriceJpaEntity(TicketPrice pricing);
 
     default TicketPrice toTicketPrice(TicketPriceDTO dto) {
-        if (dto == null) return null;
+        if (dto == null)
+            return null;
         return new TicketPrice(dto.originalPrice(), dto.discountPrice());
     }
 
     default Pricing toPricing(PricingDTO dto) {
-        if (dto == null) return null;
+        if (dto == null)
+            return null;
         return new Pricing(
                 toTicketPrice(dto.adultPrice()),
                 toTicketPrice(dto.childPrice()),
                 toTicketPrice(dto.infantPrice()),
                 dto.singleSupplement(),
-                dto.currency()
-        );
+                dto.currency());
     }
 
     default CurrencyCode toCurrencyCode(String currency) {

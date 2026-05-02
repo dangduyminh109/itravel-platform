@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 public record ScheduleDetailResponse(
-        Long id,
+        String id,
         LocalDate departureDate,
         BigDecimal surcharge,
         Integer availableSeats,

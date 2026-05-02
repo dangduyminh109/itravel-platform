@@ -14,6 +14,11 @@ public enum DomainErrorCode {
     // ===== COMMON =====
     INVALID_SLUG("INVALID_SLUG", "Invalid slug", HttpStatus.BAD_REQUEST, "slug"),
 
+    // ===== COMMON - MONEY =====
+    MONEY_AMOUNT_CANNOT_BE_NULL("MONEY_AMOUNT_CANNOT_BE_NULL", "Amount cannot be null", HttpStatus.BAD_REQUEST, "amount"),
+    MONEY_CURRENCY_CANNOT_BE_NULL("MONEY_CURRENCY_CANNOT_BE_NULL", "Currency cannot be null", HttpStatus.BAD_REQUEST, "currency"),
+    MONEY_CURRENCY_MISMATCH("MONEY_CURRENCY_MISMATCH", "Cannot operate on Money with different currencies", HttpStatus.BAD_REQUEST, "currency"),
+
     // ===== IDENTITY - AUTH / USER =====
     TOKEN_NOT_OWNED("TOKEN_NOT_OWNED", "Token does not belong to the user", HttpStatus.FORBIDDEN, "token"),
     INVALID_TOKEN("INVALID_TOKEN", "Invalid token", HttpStatus.UNAUTHORIZED, "token"),
@@ -151,6 +156,11 @@ public enum DomainErrorCode {
     SNAPSHOT_DATA_REQUIRED("SNAPSHOT_DATA_REQUIRED", "Snapshot data is required for booking item", HttpStatus.BAD_REQUEST, "snapshotData"),
     PRICE_BREAKDOWN_REQUIRED("PRICE_BREAKDOWN_REQUIRED", "Price breakdown cannot be empty", HttpStatus.BAD_REQUEST, "priceBreakdown"),
     BOOKING_CANNOT_MODIFY("BOOKING_CANNOT_MODIFY", "Cannot modify booking in current status", HttpStatus.CONFLICT, "status"),
+
+    // ===== BOOKING - APPLICATION =====
+    BOOKING_NOT_FOUND("BOOKING_NOT_FOUND", "Booking not found", HttpStatus.NOT_FOUND, "bookingId"),
+    INVALID_PASSENGER_AGE("INVALID_PASSENGER_AGE", "Passenger age does not match the ticket type", HttpStatus.BAD_REQUEST, "dateOfBirth"),
+    INVENTORY_UNAVAILABLE("INVENTORY_UNAVAILABLE", "Not enough inventory available for the requested service", HttpStatus.CONFLICT, "quantity"),
 
     ;
     String code;
