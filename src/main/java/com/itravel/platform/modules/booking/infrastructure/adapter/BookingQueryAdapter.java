@@ -3,16 +3,17 @@ package com.itravel.platform.modules.booking.infrastructure.adapter;
 import com.itravel.platform.modules.booking.application.dto.BookingDetailDTO;
 import com.itravel.platform.modules.booking.application.dto.BookingListItemDTO;
 import com.itravel.platform.modules.booking.application.port.out.booking.BookingQueryPort;
+import com.itravel.platform.modules.booking.domain.booking.BookingStatus;
 import com.itravel.platform.modules.booking.infrastructure.persistence.mapper.BookingMapper;
 import com.itravel.platform.modules.booking.infrastructure.persistence.repository.BookingJpaRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,16 +28,15 @@ public class BookingQueryAdapter implements BookingQueryPort {
     }
 
     @Override
-    public List<BookingListItemDTO> getBookingsByCustomerId(String customerId) {
-        return repository.findByCustomerId(customerId).stream()
-                .map(BookingMapper::toBookingListItemDTO)
-                .collect(Collectors.toList());
+    public Page<BookingListItemDTO> getBookingsByCustomerId(String customerId, Pageable pageable) {
+        return repository.findByCustomerId(customerId, pageable)
+                .map(BookingMapper::toBookingListItemDTO);
     }
 
     @Override
-    public List<BookingListItemDTO> getAllBookings() {
-        return repository.findAll().stream()
-                .map(BookingMapper::toBookingListItemDTO)
-                .collect(Collectors.toList());
+    public Page<BookingListItemDTO> getAllBookings(BookingStatus status, Pageable pageable) {
+        String statusStr = status != null ? status.name() : null;
+        return repository.findAllWithStatus(statusStr, pageable)
+                .map(BookingMapper::toBookingListItemDTO);
     }
 }

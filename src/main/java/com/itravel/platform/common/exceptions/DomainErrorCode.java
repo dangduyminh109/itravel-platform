@@ -161,6 +161,16 @@ public enum DomainErrorCode {
     BOOKING_NOT_FOUND("BOOKING_NOT_FOUND", "Booking not found", HttpStatus.NOT_FOUND, "bookingId"),
     INVALID_PASSENGER_AGE("INVALID_PASSENGER_AGE", "Passenger age does not match the ticket type", HttpStatus.BAD_REQUEST, "dateOfBirth"),
     INVENTORY_UNAVAILABLE("INVENTORY_UNAVAILABLE", "Not enough inventory available for the requested service", HttpStatus.CONFLICT, "quantity"),
+    CUSTOMER_ID_CANNOT_BE_BLANK("CUSTOMER_ID_CANNOT_BE_BLANK", "Customer ID cannot be blank", HttpStatus.BAD_REQUEST, "customerId"),
+    CONTACT_INFO_CANNOT_BE_NULL("CONTACT_INFO_CANNOT_BE_NULL", "Contact info cannot be null", HttpStatus.BAD_REQUEST, "contactInfo"),
+    SERVICE_TYPE_CANNOT_BE_NULL("SERVICE_TYPE_CANNOT_BE_NULL", "Service type cannot be null", HttpStatus.BAD_REQUEST, "serviceType"),
+    REFERENCE_ID_CANNOT_BE_BLANK("REFERENCE_ID_CANNOT_BE_BLANK", "Reference ID cannot be blank", HttpStatus.BAD_REQUEST, "referenceId"),
+    PASSENGERS_CANNOT_BE_EMPTY("PASSENGERS_CANNOT_BE_EMPTY", "Passengers cannot be empty", HttpStatus.BAD_REQUEST, "passengers"),
+    FULL_NAME_CANNOT_BE_NULL("FULL_NAME_CANNOT_BE_NULL", "Full name cannot be null", HttpStatus.BAD_REQUEST, "fullName"),
+    DATE_OF_BIRTH_CANNOT_BE_NULL("DATE_OF_BIRTH_CANNOT_BE_NULL", "Date of birth cannot be null", HttpStatus.BAD_REQUEST, "dateOfBirth"),
+    GENDER_CANNOT_BE_NULL("GENDER_CANNOT_BE_NULL", "Gender cannot be null", HttpStatus.BAD_REQUEST, "gender"),
+    IDENTITY_NUMBER_CANNOT_BE_BLANK("IDENTITY_NUMBER_CANNOT_BE_BLANK", "Identity number cannot be blank", HttpStatus.BAD_REQUEST, "identityNumber"),
+    PASSENGER_TYPE_CANNOT_BE_NULL("PASSENGER_TYPE_CANNOT_BE_NULL", "Passenger type cannot be null", HttpStatus.BAD_REQUEST, "passengerType"),
 
     ;
     String code;

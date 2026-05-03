@@ -1,7 +1,6 @@
 package com.itravel.platform.modules.tour.share;
 
 import com.itravel.platform.common.domain.aggregate.valueobject.Slug;
-import com.itravel.platform.modules.tour.domain.tour.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
