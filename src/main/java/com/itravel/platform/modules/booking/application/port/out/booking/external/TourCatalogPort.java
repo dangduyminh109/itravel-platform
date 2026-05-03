@@ -1,4 +1,4 @@
-package com.itravel.platform.modules.booking.application.port.out.external;
+package com.itravel.platform.modules.booking.application.port.out.booking.external;
 
 import com.itravel.platform.modules.booking.domain.bookingItem.PriceLine;
 import com.itravel.platform.modules.booking.domain.bookingItem.TourSnapshot;

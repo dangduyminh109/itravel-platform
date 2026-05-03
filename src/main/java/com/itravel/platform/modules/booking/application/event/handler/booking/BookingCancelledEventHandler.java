@@ -2,7 +2,7 @@ package com.itravel.platform.modules.booking.application.event.handler.booking;
 
 import com.itravel.platform.modules.booking.domain.event.BookingCancelledEvent;
 import com.itravel.platform.modules.booking.application.port.out.booking.BookingRepository;
-import com.itravel.platform.modules.booking.application.port.out.external.TourCatalogPort;
+import com.itravel.platform.modules.booking.application.port.out.booking.external.TourCatalogPort;
 import com.itravel.platform.modules.booking.domain.booking.BookingId;
 import com.itravel.platform.modules.booking.domain.bookingItem.ServiceType;
 import lombok.AccessLevel;

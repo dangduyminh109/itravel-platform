@@ -6,8 +6,8 @@ import com.itravel.platform.modules.booking.application.exception.InvalidPasseng
 import com.itravel.platform.modules.booking.application.exception.InventoryUnavailableException;
 import com.itravel.platform.modules.booking.application.port.in.booking.CreateBookingUseCase;
 import com.itravel.platform.modules.booking.application.port.out.booking.BookingRepository;
-import com.itravel.platform.modules.booking.application.port.out.event.BookingEventPublisher;
-import com.itravel.platform.modules.booking.application.port.out.external.TourCatalogPort;
+import com.itravel.platform.modules.booking.application.port.out.booking.event.BookingEventPublisher;
+import com.itravel.platform.modules.booking.application.port.out.booking.external.TourCatalogPort;
 import com.itravel.platform.modules.booking.domain.booking.Booking;
 import com.itravel.platform.modules.booking.domain.bookingItem.BookingItem;
 import com.itravel.platform.modules.booking.domain.bookingItem.ServiceType;

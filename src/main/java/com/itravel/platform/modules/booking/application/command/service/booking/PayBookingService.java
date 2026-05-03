@@ -4,7 +4,7 @@ import com.itravel.platform.modules.booking.application.command.model.booking.Pa
 import com.itravel.platform.modules.booking.application.exception.BookingNotFoundException;
 import com.itravel.platform.modules.booking.application.port.in.booking.PayBookingUseCase;
 import com.itravel.platform.modules.booking.application.port.out.booking.BookingRepository;
-import com.itravel.platform.modules.booking.application.port.out.event.BookingEventPublisher;
+import com.itravel.platform.modules.booking.application.port.out.booking.event.BookingEventPublisher;
 import com.itravel.platform.modules.booking.domain.booking.Booking;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

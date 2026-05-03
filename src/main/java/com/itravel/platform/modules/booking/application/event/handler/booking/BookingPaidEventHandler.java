@@ -2,8 +2,8 @@ package com.itravel.platform.modules.booking.application.event.handler.booking;
 
 import com.itravel.platform.modules.booking.domain.event.BookingPaidEvent;
 import com.itravel.platform.modules.booking.application.port.out.booking.BookingRepository;
-import com.itravel.platform.modules.booking.application.port.out.external.InvoicePort;
-import com.itravel.platform.modules.booking.application.port.out.external.NotificationPort;
+import com.itravel.platform.modules.booking.application.port.out.booking.external.InvoicePort;
+import com.itravel.platform.modules.booking.application.port.out.booking.external.NotificationPort;
 import com.itravel.platform.modules.booking.domain.booking.BookingId;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

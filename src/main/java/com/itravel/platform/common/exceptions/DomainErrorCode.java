@@ -172,7 +172,14 @@ public enum DomainErrorCode {
     IDENTITY_NUMBER_CANNOT_BE_BLANK("IDENTITY_NUMBER_CANNOT_BE_BLANK", "Identity number cannot be blank", HttpStatus.BAD_REQUEST, "identityNumber"),
     PASSENGER_TYPE_CANNOT_BE_NULL("PASSENGER_TYPE_CANNOT_BE_NULL", "Passenger type cannot be null", HttpStatus.BAD_REQUEST, "passengerType"),
 
-    ;
+    // ===== PAYMENT =====
+    INVALID_PAYMENT_ID("INVALID_PAYMENT_ID", "Invalid payment id", HttpStatus.BAD_REQUEST, "paymentId"),
+    INVALID_PAYMENT_REFERENCE_CODE("INVALID_PAYMENT_REFERENCE_CODE", "Invalid payment reference code", HttpStatus.BAD_REQUEST, "referenceCode"),
+    INVALID_PAYMENT_STATUS("INVALID_PAYMENT_STATUS", "Invalid payment status", HttpStatus.BAD_REQUEST, "status"),
+    PAYMENT_INVALID_STATE_TRANSITION("PAYMENT_INVALID_STATE_TRANSITION", "Invalid payment state transition", HttpStatus.CONFLICT, "status"),
+    PAYMENT_GATEWAY_NOT_FOUND("PAYMENT_GATEWAY_NOT_FOUND", "Payment gateway not found", HttpStatus.NOT_FOUND, "paymentMethod"),
+    PAYMENT_NOT_FOUND("PAYMENT_NOT_FOUND", "Payment not found", HttpStatus.NOT_FOUND, "paymentId"),
+;
     String code;
     String message;
     HttpStatus httpStatusCode;

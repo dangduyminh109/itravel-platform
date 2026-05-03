@@ -2,7 +2,7 @@ package com.itravel.platform.modules.booking.application.event.handler.booking;
 
 import com.itravel.platform.modules.booking.domain.event.BookingCreatedEvent;
 import com.itravel.platform.modules.booking.application.command.model.booking.ExpireBookingCommand;
-import com.itravel.platform.modules.booking.application.port.in.facade.BookingCommandFacade;
+import com.itravel.platform.modules.booking.application.port.in.booking.facade.BookingCommandFacade;
 import com.itravel.platform.modules.booking.domain.booking.BookingId;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.itravel.platform.modules.booking.application.port.in.facade;
+package com.itravel.platform.modules.booking.application.port.in.booking.facade;
 
 import com.itravel.platform.modules.booking.application.command.model.booking.CancelBookingCommand;
 import com.itravel.platform.modules.booking.application.command.model.booking.CreateBookingCommand;
