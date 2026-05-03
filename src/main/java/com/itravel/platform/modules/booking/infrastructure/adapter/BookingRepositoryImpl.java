@@ -3,6 +3,7 @@ package com.itravel.platform.modules.booking.infrastructure.adapter;
 import com.itravel.platform.modules.booking.application.dto.BookingDetailDTO;
 import com.itravel.platform.modules.booking.application.port.out.booking.BookingRepository;
 import com.itravel.platform.modules.booking.domain.booking.Booking;
+import com.itravel.platform.modules.booking.domain.booking.BookingCode;
 import com.itravel.platform.modules.booking.domain.booking.BookingId;
 import com.itravel.platform.modules.booking.infrastructure.persistence.entity.BookingJpaEntity;
 import com.itravel.platform.modules.booking.infrastructure.persistence.mapper.BookingMapper;
@@ -31,6 +32,12 @@ public class BookingRepositoryImpl implements BookingRepository {
     @Override
     public Optional<Booking> findById(BookingId id) {
         return bookingJpaRepository.findById(id.value())
+                .map(BookingMapper::toBookingDomain);
+    }
+
+    @Override
+    public Optional<Booking> findByCode(BookingCode code) {
+        return bookingJpaRepository.findByBookingCode(code.value())
                 .map(BookingMapper::toBookingDomain);
     }
 }

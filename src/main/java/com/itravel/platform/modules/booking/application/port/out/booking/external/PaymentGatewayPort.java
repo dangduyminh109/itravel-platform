@@ -1,4 +1,4 @@
-package com.itravel.platform.modules.booking.application.port.out.external;
+package com.itravel.platform.modules.booking.application.port.out.booking.external;
 
 import java.math.BigDecimal;
 

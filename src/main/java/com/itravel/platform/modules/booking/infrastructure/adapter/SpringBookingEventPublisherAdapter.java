@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.booking.infrastructure.adapter;
 
-import com.itravel.platform.modules.booking.application.port.out.event.BookingEventPublisher;
+import com.itravel.platform.modules.booking.application.port.out.booking.event.BookingEventPublisher;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

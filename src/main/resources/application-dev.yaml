@@ -64,3 +64,14 @@ security:
 
 firebase:
   service-account: firebase-service-account.json
+
+
+payment:
+  vnp:
+    tmn-code: 
+    pay-url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+    hash-secret: 
+    return-url: "http://localhost:9092/api/payment/webhook/vnpay_return"
+
+frontend:
+    url:

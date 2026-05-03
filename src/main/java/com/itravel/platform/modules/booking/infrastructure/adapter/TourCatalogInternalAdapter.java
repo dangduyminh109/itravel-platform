@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.booking.infrastructure.adapter;
 
-import com.itravel.platform.modules.booking.application.port.out.external.TourCatalogPort;
+import com.itravel.platform.modules.booking.application.port.out.booking.external.TourCatalogPort;
 import com.itravel.platform.modules.booking.domain.bookingItem.PriceLine;
 import com.itravel.platform.modules.booking.domain.bookingItem.PriceLineType;
 import com.itravel.platform.modules.booking.domain.bookingItem.TourSnapshot;

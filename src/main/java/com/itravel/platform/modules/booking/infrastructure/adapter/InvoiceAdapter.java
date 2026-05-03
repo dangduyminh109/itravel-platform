@@ -1,6 +1,6 @@
 package com.itravel.platform.modules.booking.infrastructure.adapter;
 
-import com.itravel.platform.modules.booking.application.port.out.external.InvoicePort;
+import com.itravel.platform.modules.booking.application.port.out.booking.external.InvoicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
