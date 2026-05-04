@@ -2,7 +2,7 @@ package com.itravel.platform.modules.payment.application.command.service;
 
 import com.itravel.platform.common.domain.aggregate.valueobject.Money;
 import com.itravel.platform.modules.booking.application.dto.BookingDetailDTO;
-import com.itravel.platform.modules.booking.application.exception.BookingNotFoundException;
+import com.itravel.platform.modules.booking.application.port.in.booking.facade.BookingCommandFacade;
 import com.itravel.platform.modules.booking.application.port.in.booking.facade.BookingQueryFacade;
 import com.itravel.platform.modules.payment.api.dto.PaymentUrlResponse;
 import com.itravel.platform.modules.payment.application.command.model.CreatePaymentCommand;
@@ -27,12 +27,13 @@ import java.util.Optional;
 public class CreatePaymentService implements CreatePaymentUseCase {
     Map<String, PaymentGatewayPort> gateways;
     BookingQueryFacade bookingQueryFacade;
-
+    BookingCommandFacade bookingCommandFacade;
     @Override
     @Transactional
     public PaymentUrlResponse execute(CreatePaymentCommand command) throws UnsupportedEncodingException {
-        BookingDetailDTO booking = bookingQueryFacade.getBookingDetail(command.bookingCode())
-                .orElseThrow(BookingNotFoundException::new);
+        bookingCommandFacade.verifyBooking(command.bookingCode());
+
+        BookingDetailDTO booking = bookingQueryFacade.getBookingDetailByBookingCode(command.bookingCode());
 
         Payment payment = Payment.create(
                 new PaymentReferenceCode(command.bookingCode()),

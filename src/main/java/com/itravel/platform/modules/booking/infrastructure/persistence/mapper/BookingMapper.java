@@ -51,14 +51,22 @@ public interface BookingMapper {
 
                 if (domain.getBookingItems() != null) {
                         List<BookingItemJpaEntity> items = domain.getBookingItems().stream()
-                                .map(BookingItemMapper::toBookingItemJpaEntity)
+                                .map(bookingItem -> {
+                                        BookingItemJpaEntity bookingItemJpaEntity = BookingItemMapper.toBookingItemJpaEntity(bookingItem);
+                                        bookingItemJpaEntity.setBooking(entity);
+                                        return bookingItemJpaEntity;
+                                })
                                 .collect(Collectors.toList());
                         entity.setBookingItems(items);
                 }
 
                 if (domain.getPassengers() != null) {
                         List<PassengerJpaEntity> passengers = domain.getPassengers().stream()
-                                .map(PassengerMapper::toPassengerJpaEntity)
+                                .map((passenger -> {
+                                        PassengerJpaEntity passengerJpaEntity = PassengerMapper.toPassengerJpaEntity(passenger);
+                                        passengerJpaEntity.setBooking(entity);
+                                        return passengerJpaEntity;
+                                }))
                                 .collect(Collectors.toList());
                         entity.setPassengers(passengers);
                 }

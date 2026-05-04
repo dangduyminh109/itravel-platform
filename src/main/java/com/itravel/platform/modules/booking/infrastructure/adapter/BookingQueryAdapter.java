@@ -28,6 +28,12 @@ public class BookingQueryAdapter implements BookingQueryPort {
     }
 
     @Override
+    public Optional<BookingDetailDTO> getBookingDetailByBookingCode(String code) {
+        return repository.findByBookingCode(code)
+                .map(BookingMapper::toBookingDetailDTO);
+    }
+
+    @Override
     public Page<BookingListItemDTO> getBookingsByCustomerId(String customerId, Pageable pageable) {
         return repository.findByCustomerId(customerId, pageable)
                 .map(BookingMapper::toBookingListItemDTO);

@@ -2,6 +2,7 @@ package com.itravel.platform.modules.booking.application.port.in.booking.facade;
 
 import com.itravel.platform.modules.booking.application.dto.BookingDetailDTO;
 import com.itravel.platform.modules.booking.application.dto.BookingListItemDTO;
+import com.itravel.platform.modules.booking.application.query.booking.GetBookingDetailByBookingCodeHandler;
 import com.itravel.platform.modules.booking.domain.booking.BookingStatus;
 import com.itravel.platform.modules.booking.application.query.booking.GetBookingDetailHandler;
 import com.itravel.platform.modules.booking.application.query.booking.GetBookingsHandler;
@@ -20,9 +21,14 @@ public class BookingQueryFacade {
     GetBookingDetailHandler getBookingDetailHandler;
     GetCustomerBookingsHandler getCustomerBookingsHandler;
     GetBookingsHandler getBookingsHandler;
+    GetBookingDetailByBookingCodeHandler getBookingDetailByBookingCodeHandler;
 
     public BookingDetailDTO getBookingDetail(String bookingId) {
         return getBookingDetailHandler.handle(bookingId);
+    }
+
+    public BookingDetailDTO getBookingDetailByBookingCode(String code) {
+        return getBookingDetailByBookingCodeHandler.handle(code);
     }
 
     public Page<BookingListItemDTO> getCustomerBookings(String customerId, Pageable pageable) {

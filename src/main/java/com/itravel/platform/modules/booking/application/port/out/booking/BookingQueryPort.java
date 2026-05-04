@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface BookingQueryPort {
     Optional<BookingDetailDTO> getBookingDetail(String bookingId);
+    Optional<BookingDetailDTO> getBookingDetailByBookingCode(String code);
     Page<BookingListItemDTO> getBookingsByCustomerId(String customerId, Pageable pageable);
     Page<BookingListItemDTO> getAllBookings(BookingStatus status, Pageable pageable);
 }

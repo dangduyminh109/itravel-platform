@@ -313,4 +313,8 @@ public class Tour extends SoftDeletableAggregate<TourId> {
         this.tourImages = tourImages;
         touch();
     }
+
+    public boolean verifyMinParticipant(int participantCount) {
+        return participantCount >= this.participantLimit.minParticipants();
+    }
 }

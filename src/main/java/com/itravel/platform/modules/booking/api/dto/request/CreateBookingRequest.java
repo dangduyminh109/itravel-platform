@@ -3,7 +3,6 @@ package com.itravel.platform.modules.booking.api.dto.request;
 import com.itravel.platform.common.domain.enums.Gender;
 import com.itravel.platform.modules.booking.domain.booking.ContactInfo;
 import com.itravel.platform.modules.booking.domain.bookingItem.ServiceType;
-import com.itravel.platform.modules.booking.domain.passenger.FullName;
 import com.itravel.platform.modules.booking.domain.passenger.PassengerType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -32,7 +31,7 @@ public record CreateBookingRequest(
 ) {
     public record PassengerRequest(
             @NotNull(message = "FULL_NAME_CANNOT_BE_NULL")
-            FullName fullName,
+            String fullName,
 
             @NotNull(message = "DATE_OF_BIRTH_CANNOT_BE_NULL")
             LocalDate dateOfBirth,

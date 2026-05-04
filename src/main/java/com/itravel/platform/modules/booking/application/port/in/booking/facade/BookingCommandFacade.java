@@ -1,14 +1,8 @@
 package com.itravel.platform.modules.booking.application.port.in.booking.facade;
 
-import com.itravel.platform.modules.booking.application.command.model.booking.CancelBookingCommand;
-import com.itravel.platform.modules.booking.application.command.model.booking.CreateBookingCommand;
-import com.itravel.platform.modules.booking.application.command.model.booking.ExpireBookingCommand;
-import com.itravel.platform.modules.booking.application.command.model.booking.PayBookingCommand;
+import com.itravel.platform.modules.booking.application.command.model.booking.*;
 import com.itravel.platform.modules.booking.application.dto.BookingDetailDTO;
-import com.itravel.platform.modules.booking.application.port.in.booking.CancelBookingUseCase;
-import com.itravel.platform.modules.booking.application.port.in.booking.CreateBookingUseCase;
-import com.itravel.platform.modules.booking.application.port.in.booking.ExpireBookingUseCase;
-import com.itravel.platform.modules.booking.application.port.in.booking.PayBookingUseCase;
+import com.itravel.platform.modules.booking.application.port.in.booking.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +16,7 @@ public class BookingCommandFacade {
     CancelBookingUseCase cancelBookingUseCase;
     PayBookingUseCase payBookingUseCase;
     ExpireBookingUseCase expireBookingUseCase;
+    VerifyBookingUseCase verifyBookingUseCase;
 
     public BookingDetailDTO createBooking(CreateBookingCommand command) {
         return createBookingUseCase.execute(command);
@@ -37,5 +32,9 @@ public class BookingCommandFacade {
     
     public void expireBooking(ExpireBookingCommand command) {
         expireBookingUseCase.execute(command);
+    }
+
+    public void verifyBooking(String code) {
+        verifyBookingUseCase.execute(code);
     }
 }

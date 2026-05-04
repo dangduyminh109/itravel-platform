@@ -67,7 +67,7 @@ public enum DomainErrorCode {
     LOCATION_NAME_TOO_LONG("LOCATION_NAME_TOO_LONG", "Location name is too long", HttpStatus.BAD_REQUEST, "locationName"),
     INVALID_TYPE_OR_PARENT("INVALID_TYPE_OR_PARENT", "Invalid type or parent", HttpStatus.BAD_REQUEST, "parentId,type"),
 
-    // ===== TOUR  =====
+    // ===== TOUR =====
     INVALID_TOUR_NAME("INVALID_TOUR_NAME", "Invalid tour name", HttpStatus.BAD_REQUEST, "tourName"),
     TOUR_NAME_TOO_LONG("TOUR_NAME_TOO_LONG", "Tour name is too long", HttpStatus.BAD_REQUEST, "tourName"),
     INVALID_CURRENCY("INVALID_CURRENCY", "Invalid currency", HttpStatus.BAD_REQUEST, "currency"),
@@ -87,6 +87,7 @@ public enum DomainErrorCode {
     TOUR_CATEGORY_ID_CANNOT_BE_NULL("TOUR_CATEGORY_ID_CANNOT_BE_NULL", "Category ID cannot be null", HttpStatus.BAD_REQUEST, "categoryId"),
     TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL("TOUR_DEPARTURE_LOCATION_ID_CANNOT_BE_NULL", "Departure location ID cannot be null", HttpStatus.BAD_REQUEST, "departureLocationId"),
     TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL("TOUR_DESTINATION_LOCATION_ID_CANNOT_BE_NULL", "Destination location ID cannot be null", HttpStatus.BAD_REQUEST, "destinationLocationId"),
+    TOUR_MIN_PARTICIPANTS_NOT_MET("TOUR_MIN_PARTICIPANTS_NOT_MET", "Booking quantity does not meet the tour's minimum participants requirement", HttpStatus.BAD_REQUEST, "quantity"),
     // ===== TOUR - CATEGORY =====
     INVALID_CATEGORY_ID("INVALID_CATEGORY_ID", "Invalid category id", HttpStatus.BAD_REQUEST, "categoryId"),
     INVALID_CATEGORY_NAME("INVALID_CATEGORY_NAME", "Invalid category name", HttpStatus.BAD_REQUEST, "categoryName"),
@@ -102,7 +103,7 @@ public enum DomainErrorCode {
     ITINERARY_TITLE_TOO_LONG("ITINERARY_TITLE_TOO_LONG", "Itinerary title is too long", HttpStatus.BAD_REQUEST, "title"),
     INVALID_ITINERARY_ACTIVITIES("INVALID_ITINERARY_ACTIVITIES", "Invalid itinerary activities", HttpStatus.BAD_REQUEST, "activities"),
     ITINERARY_NOT_FOUND("ITINERARY_NOT_FOUND", "Invalid not found", HttpStatus.BAD_REQUEST, "itinerary id"),
-    DUPLICATE_ITINERARY_DAY("DUPLICATE_ITINERARY_DAY","Duplicate day numbers in itineraries", HttpStatus.BAD_REQUEST, "itineraries"),
+    DUPLICATE_ITINERARY_DAY("DUPLICATE_ITINERARY_DAY", "Duplicate day numbers in itineraries", HttpStatus.BAD_REQUEST, "itineraries"),
     TOUR_ITINERARY_DAY_NUMBER_CANNOT_BE_NULL("TOUR_ITINERARY_DAY_NUMBER_CANNOT_BE_NULL", "Day number cannot be null", HttpStatus.BAD_REQUEST, "dayNumber"),
     TOUR_ITINERARY_TITLE_CANNOT_BE_BLANK("TOUR_ITINERARY_TITLE_CANNOT_BE_BLANK", "Itinerary title cannot be blank", HttpStatus.BAD_REQUEST, "title"),
     TOUR_ITINERARY_TITLE_TOO_LONG("TOUR_ITINERARY_TITLE_TOO_LONG", "Itinerary title is too long", HttpStatus.BAD_REQUEST, "title"),
@@ -119,12 +120,13 @@ public enum DomainErrorCode {
     STATUS_CANNOT_BE_NULL("STATUS_CANNOT_BE_NULL", "Status cannot be null", HttpStatus.BAD_REQUEST, "status"),
     SURCHARGE_MUST_BE_NON_NEGATIVE("SURCHARGE_MUST_BE_NON_NEGATIVE", "Surcharge must be greater than or equal to 0", HttpStatus.BAD_REQUEST, "surcharge"),
     AVAILABLE_SEATS_INVALID("AVAILABLE_SEATS_INVALID", "Available seats must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null),
-    SURCHARGE_INVALID("SURCHARGE_INVALID", "Surcharge must be greater than or equal to 0", HttpStatus.BAD_REQUEST, null),
+    SURCHARGE_INVALID("SURCHARGE_INVALID", "Surcharge must be greater than or equal to 0", HttpStatus.BAD_REQUEST,
+            null),
     SCHEDULE_STATUS_CANNOT_BE_BLANK("SCHEDULE_STATUS_CANNOT_BE_BLANK", "Schedule status cannot be blank", HttpStatus.BAD_REQUEST, null),
     SCHEDULE_STATUS_INVALID("SCHEDULE_STATUS_INVALID", "Schedule status must be one of OPEN, FULL, CANCELLED, COMPLETED", HttpStatus.BAD_REQUEST, null),
-    TOTAL_SEATS_LOWER_THAN_MIN_PARTICIPANTS("TOTAL_SEATS_LOWER_THAN_MIN_PARTICIPANTS","Total seats is lower than minimum participants",HttpStatus.BAD_REQUEST,"totalSeats"),
+    TOTAL_SEATS_LOWER_THAN_MIN_PARTICIPANTS("TOTAL_SEATS_LOWER_THAN_MIN_PARTICIPANTS", "Total seats is lower than minimum participants", HttpStatus.BAD_REQUEST, "totalSeats"),
     MISSING_ADULT_PRICE("MISSING_ADULT_PRICE", "Adult price is missing", HttpStatus.BAD_REQUEST, "adultPrice"),
-    NEGATIVE_SINGLE_SUPPLEMENT("NEGATIVE_SINGLE_SUPPLEMENT", "Single supplement cannot be negative",HttpStatus.BAD_REQUEST, "singleSupplement"),
+    NEGATIVE_SINGLE_SUPPLEMENT("NEGATIVE_SINGLE_SUPPLEMENT", "Single supplement cannot be negative", HttpStatus.BAD_REQUEST, "singleSupplement"),
     ORIGINAL_PRICE_MUST_BE_POSITIVE("ORIGINAL_PRICE_MUST_BE_POSITIVE", "Original price must be positive", HttpStatus.BAD_REQUEST, "originalPrice"),
     DISCOUNT_PRICE_MUST_BE_POSITIVE("DISCOUNT_PRICE_MUST_BE_POSITIVE", "Discount price must be positive", HttpStatus.BAD_REQUEST, "discountPrice"),
     DEPARTURE_DATE_MUST_BE_FUTURE("DEPARTURE_DATE_MUST_BE_FUTURE", "Departure date must be in the future", HttpStatus.BAD_REQUEST, "departureDate"),
@@ -156,6 +158,7 @@ public enum DomainErrorCode {
     SNAPSHOT_DATA_REQUIRED("SNAPSHOT_DATA_REQUIRED", "Snapshot data is required for booking item", HttpStatus.BAD_REQUEST, "snapshotData"),
     PRICE_BREAKDOWN_REQUIRED("PRICE_BREAKDOWN_REQUIRED", "Price breakdown cannot be empty", HttpStatus.BAD_REQUEST, "priceBreakdown"),
     BOOKING_CANNOT_MODIFY("BOOKING_CANNOT_MODIFY", "Cannot modify booking in current status", HttpStatus.CONFLICT, "status"),
+    BOOKING_NOT_RESERVED("BOOKING_NOT_RESERVED", "Booking is not in reserved state", HttpStatus.CONFLICT, "status"),
 
     // ===== BOOKING - APPLICATION =====
     BOOKING_NOT_FOUND("BOOKING_NOT_FOUND", "Booking not found", HttpStatus.NOT_FOUND, "bookingId"),
@@ -179,7 +182,8 @@ public enum DomainErrorCode {
     PAYMENT_INVALID_STATE_TRANSITION("PAYMENT_INVALID_STATE_TRANSITION", "Invalid payment state transition", HttpStatus.CONFLICT, "status"),
     PAYMENT_GATEWAY_NOT_FOUND("PAYMENT_GATEWAY_NOT_FOUND", "Payment gateway not found", HttpStatus.NOT_FOUND, "paymentMethod"),
     PAYMENT_NOT_FOUND("PAYMENT_NOT_FOUND", "Payment not found", HttpStatus.NOT_FOUND, "paymentId"),
-;
+    ;
+
     String code;
     String message;
     HttpStatus httpStatusCode;

@@ -1,5 +1,7 @@
 package com.itravel.platform.common.domain.aggregate.valueobject;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.itravel.platform.common.domain.enums.CurrencyCode;
 import com.itravel.platform.common.domain.aggregate.valueobject.exception.MoneyAmountCannotBeNullException;
 import com.itravel.platform.common.domain.aggregate.valueobject.exception.MoneyCurrencyCannotBeNullException;
@@ -16,7 +18,11 @@ public class Money {
     BigDecimal amount;
     CurrencyCode currency;
 
-    public Money(BigDecimal amount, CurrencyCode currency) {
+    @JsonCreator
+    public Money(
+            @JsonProperty("amount") BigDecimal amount,
+            @JsonProperty("currency") CurrencyCode currency
+    ) {
         if (amount == null) {
             throw new MoneyAmountCannotBeNullException();
         }

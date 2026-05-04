@@ -25,6 +25,7 @@ public class CategoryJpaEntity extends SoftDeletableJpaBaseModel {
     String name;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     CategoryStatus status;
 
     @Column(nullable = false)

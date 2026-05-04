@@ -9,8 +9,8 @@ import com.itravel.platform.modules.booking.api.mapper.BookingRestMapper;
 import com.itravel.platform.modules.booking.application.command.model.booking.CancelBookingCommand;
 import com.itravel.platform.modules.booking.application.dto.BookingDetailDTO;
 import com.itravel.platform.modules.booking.application.dto.BookingListItemDTO;
-import com.itravel.platform.modules.booking.application.port.in.facade.BookingCommandFacade;
-import com.itravel.platform.modules.booking.application.port.in.facade.BookingQueryFacade;
+import com.itravel.platform.modules.booking.application.port.in.booking.facade.BookingCommandFacade;
+import com.itravel.platform.modules.booking.application.port.in.booking.facade.BookingQueryFacade;
 import com.itravel.platform.modules.booking.domain.booking.BookingId;
 import com.itravel.platform.modules.booking.domain.booking.BookingStatus;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/booking")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BookingController {

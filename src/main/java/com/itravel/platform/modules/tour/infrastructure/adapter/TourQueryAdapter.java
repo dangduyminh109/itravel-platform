@@ -24,7 +24,7 @@ public class TourQueryAdapter implements TourQueryPort {
 
     @Override
     public Page<TourListItemDTO> getTours(String keyword, Boolean isDeleted, String status, Long categoryId, Long departureId, BigDecimal maxPrice, Pageable pageable) {
-        return repository.getTours(keyword, isDeleted, status, categoryId, departureId, maxPrice, pageable)
+        return repository.getTours(keyword, isDeleted, status, categoryId, departureId, pageable)
                 .map(TourMapper::toTourListItemDTO);
     }
 

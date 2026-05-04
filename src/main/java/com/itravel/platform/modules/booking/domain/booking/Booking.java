@@ -10,6 +10,7 @@ import com.itravel.platform.modules.booking.domain.event.BookingExpiredEvent;
 import com.itravel.platform.modules.booking.domain.event.BookingPaidEvent;
 import com.itravel.platform.modules.booking.domain.exception.BookingCannotCancelCompletedException;
 import com.itravel.platform.modules.booking.domain.exception.BookingCannotModifyException;
+import com.itravel.platform.modules.booking.domain.exception.BookingNotReservedException;
 import com.itravel.platform.modules.booking.domain.exception.InvalidBookingStateTransitionException;
 import com.itravel.platform.modules.booking.domain.passenger.Passenger;
 import lombok.AccessLevel;
@@ -130,6 +131,12 @@ public class Booking extends SoftDeletableAggregate<BookingId> {
             booking.passengers.addAll(passengers);
         }
         return booking;
+    }
+
+    public void verify() {
+        if(!this.status.equals(BookingStatus.RESERVED)) {
+            throw new BookingNotReservedException();
+        }
     }
 
     public void addBookingItem(BookingItem item) {

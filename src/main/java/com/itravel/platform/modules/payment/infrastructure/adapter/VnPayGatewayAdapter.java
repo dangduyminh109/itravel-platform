@@ -78,7 +78,7 @@ public class VnPayGatewayAdapter implements PaymentGatewayPort {
 
     @Override
     public PaymentUrlResponse createPaymentUrl(Payment payment, String clientId) throws UnsupportedEncodingException {
-        String vnp_TxnRef = payment.getReferenceCode().value();
+        String vnp_TxnRef = payment.getGatewayTransactionId();
         String vnp_OrderInfo = "Thanh toan hoa don " + payment.getReferenceCode().value();
         String vnp_TmnCode = TMN_CODE;
         String vnp_HashSecret = SECRET_KEY;
