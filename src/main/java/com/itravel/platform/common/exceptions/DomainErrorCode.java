@@ -182,6 +182,10 @@ public enum DomainErrorCode {
     PAYMENT_INVALID_STATE_TRANSITION("PAYMENT_INVALID_STATE_TRANSITION", "Invalid payment state transition", HttpStatus.CONFLICT, "status"),
     PAYMENT_GATEWAY_NOT_FOUND("PAYMENT_GATEWAY_NOT_FOUND", "Payment gateway not found", HttpStatus.NOT_FOUND, "paymentMethod"),
     PAYMENT_NOT_FOUND("PAYMENT_NOT_FOUND", "Payment not found", HttpStatus.NOT_FOUND, "paymentId"),
+
+    // ===== NOTIFICATION =====
+    NOTIFICATION_NOT_FOUND("NOTIFICATION_NOT_FOUND", "Notification not found", HttpStatus.NOT_FOUND, "notificationId"),
+    INVALID_NOTIFICATION_STATE("INVALID_NOTIFICATION_STATE", "Invalid notification state transition", HttpStatus.CONFLICT, "status"),
     ;
 
     String code;

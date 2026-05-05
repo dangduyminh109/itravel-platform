@@ -75,3 +75,7 @@ payment:
 
 frontend:
     url:
+    
+notification:
+  mail:
+    from: 
