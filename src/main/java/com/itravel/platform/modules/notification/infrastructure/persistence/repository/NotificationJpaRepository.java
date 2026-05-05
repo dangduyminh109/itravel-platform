@@ -4,6 +4,8 @@ import com.itravel.platform.modules.notification.infrastructure.persistence.enti
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,4 +15,8 @@ public interface NotificationJpaRepository extends JpaRepository<NotificationJpa
     List<NotificationJpaEntity> findAllByRecipientId(String recipientId);
     Page<NotificationJpaEntity> findAllByRecipientId(String recipientId, Pageable pageable);
     long countByRecipientIdAndIsReadFalse(String recipientId);
+
+    @Modifying
+    @Query("UPDATE NotificationJpaEntity n SET n.isRead = true WHERE n.recipientId = :recipientId AND n.isRead = false")
+    void markAllAsReadByRecipientId(String recipientId);
 }

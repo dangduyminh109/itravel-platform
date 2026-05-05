@@ -11,4 +11,5 @@ public interface NotificationRepositoryPort {
     Optional<Notification> findById(NotificationId id);
     List<Notification> findAllByRecipientId(String recipientId);
     long countUnreadByRecipientId(String recipientId);
+    void markAllAsRead(String recipientId);
 }

@@ -48,4 +48,9 @@ public class NotificationRepositoryImpl implements NotificationRepositoryPort {
     public long countUnreadByRecipientId(String recipientId) {
         return jpaRepository.countByRecipientIdAndIsReadFalse(recipientId);
     }
+
+    @Override
+    public void markAllAsRead(String recipientId) {
+        jpaRepository.markAllAsReadByRecipientId(recipientId);
+    }
 }

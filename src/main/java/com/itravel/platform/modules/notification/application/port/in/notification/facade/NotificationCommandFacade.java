@@ -20,8 +20,8 @@ public class NotificationCommandFacade {
         return createNotificationUseCase.createNotification(command);
     }
 
-    public void markAsRead(NotificationId id) {
-        markNotificationAsReadUseCase.markAsRead(id);
+    public void markAsRead(String id) {
+        markNotificationAsReadUseCase.markAsRead(new NotificationId(id));
     }
 
     public void markAllAsRead(String recipientId) {

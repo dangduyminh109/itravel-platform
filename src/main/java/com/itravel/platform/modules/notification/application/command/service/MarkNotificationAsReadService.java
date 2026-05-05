@@ -30,12 +30,6 @@ public class MarkNotificationAsReadService implements MarkNotificationAsReadUseC
     @Override
     @Transactional
     public void markAllAsRead(String recipientId) {
-        List<Notification> notifications = notificationRepository.findAllByRecipientId(recipientId);
-        notifications.forEach(notification -> {
-            if (!notification.isRead()) {
-                notification.markAsRead();
-                notificationRepository.save(notification);
-            }
-        });
+        notificationRepository.markAllAsRead(recipientId);
     }
 }
